@@ -118,7 +118,7 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	vTaskDelay(pdMS_TO_TICKS(1000));
   }
   /* USER CODE END StartDefaultTask */
 }
