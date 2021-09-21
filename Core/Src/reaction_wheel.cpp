@@ -1,9 +1,4 @@
-/*
- * reaction_wheel.cpp
- *
- *  Created on: 20. ruj 2021.
- *      Author: ivnucec
- */
+// TODO: Port code in this file
 
 
 #include "reaction_wheel.hpp"
