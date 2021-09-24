@@ -10,6 +10,7 @@
 
 
 #include <cstdint>
+#include "mpu9250.hpp"
 
 
 class InertialMeasUnit

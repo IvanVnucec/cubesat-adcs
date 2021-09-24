@@ -9,6 +9,7 @@
 
 
 #include "inertial_meas_unit.hpp"
+#include "mpu9250.hpp"
 
 
 InertialMeasUnit::InertialMeasUnit()
