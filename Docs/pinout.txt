@@ -1,0 +1,38 @@
+About: Pinout of our setup. Generated from cubesat-adcs.ioc.
+
+
+SPI1
+	- MISO: Pin A6
+	- MOSI: Pin A7
+	- SCK:  Pin A1
+	- ~SS: (not generated/assigned by the tool)
+
+UART1:
+	- Rx: Pin A15
+	- Tx: Pin A2
+
+LED:
+	- Pin B3
+	
+I2C1:
+	- SDA: Pin A10
+	- SCL: Pin A9
+
+TIM1_CH1 PWM:
+	- Pin A8
+
+Debug Serial Wire:
+	- CLK: Pin A14
+	- DIO: Pin A13
+
+Low Speed Crystal:
+	- In: Pin C14
+	- Out: Pin C15
+	
+High Speed Crystal:
+	- In: Pin A0
+	- Out: (No out pin, idk why)  
+
+Reaction Wheel Direction Pin (GPIO):
+	- Pin H3
+
