@@ -118,7 +118,9 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	vTaskDelay(pdMS_TO_TICKS(1000));
+	  vTaskDelay(pdMS_TO_TICKS(1000));
+
+	  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
   }
   /* USER CODE END StartDefaultTask */
 }
