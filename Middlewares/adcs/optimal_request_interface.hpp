@@ -21,7 +21,7 @@ class OptimalRequest {
     void fill_w(float vec_w[3]);
 
   public:
-    static constexpr unsigned iterationPeriodInMiliSec = 1000u;
+    static constexpr unsigned m_iterationPeriodInMiliSec = 1000u;
     
     OptimalRequest();
     ~OptimalRequest();
