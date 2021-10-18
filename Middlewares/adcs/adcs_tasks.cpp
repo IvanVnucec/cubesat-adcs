@@ -39,19 +39,11 @@ const static osThreadAttr_t optimalRequest_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 static void StartAngleRegulationTask(void *argument);
-static void StartOptimalRequestTask(void *argument);
 
 /* Private application code --------------------------------------------------*/
 static void StartAngleRegulationTask(void *argument)
 {
     REG_ANGLE_taskCallback(argument);
-}
-
-static void StartOptimalRequestTask(void *argument)
-{
-    using namespace OptimalRequestInterface;
-    
-    optimalRequestTaskCallback(argument);
 }
 
 void initAdcsThreads()
@@ -61,8 +53,9 @@ void initAdcsThreads()
         osThreadNew(StartAngleRegulationTask, NULL, &angleRegulationTask_attributes);
 
     // optimal request thread
-    optimalRequestHandle =
-        osThreadNew(StartOptimalRequestTask, NULL, &optimalRequest_attributes);
+    optimalRequestHandle = osThreadNew(OptimalRequestInterface::optimalRequestThread,
+                                       NULL,
+                                       &optimalRequest_attributes);
 }
 
 #ifdef __cplusplus

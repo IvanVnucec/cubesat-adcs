@@ -30,7 +30,7 @@ class OptimalRequest {
     void getQuaternion(float q[4]);
 };
 
-void optimalRequestTaskCallback(void *argument);
+void optimalRequestThread(void *argument);
 
 }    // namespace OptimalRequestInterface
 

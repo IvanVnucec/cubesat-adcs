@@ -53,17 +53,6 @@ void OptimalRequest::getQuaternion(float q[4])
     get_quat_from_K(m_or_handle.K, q);
 }
 
-void optimalRequestTaskCallback(void *argument)
-{
-    static OptimalRequest optimal_request;
-
-    for (;;) {
-        optimal_request.iterate();
-
-        vTaskDelay(pdMS_TO_TICKS(optimal_request.iterationPeriodInMiliSec));
-    }
-}
-
 void OptimalRequest::fill_r(float vec1[3], float vec2[3])
 {
     m_or_handle.r[0] = vec1[0];
@@ -89,6 +78,17 @@ void OptimalRequest::fill_w(float vec_w[3])
     m_or_handle.w[0] = vec_w[0];
     m_or_handle.w[1] = vec_w[1];
     m_or_handle.w[2] = vec_w[2];
+}
+
+void optimalRequestThread(void *argument)
+{
+    static OptimalRequest optimal_request;
+
+    for (;;) {
+        optimal_request.iterate();
+
+        vTaskDelay(pdMS_TO_TICKS(optimal_request.iterationPeriodInMiliSec));
+    }
 }
 
 }    // namespace OptimalRequestInterface
