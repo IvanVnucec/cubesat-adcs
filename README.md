@@ -7,6 +7,9 @@
 	4. Build Debug configuration
 
 ## Development
+### Code structure
+	- Middlewares/optimal_request - Optimal request algorithm copied from https://github.com/IvanVnucec/Optimal-REQUEST
+
 ### Code formatting
 	1. Install LLVM package https://prereleases.llvm.org/win-snapshots/LLVM-12.0.0-6923b0a7-win64.exe
 	2. Install CppStyle 1.5.0.0 on Eclipse Marketplace https://marketplace.eclipse.org/content/cppstyle
