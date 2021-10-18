@@ -5,30 +5,27 @@
  *      Author: ivnucec
  */
 
-
-#include <cassert>
 #include "pid_regulator.hpp"
 
+#include <cassert>
 
 PidRegulator::PidRegulator(float Kp, float Ki, float Kd, float V, float Ts)
-: m_Ti( Kp / Ki ), m_Td( Kd / Kp )
+    : m_Ti(Kp / Ki), m_Td(Kd / Kp)
 {
-	assert(Ts > 0.0f);
-	assert(V  > 0.0f);
+    assert(Ts > 0.0f);
+    assert(V > 0.0f);
 
     /* Set coefficients */
-	m_Kp = Kp;
-	m_Ki = Ki;
-	m_Kd = Kd;
-	m_Ts = Ts;
-	m_V  = V;
+    m_Kp = Kp;
+    m_Ki = Ki;
+    m_Kd = Kd;
+    m_Ts = Ts;
+    m_V  = V;
 }
-
 
 PidRegulator::~PidRegulator()
 {
 }
-
 
 float PidRegulator::regulate(float error)
 {
@@ -42,7 +39,8 @@ float PidRegulator::regulate(float error)
     m_ui0 = m_ui1 + m_Kp * m_Ts / m_Ti * (m_e0 + m_e1) / 2.0f;
 
     /* ud(k)  = Td / (Td + v * T) * ud(k-1)   + Kr * v * Td / (Td + v * T) * (  e(k)   - e(k-1)  ) */
-    m_ud0 = m_Td / (m_Td + m_V * m_Ts) * m_ud1 + m_Kp * m_V * m_Td / (m_Td + m_V * m_Ts) * (m_e0 - m_e1);
+    m_ud0 = m_Td / (m_Td + m_V * m_Ts) * m_ud1
+            + m_Kp * m_V * m_Td / (m_Td + m_V * m_Ts) * (m_e0 - m_e1);
 
     /* u(k)  =    up(k)  +    ui(k)  +    ud(k) */
     m_u0 = m_up0 + m_ui0 + m_ud0;
@@ -57,9 +55,7 @@ float PidRegulator::regulate(float error)
     return m_u0;
 }
 
-
-void  PidRegulator::resetIntegral()
+void PidRegulator::resetIntegral()
 {
-	m_ui1 = 0.0f;
+    m_ui1 = 0.0f;
 }
-

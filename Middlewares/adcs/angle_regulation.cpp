@@ -2,13 +2,12 @@
 
 #include "angle_regulation.hpp"
 
-
 //static PID_Handle_t hpid;
 static int regulation_running = 0;
 
-
-void REG_ANGLE_init(void) {
-	/*
+void REG_ANGLE_init(void)
+{
+    /*
 	PID_Init(&hpid,
 	REG_ANGLE_PID_COEFF_P,
 	REG_ANGLE_PID_COEFF_I,
@@ -19,28 +18,32 @@ void REG_ANGLE_init(void) {
 	MOTOR_init();
 	*/
 
-	regulation_running = 0;
+    regulation_running = 0;
 }
 
-void REG_ANGLE_startRegulation(void) {
-	regulation_running = 1;
+void REG_ANGLE_startRegulation(void)
+{
+    regulation_running = 1;
 }
 
-void REG_ANGLE_stopRegulation(void) {
-	regulation_running = 0;
-	/*
+void REG_ANGLE_stopRegulation(void)
+{
+    regulation_running = 0;
+    /*
 	PID_ResetIntegral(&hpid);
 	MOTOR_setPwm(0);
 	*/
 }
 
-void REG_ANGLE_pauseRegulation(void) {
-	regulation_running = 0;
+void REG_ANGLE_pauseRegulation(void)
+{
+    regulation_running = 0;
 }
 
-float REG_ANGLE_regulate(float desired_angle, float real_angle) {
-	float output = 0.0f;
-	/*
+float REG_ANGLE_regulate(float desired_angle, float real_angle)
+{
+    float output = 0.0f;
+    /*
 	float error;
 
 	if (regulation_running == 1) {
@@ -50,5 +53,5 @@ float REG_ANGLE_regulate(float desired_angle, float real_angle) {
 	}
 	*/
 
-	return output;
+    return output;
 }

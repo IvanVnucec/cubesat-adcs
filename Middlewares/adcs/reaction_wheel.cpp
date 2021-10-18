@@ -1,12 +1,12 @@
 // TODO: Port code in this file
 
-
-#include <limits.h>
-#include <cmath>
 #include "reaction_wheel.hpp"
-#include "tim.h"
-#include "main.h"
 
+#include "main.h"
+#include "tim.h"
+
+#include <cmath>
+#include <limits.h>
 
 /**
  * Initialize MCU peripherals.
@@ -16,20 +16,18 @@
  */
 ReactionWheel::ReactionWheel(int ang_vel)
 {
-	startPWM();
-	setAngularVelocity(ang_vel);
+    startPWM();
+    setAngularVelocity(ang_vel);
 }
-
 
 /**
  * Set reaction wheel angular velocity to zero and deinitializes MCU peripherals.
  */
 ReactionWheel::~ReactionWheel()
 {
-	setAngularVelocity(0);
-	stopPWM();
+    setAngularVelocity(0);
+    stopPWM();
 }
-
 
 /**
  * Set direction of rotation and the PWM based on angular velocity.
@@ -37,25 +35,21 @@ ReactionWheel::~ReactionWheel()
  */
 void ReactionWheel::setAngularVelocity(int angular_vel)
 {
+    // TODO: add assert here
+    m_ang_vel = angular_vel;
 
-	// TODO: add assert here
-	m_ang_vel = angular_vel;
+    if (m_ang_vel > 0) {
+        // TODO: determine experimentally which direction we should set here
+        setDirection(CLOCKWISE);
+    } else {
+        // TODO: determine experimentally which direction we should set here
+        setDirection(ANTICLOCKWISE);
+    }
 
-	if(m_ang_vel > 0) {
-		// TODO: determine experimentally which direction we should set here
-		setDirection(CLOCKWISE);
-	}
-	else
-	{
-		// TODO: determine experimentally which direction we should set here
-		setDirection(ANTICLOCKWISE);
-	}
-
-	// TODO: convert angular_vel to PWM value (this implementation is for example only!!!)
-	float pwm = std::abs(m_ang_vel) / INT_MAX;
-	setPWM(pwm);
+    // TODO: convert angular_vel to PWM value (this implementation is for example only!!!)
+    float pwm = std::abs(m_ang_vel) / INT_MAX;
+    setPWM(pwm);
 }
-
 
 /**
  * Set the GPIO Direction Pin based on direction value.
@@ -64,21 +58,21 @@ void ReactionWheel::setAngularVelocity(int angular_vel)
  */
 void ReactionWheel::setDirection(ReactionWheelDirection dir)
 {
-	// TODO: add assert here. See how to assert Enums
-	m_dir = dir;
+    // TODO: add assert here. See how to assert Enums
+    m_dir = dir;
 
-	if(dir == CLOCKWISE)
-	{
-	    // TODO: Figure out digital pin state for clockwise direction
-		HAL_GPIO_WritePin(REACTION_WHEEL_DIR_GPIO_Port, REACTION_WHEEL_DIR_Pin, GPIO_PIN_RESET);
-	}
-	else
-	{
-		// TODO: Figure out digital pin state for anticlockwise direction
-		HAL_GPIO_WritePin(REACTION_WHEEL_DIR_GPIO_Port, REACTION_WHEEL_DIR_Pin, GPIO_PIN_SET);
-	}
+    if (dir == CLOCKWISE) {
+        // TODO: Figure out digital pin state for clockwise direction
+        HAL_GPIO_WritePin(REACTION_WHEEL_DIR_GPIO_Port,
+                          REACTION_WHEEL_DIR_Pin,
+                          GPIO_PIN_RESET);
+    } else {
+        // TODO: Figure out digital pin state for anticlockwise direction
+        HAL_GPIO_WritePin(REACTION_WHEEL_DIR_GPIO_Port,
+                          REACTION_WHEEL_DIR_Pin,
+                          GPIO_PIN_SET);
+    }
 }
-
 
 /**
  * Starts the Timer and PWM.
@@ -86,12 +80,11 @@ void ReactionWheel::setDirection(ReactionWheelDirection dir)
  */
 void ReactionWheel::startPWM()
 {
-	// start Timer and PWM
-	HAL_TIM_Base_Start(&htim1);
-	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
+    // start Timer and PWM
+    HAL_TIM_Base_Start(&htim1);
+    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
 }
-
 
 /**
  * Stops the Timer and PWM.
@@ -99,12 +92,11 @@ void ReactionWheel::startPWM()
  */
 void ReactionWheel::stopPWM()
 {
-	// stop PWM and Timer
-	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
-	HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
-	HAL_TIM_Base_Stop(&htim1);
+    // stop PWM and Timer
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
+    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+    HAL_TIM_Base_Stop(&htim1);
 }
-
 
 /**
  * Sets the PWM by setting the Timer Compare register.
@@ -113,10 +105,10 @@ void ReactionWheel::stopPWM()
  */
 void ReactionWheel::setPWM(float pwm)
 {
-	// TODO: add assert here
-	m_pwm = pwm;
+    // TODO: add assert here
+    m_pwm = pwm;
 
-	// TODO: convert pwm to pulse_width
-	uint32_t pulse_width = 0u;
-	__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, pulse_width);
+    // TODO: convert pwm to pulse_width
+    uint32_t pulse_width = 0u;
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, pulse_width);
 }

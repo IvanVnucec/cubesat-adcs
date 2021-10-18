@@ -7,48 +7,34 @@
  *      Author: ivnucec
  */
 
-
 #include "inertial_meas_unit.hpp"
-#include "mpu9250.hpp"
 
+#include "mpu9250.hpp"
 
 InertialMeasUnit::InertialMeasUnit()
 {
-
 }
-
 
 InertialMeasUnit::~InertialMeasUnit()
 {
-
 }
-
 
 void InertialMeasUnit::calibrateGyro()
 {
-
 }
-
 
 void InertialMeasUnit::getDataFromSensorAsync()
 {
-
 }
-
 
 void InertialMeasUnit::getGyroData()
 {
-
 }
-
 
 void InertialMeasUnit::getAccData()
 {
-
 }
-
 
 void InertialMeasUnit::getMagData()
 {
-
 }
