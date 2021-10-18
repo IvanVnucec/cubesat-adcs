@@ -63,6 +63,9 @@ void inertialMeasUnitThread(void *argument)
 
     for (;;) {
         imu.getDataFromSensorAsync();
+        // TODO: Add data buffering and send notification 
+        //       that we have data to the other threads using IMU
+
         vTaskDelay(pdMS_TO_TICKS(10));
     }
 }

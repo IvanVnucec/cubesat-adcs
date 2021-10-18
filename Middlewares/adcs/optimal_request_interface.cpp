@@ -52,31 +52,31 @@ void OptimalRequest::getQuaternion(float q[4])
     get_quat_from_K(m_or_handle.K, q);
 }
 
-void OptimalRequest::fill_r(float vec1[3], float vec2[3])
+void OptimalRequest::fill_r(float ref_acc[3], float ref_mag[3])
 {
-    m_or_handle.r[0] = vec1[0];
-    m_or_handle.r[1] = vec1[1];
-    m_or_handle.r[2] = vec1[2];
-    m_or_handle.r[3] = vec2[0];
-    m_or_handle.r[4] = vec2[1];
-    m_or_handle.r[5] = vec2[2];
+    m_or_handle.r[0] = ref_acc[0];
+    m_or_handle.r[1] = ref_acc[1];
+    m_or_handle.r[2] = ref_acc[2];
+    m_or_handle.r[3] = ref_mag[0];
+    m_or_handle.r[4] = ref_mag[1];
+    m_or_handle.r[5] = ref_mag[2];
 }
 
-void OptimalRequest::fill_b(float vec1[3], float vec2[3])
+void OptimalRequest::fill_b(float bdy_acc[3], float bdy_mag[3])
 {
-    m_or_handle.b[0] = vec1[0];
-    m_or_handle.b[1] = vec1[1];
-    m_or_handle.b[2] = vec1[2];
-    m_or_handle.b[3] = vec2[0];
-    m_or_handle.b[4] = vec2[1];
-    m_or_handle.b[5] = vec2[2];
+    m_or_handle.b[0] = bdy_acc[0];
+    m_or_handle.b[1] = bdy_acc[1];
+    m_or_handle.b[2] = bdy_acc[2];
+    m_or_handle.b[3] = bdy_mag[0];
+    m_or_handle.b[4] = bdy_mag[1];
+    m_or_handle.b[5] = bdy_mag[2];
 }
 
-void OptimalRequest::fill_w(float vec_w[3])
+void OptimalRequest::fill_w(float bdy_gyr[3])
 {
-    m_or_handle.w[0] = vec_w[0];
-    m_or_handle.w[1] = vec_w[1];
-    m_or_handle.w[2] = vec_w[2];
+    m_or_handle.w[0] = bdy_gyr[0];
+    m_or_handle.w[1] = bdy_gyr[1];
+    m_or_handle.w[2] = bdy_gyr[2];
 }
 
 void optimalRequestThread(void *argument)
@@ -84,6 +84,7 @@ void optimalRequestThread(void *argument)
     static OptimalRequest optimal_request;
 
     for (;;) {
+        // TODO: Get data from IMU here
         optimal_request.iterate();
 
         vTaskDelay(pdMS_TO_TICKS(optimal_request.iterationPeriodInMiliSec));
