@@ -5,6 +5,7 @@
  *      Author: ivnucec
  */
 
+/* Includes ------------------------------------------------------------------*/
 #include "FreeRTOS.h"
 #include "angle_regulation.hpp"
 #include "cmsis_os.h"
@@ -14,6 +15,13 @@
 extern "C" {
 #endif
 
+/* Private typedef -----------------------------------------------------------*/
+
+/* Private define ------------------------------------------------------------*/
+
+/* Private macro -------------------------------------------------------------*/
+
+/* Private variables ---------------------------------------------------------*/
 static osThreadId_t angleRegulationTaskHandle;
 const static osThreadAttr_t angleRegulationTask_attributes = {
     .name       = "angleRegulationTask",
@@ -21,6 +29,10 @@ const static osThreadAttr_t angleRegulationTask_attributes = {
     .priority   = (osPriority_t)osPriorityNormal1,
 };
 
+/* Private function prototypes -----------------------------------------------*/
+static void StartAngleRegulationTask(void *argument);
+
+/* Private application code --------------------------------------------------*/
 static void StartAngleRegulationTask(void *argument)
 {
     REG_ANGLE_taskCallback(argument);
