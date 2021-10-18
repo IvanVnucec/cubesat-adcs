@@ -9,6 +9,7 @@
 #include "FreeRTOS.h"
 #include "angle_regulation.hpp"
 #include "cmsis_os.h"
+#include "optimal_request_interface.hpp"
 #include "task.h"
 
 #ifdef __cplusplus
@@ -48,7 +49,7 @@ static void StartAngleRegulationTask(void *argument)
 
 static void StartOptimalRequestTask(void *argument)
 {
-    // TODO [Ivan Vnucec]: Add task code here
+    OptimalRequestInterface::optimalRequestTaskCallback(argument);
 }
 
 void initAdcsThreads()
