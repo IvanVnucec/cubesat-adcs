@@ -1,4 +1,5 @@
 // TODO: Port code in this file
+// TODO: Add namespace and delete REG_AGNLE_ prefix throughout cpp and hpp files
 
 #include "angle_regulation.hpp"
 
