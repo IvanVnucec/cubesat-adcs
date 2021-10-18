@@ -38,29 +38,56 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 class TwoWire {
   public:
-    void begin();
-    void setClock(const uint32_t);
-    void beginTransmission(uint8_t);
-    void write(uint8_t);
-    void endTransmission();
-    void endTransmission(bool);
-    size_t requestFrom(uint8_t, uint8_t);
-    uint8_t read();
+    void begin()
+    {
+    }
+    void setClock(const uint32_t)
+    {
+    }
+    void beginTransmission(uint8_t)
+    {
+    }
+    void write(uint8_t)
+    {
+    }
+    void endTransmission()
+    {
+    }
+    void endTransmission(bool)
+    {
+    }
+    size_t requestFrom(uint8_t, uint8_t)
+    {
+        return 0;
+    }
+    uint8_t read()
+    {
+        return 0;
+    }
 };
 
 class SPISettings {
   public:
-    SPISettings(const uint32_t,
-                int,
-                int);    // https://www.arduino.cc/en/Reference/SPISettings
+    SPISettings(const uint32_t, int, int)
+    {
+    }    // https://www.arduino.cc/en/Reference/SPISettings
 };
 
 class SPIClass {
   public:
-    void begin();
-    void beginTransaction(SPISettings);
-    uint8_t transfer(uint8_t);
-    void endTransaction();
+    void begin()
+    {
+    }
+    void beginTransaction(SPISettings)
+    {
+    }
+    uint8_t transfer(uint8_t)
+    {
+        return 0;
+    }
+    void endTransaction()
+    {
+    }
 };
 // END OF MOCKS
 
