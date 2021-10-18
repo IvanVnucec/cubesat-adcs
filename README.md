@@ -9,6 +9,7 @@
 ## Development
 ### Code structure
 	- Middlewares/optimal_request - Optimal request algorithm copied from https://github.com/IvanVnucec/Optimal-REQUEST
+	- Core/Src/freertos.c - OS tasks
 
 ### Code formatting
 	1. Install LLVM package https://prereleases.llvm.org/win-snapshots/LLVM-12.0.0-6923b0a7-win64.exe
