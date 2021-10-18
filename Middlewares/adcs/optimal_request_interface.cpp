@@ -29,8 +29,7 @@ OptimalRequest::OptimalRequest()
     //m_or_handle.fill_b(bdy_acc[0], bdy_mag[0]);
     //m_or_handle.fill_w(bdy_gyr[0]);
 
-    // init optimal_req on 1st meas
-    optimal_request_init(&m_or_handle);
+    //optimal_request_init(&m_or_handle);
 }
 
 OptimalRequest::~OptimalRequest()
@@ -45,7 +44,7 @@ void OptimalRequest::iterate()
     //m_or_handle.fill_b(bdy_acc[i], bdy_mag[i]);
     //m_or_handle.fill_w(bdy_gyr[i]);
 
-    optimal_request(&m_or_handle);
+    //optimal_request(&m_or_handle);
 }
 
 void OptimalRequest::getQuaternion(float q[4])

@@ -21,9 +21,8 @@ class OptimalRequest {
     void fill_w(float vec_w[3]);
 
   public:
-    const unsigned iterationPeriodInMiliSec =
-        1000U;    // ms // TODO [Ivan Vnucec]: Add defined delay period here
-
+    static constexpr unsigned iterationPeriodInMiliSec = 1000u;
+    
     OptimalRequest();
     ~OptimalRequest();
     void iterate();
