@@ -49,7 +49,9 @@ static void StartAngleRegulationTask(void *argument)
 
 static void StartOptimalRequestTask(void *argument)
 {
-    OptimalRequestInterface::optimalRequestTaskCallback(argument);
+    using namespace OptimalRequestInterface;
+    
+    optimalRequestTaskCallback(argument);
 }
 
 void initAdcsThreads()

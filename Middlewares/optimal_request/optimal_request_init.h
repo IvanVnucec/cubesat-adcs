@@ -8,6 +8,10 @@
 #ifndef OPTIMAL_REQUEST_INIT_H
     #define OPTIMAL_REQUEST_INIT_H
 
+    #ifdef __cplusplus
+extern "C" {
+    #endif
+
     /* Include Files */
     #include "get_quat_from_K_types.h"
     #include "rtwtypes.h"
@@ -17,6 +21,10 @@
 
 /* Function Declarations */
 extern void optimal_request_init(struct0_T *s);
+
+    #ifdef __cplusplus
+}
+    #endif
 
 #endif
 

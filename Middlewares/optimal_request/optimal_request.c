@@ -15,6 +15,10 @@
 
 #include <math.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Function Definitions */
 
 /*
@@ -603,6 +607,10 @@ void optimal_request(struct0_T *s)
     /* 'optimal_request:112' s.Rho = Rho; */
     s->Rho = Rho;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 /*
  * File trailer for optimal_request.c
