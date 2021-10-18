@@ -38,19 +38,13 @@ const static osThreadAttr_t optimalRequest_attributes = {
 };
 
 /* Private function prototypes -----------------------------------------------*/
-static void StartAngleRegulationTask(void *argument);
 
 /* Private application code --------------------------------------------------*/
-static void StartAngleRegulationTask(void *argument)
-{
-    REG_ANGLE_taskCallback(argument);
-}
-
 void initAdcsThreads()
 {
     // angle regulation thread
     angleRegulationTaskHandle =
-        osThreadNew(StartAngleRegulationTask, NULL, &angleRegulationTask_attributes);
+        osThreadNew(REG_ANGLE_thread, NULL, &angleRegulationTask_attributes);
 
     // optimal request thread
     optimalRequestHandle = osThreadNew(OptimalRequestInterface::optimalRequestThread,

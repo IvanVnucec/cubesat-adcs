@@ -65,7 +65,7 @@ float REG_ANGLE_regulate(float desired_angle, float real_angle)
   * @param  argument: Not used
   * @retval None
   */
-void REG_ANGLE_taskCallback(void *argument)
+void REG_ANGLE_thread(void *argument)
 {
     for (;;) {
         vTaskDelay(pdMS_TO_TICKS(1000));
