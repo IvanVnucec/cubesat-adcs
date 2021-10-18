@@ -9,6 +9,7 @@
 ## Development
 ### Code structure
 	- Middlewares/optimal_request - Optimal request algorithm copied from https://github.com/IvanVnucec/Optimal-REQUEST
+	- Middlewares/adcs - Files for Attitude determination and control system files
 	- Core/Src/freertos.c - OS tasks
 	- Drivers/mpu9250 - MPU9250 IMU drivers
 
