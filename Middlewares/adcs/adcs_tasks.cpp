@@ -29,8 +29,16 @@ const static osThreadAttr_t angleRegulationTask_attributes = {
     .priority   = (osPriority_t)osPriorityNormal1,
 };
 
+static osThreadId_t optimalRequestHandle;
+const static osThreadAttr_t optimalRequest_attributes = {
+    .name       = "angleOptimalRequest",
+    .stack_size = 128 * 4,
+    .priority   = (osPriority_t)osPriorityNormal2,
+};
+
 /* Private function prototypes -----------------------------------------------*/
 static void StartAngleRegulationTask(void *argument);
+static void StartOptimalRequestTask(void *argument);
 
 /* Private application code --------------------------------------------------*/
 static void StartAngleRegulationTask(void *argument)
@@ -38,11 +46,20 @@ static void StartAngleRegulationTask(void *argument)
     REG_ANGLE_taskCallback(argument);
 }
 
+static void StartOptimalRequestTask(void *argument)
+{
+    // TODO [Ivan Vnucec]: Add task code here
+}
+
 void initAdcsThreads()
 {
     // angle regulation thread
     angleRegulationTaskHandle =
         osThreadNew(StartAngleRegulationTask, NULL, &angleRegulationTask_attributes);
+
+    // optimal request thread
+    optimalRequestHandle =
+        osThreadNew(StartOptimalRequestTask, NULL, &optimalRequest_attributes);
 }
 
 #ifdef __cplusplus
