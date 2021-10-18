@@ -12,9 +12,12 @@
 
 #include <cstdint>
 
+
+namespace InertialMeasUnit {
+
 class InertialMeasUnit {
   private:
-    const uint8_t m_imu_i2c_address = 0x68;
+    static constexpr uint8_t m_imu_i2c_address = (uint8_t) 0x68;
 
   public:
     InertialMeasUnit();
@@ -25,5 +28,9 @@ class InertialMeasUnit {
     void getAccData();
     void getMagData();
 };
+
+void inertialMeasUnitThread(void *argument);
+
+}    // namespace InertialMeasUnit
 
 #endif /* INC_INERTIAL_MEAS_UNIT_HPP_ */
