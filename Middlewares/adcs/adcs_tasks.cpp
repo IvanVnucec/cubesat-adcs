@@ -32,7 +32,7 @@ const static osThreadAttr_t angleRegulationTask_attributes = {
 
 static osThreadId_t optimalRequestHandle;
 const static osThreadAttr_t optimalRequest_attributes = {
-    .name       = "angleOptimalRequest",
+    .name       = "optimalRequestTask",
     .stack_size = 128 * 4,
     .priority   = (osPriority_t)osPriorityNormal2,
 };
