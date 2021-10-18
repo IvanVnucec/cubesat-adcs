@@ -27,6 +27,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "adcs_tasks.hpp"
 
 /* USER CODE END Includes */
 
@@ -47,12 +48,6 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-osThreadId_t angleRegulationTaskHandle;
-const osThreadAttr_t angleRegulationTask_attributes = {
-    .name       = "angleRegulationTask",
-    .stack_size = 128 * 4,
-    .priority   = (osPriority_t)osPriorityNormal1,
-};
 
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
@@ -65,7 +60,6 @@ const osThreadAttr_t defaultTask_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
-void StartAngleRegulationTask(void *argument);
 
 /* USER CODE END FunctionPrototypes */
 
@@ -106,8 +100,7 @@ void MX_FREERTOS_Init(void)
 
     /* USER CODE BEGIN RTOS_THREADS */
     /* add threads, ... */
-    angleRegulationTaskHandle =
-        osThreadNew(StartAngleRegulationTask, NULL, &angleRegulationTask_attributes);
+    initAdcsThreads();
 
     /* USER CODE END RTOS_THREADS */
 
@@ -137,19 +130,6 @@ void StartDefaultTask(void *argument)
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
-/**
-  * @brief  Function implementing the Angle regulation thread.
-  * @param  argument: Not used
-  * @retval None
-  */
-void StartAngleRegulationTask(void *argument)
-{
-    for (;;) {
-        vTaskDelay(pdMS_TO_TICKS(1000));
-
-        // TODO: Add Angle regulation code here
-    }
-}
 
 /* USER CODE END Application */
 

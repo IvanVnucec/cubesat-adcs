@@ -2,6 +2,9 @@
 
 #include "angle_regulation.hpp"
 
+#include "FreeRTOS.h"
+#include "task.h"
+
 //static PID_Handle_t hpid;
 static int regulation_running = 0;
 
@@ -54,4 +57,18 @@ float REG_ANGLE_regulate(float desired_angle, float real_angle)
 	*/
 
     return output;
+}
+
+/**
+  * @brief  Function implementing the Angle regulation thread callback.
+  * @param  argument: Not used
+  * @retval None
+  */
+void REG_ANGLE_taskCallback(void *argument)
+{
+    for (;;) {
+        vTaskDelay(pdMS_TO_TICKS(1000));
+
+        // TODO: Add Angle regulation code here
+    }
 }
