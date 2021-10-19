@@ -34,7 +34,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #define HIGH 0
 #define LOW 0
 #define MSBFIRST 0
-#define SPI_MODE3 0
 
 class TwoWire {
   public:
@@ -63,30 +62,6 @@ class TwoWire {
     uint8_t read()
     {
         return 0;
-    }
-};
-
-class SPISettings {
-  public:
-    SPISettings(const uint32_t, int, int)
-    {
-    }    // https://www.arduino.cc/en/Reference/SPISettings
-};
-
-class SPIClass {
-  public:
-    void begin()
-    {
-    }
-    void beginTransaction(SPISettings)
-    {
-    }
-    uint8_t transfer(uint8_t)
-    {
-        return 0;
-    }
-    void endTransaction()
-    {
     }
 };
 // END OF MOCKS
@@ -123,7 +98,6 @@ class MPU9250 {
         LP_ACCEL_ODR_500HZ   = 11
     };
     MPU9250(TwoWire &bus, uint8_t address);
-    MPU9250(SPIClass &bus, uint8_t csPin);
     int begin();
     int setAccelRange(AccelRange range);
     int setGyroRange(GyroRange range);
@@ -178,14 +152,6 @@ class MPU9250 {
     TwoWire *_i2c;
     const uint32_t _i2cRate = 400000;    // 400 kHz
     size_t _numBytes;                    // number of bytes received from I2C
-    // spi
-    SPIClass *_spi;
-    uint8_t _csPin;
-    bool _useSPI;
-    bool _useSPIHS;
-    const uint8_t SPI_READ      = 0x80;
-    const uint32_t SPI_LS_CLOCK = 1000000;     // 1 MHz
-    const uint32_t SPI_HS_CLOCK = 15000000;    // 15 MHz
     // track success of interacting with sensor
     int _status;
     // buffer for reading from sensor
