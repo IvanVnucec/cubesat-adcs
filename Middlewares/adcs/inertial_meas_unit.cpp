@@ -14,8 +14,8 @@
 
 namespace InertialMeasUnit {
 
-static TwoWire Wire;    // TODO: Delete this when mpu9250 driver is implemented
-static MPU9250 imu(Wire, 0x68);
+// TODO [Ivan Vnucec]: We don't want global variables
+static MPU9250 imu(0x68);
 
 InertialMeasUnit::InertialMeasUnit()
 {

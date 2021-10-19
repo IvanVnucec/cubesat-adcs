@@ -23,41 +23,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 #include "mpu9250.hpp"
 
+#include "i2c.h"
+#include "stm32l4xx.h"
+
 #include <cmath>
 #include <cstring>
 
-// TODO: Implement MOCKS Functions below
-// MOCKS
-void delay(int)
-{
-}
-void pinMode(uint8_t, int)
-{
-}
-void digitalWrite(uint8_t, int)
-{
-}
-float map(float, float, float, float, float)
-{
-    return 0.0f;
-}    // https://www.arduino.cc/reference/en/language/functions/math/map/
-// END MOCKS
+static void delay(int delay);
+static long map(long x, long in_min, long in_max, long out_min, long out_max);
 
-/* MPU9250 object, input the I2C bus and address */
-MPU9250::MPU9250(TwoWire &bus, uint8_t address)
+/* MPU9250 object, input the I2C address */
+MPU9250::MPU9250(uint8_t address)
 {
-    _i2c     = &bus;       // I2C bus
-    _address = address;    // I2C address
+    _address = address << 1;    // I2C address
 }
 
 /* starts communication with the MPU-9250 */
 int MPU9250::begin()
 {
-    // starting the I2C bus
-    _i2c->begin();
-    // setting the I2C clock
-    _i2c->setClock(_i2cRate);
-
     // select clock source to gyro
     if (writeRegister(PWR_MGMNT_1, CLOCK_SEL_PLL) < 0) {
         return -1;
@@ -1093,16 +1076,26 @@ void MPU9250::setMagCalZ(float bias, float scaleFactor)
 /* writes a byte to MPU9250 register given a register address and data */
 int MPU9250::writeRegister(uint8_t subAddress, uint8_t data)
 {
-    /* write data to device */
-    _i2c->beginTransmission(_address);    // open the device
-    _i2c->write(subAddress);              // write the register address
-    _i2c->write(data);                    // write the data
-    _i2c->endTransmission();
+    HAL_StatusTypeDef retval;
+
+    retval = HAL_I2C_Mem_Write(&hi2c1,
+                               _address,
+                               subAddress,
+                               I2C_MEMADD_SIZE_8BIT,
+                               &data,
+                               1,
+                               1000);
 
     delay(10);
 
+    if (retval != HAL_OK) {
+        return -1;    // failure
+    }
+
     /* read back the register */
-    readRegisters(subAddress, 1, _buffer);
+    if (readRegisters(subAddress, 1, _buffer) != 1) {
+        return -1;
+    }
     /* check the read back register against the written register */
     if (_buffer[0] == data) {
         return 1;
@@ -1114,18 +1107,20 @@ int MPU9250::writeRegister(uint8_t subAddress, uint8_t data)
 /* reads registers from MPU9250 given a starting register address, number of bytes, and a pointer to store data */
 int MPU9250::readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest)
 {
-    _i2c->beginTransmission(_address);    // open the device
-    _i2c->write(subAddress);              // specify the starting register address
-    _i2c->endTransmission(false);
-    _numBytes = _i2c->requestFrom(_address,
-                                  count);    // specify the number of bytes to receive
-    if (_numBytes == count) {
-        for (uint8_t i = 0; i < count; i++) {
-            dest[i] = _i2c->read();
-        }
-        return 1;
+    HAL_StatusTypeDef retval;
+
+    retval = HAL_I2C_Mem_Read(&hi2c1,
+                              _address,
+                              subAddress,
+                              I2C_MEMADD_SIZE_8BIT,
+                              dest,
+                              count,
+                              1000);
+
+    if (retval != HAL_OK) {
+        return -1;    // failure
     } else {
-        return -1;
+        return 1;    // success
     }
 }
 
@@ -1200,4 +1195,14 @@ int MPU9250::whoAmIAK8963()
     }
     // return the register value
     return _buffer[0];
+}
+
+static void delay(int delay)
+{
+    HAL_Delay(delay);
+}
+
+static long map(long x, long in_min, long in_max, long out_min, long out_max)
+{
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }

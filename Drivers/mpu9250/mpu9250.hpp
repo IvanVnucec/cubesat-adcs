@@ -27,45 +27,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <cstddef>
 #include <cstdint>
 
-// TODO: Implement MOCKS Functions below
-// MOCKS
-
-#define OUTPUT 0
-#define HIGH 0
-#define LOW 0
-#define MSBFIRST 0
-
-class TwoWire {
-  public:
-    void begin()
-    {
-    }
-    void setClock(const uint32_t)
-    {
-    }
-    void beginTransmission(uint8_t)
-    {
-    }
-    void write(uint8_t)
-    {
-    }
-    void endTransmission()
-    {
-    }
-    void endTransmission(bool)
-    {
-    }
-    size_t requestFrom(uint8_t, uint8_t)
-    {
-        return 0;
-    }
-    uint8_t read()
-    {
-        return 0;
-    }
-};
-// END OF MOCKS
-
 class MPU9250 {
   public:
     enum GyroRange {
@@ -97,7 +58,7 @@ class MPU9250 {
         LP_ACCEL_ODR_250HZ   = 10,
         LP_ACCEL_ODR_500HZ   = 11
     };
-    MPU9250(TwoWire &bus, uint8_t address);
+    MPU9250(uint8_t address);
     int begin();
     int setAccelRange(AccelRange range);
     int setGyroRange(GyroRange range);
@@ -149,9 +110,6 @@ class MPU9250 {
   protected:
     // i2c
     uint8_t _address;
-    TwoWire *_i2c;
-    const uint32_t _i2cRate = 400000;    // 400 kHz
-    size_t _numBytes;                    // number of bytes received from I2C
     // track success of interacting with sensor
     int _status;
     // buffer for reading from sensor
