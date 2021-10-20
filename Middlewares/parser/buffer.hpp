@@ -10,8 +10,8 @@
 
 #include <cstdint>
 #include <memory>
+#include "stm32l4xx.h"
 
-// TODO [ivan vnucec]: guard variables by disabling interrupts or use some other solution. See functions below
 template <class T = std::uint8_t> class Buffer {
   private:
     std::unique_ptr<T[]> m_buffer;
@@ -21,8 +21,13 @@ template <class T = std::uint8_t> class Buffer {
 
   public:
     Buffer<T>(int size)
-        : m_buffer(std::unique_ptr<T[]>(new T[size])), m_head(0), m_tail(0), m_size(size)
     {
+        __disable_irq();
+        m_buffer = { std::unique_ptr<T[]>(new T[size]) };
+        m_head = 0;
+        m_tail = 0;
+        m_size = 0;
+        __enable_irq();
     }
 
     ~Buffer<T>()
@@ -31,25 +36,37 @@ template <class T = std::uint8_t> class Buffer {
 
     void push(T item)
     {
+        __disable_irq();
         m_buffer[m_tail] = item;
         m_tail           = (m_tail + 1) % m_size;
+        __enable_irq();
     }
 
     T pop()
     {
+        __disable_irq();
         T item = m_buffer[m_head];
         m_head = (m_head + 1) % m_size;
+        __enable_irq();
         return item;
     }
 
     bool is_empty()
     {
-        return m_head == m_tail;
+        __disable_irq();
+        bool retval = m_head == m_tail;
+        __enable_irq();
+
+        return retval;
     }
 
     bool is_full()
     {
-        return (m_tail == (m_head - 1) % m_size);
+        __disable_irq();
+        bool retval = m_tail == (m_head - 1) % m_size;
+        __enable_irq();
+
+        return retval;
     }
 };
 
