@@ -31,6 +31,7 @@ void InertialMeasUnit::calibrateGyro()
     imu.calibrateGyro();
 }
 
+// TODO [Ivan Vnucec]: Add async reads
 void InertialMeasUnit::getDataFromSensorAsync()
 {
     imu.readSensor();
