@@ -8,14 +8,19 @@
 #ifndef PARSER_PARSER_HPP_
 #define PARSER_PARSER_HPP_
 
+#include <memory>
 #include <string>
+#include <vector>
 
 typedef void (*callback_t)(void *argument);
 
 class Parser {
   private:
+    std::unique_ptr<std::string[]> m_commands;
+    std::unique_ptr<callback_t[]> m_callbacks;
+
   public:
-    Parser();
+    Parser(size_t num_of_commands);
     ~Parser();
     bool commandReceived();
     std::string getCommand();

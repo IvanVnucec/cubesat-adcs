@@ -9,9 +9,12 @@
 
 #include "parser.hpp"
 
+#include <memory>
 #include <string>
 
-Parser::Parser()
+Parser::Parser(size_t num_of_commands)
+    : m_commands(std::unique_ptr<std::string[]>(new std::string[num_of_commands])),
+      m_callbacks(std::unique_ptr<callback_t[]>(new callback_t[num_of_commands]))
 {
 }
 
