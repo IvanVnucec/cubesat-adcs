@@ -9,5 +9,7 @@
 #define PARSER_HAL_INTERFACE_HPP_
 
 void startReceivingFromUart(void);
+void getDataFromUart(std::uint8_t *data, unsigned len);
+void sendDataWithUart(std::uint8_t *data, unsigned len);
 
 #endif /* PARSER_HAL_INTERFACE_HPP_ */

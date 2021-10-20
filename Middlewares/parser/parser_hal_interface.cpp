@@ -10,9 +10,29 @@ static std::uint8_t data_received;
 static Buffer<std::uint8_t> bufferIn(3);
 static Buffer<std::uint8_t> bufferOut(3);
 
-extern "C" void startReceivingFromUart(void)
+void startReceivingFromUart()
 {
     HAL_UART_Receive_IT(&huart2, &data_received, 1);
+}
+
+// TODO [ivan vnucec]: test this
+void getDataFromUart(std::uint8_t *data, unsigned len) 
+{
+    // TODO: check if buffer is empty
+    for (unsigned i = 0; i < len; i++)
+        data[i] = bufferIn.pop();
+    
+}
+
+// TODO [ivan vnucec]: test this
+void sendDataWithUart(std::uint8_t *data, unsigned len)
+{
+    // TODO: check if buffer is full
+    data_to_send = data[0];
+    for (unsigned i = 1; i < len; i++)
+        bufferOut.push(data[i]);
+
+    HAL_UART_Transmit_IT(&huart2, &data_to_send, 1);
 }
 
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *handle)
