@@ -25,6 +25,7 @@ void getDataFromUart(std::uint8_t *data, unsigned len)
 }
 
 // TODO [ivan vnucec]: test this
+// TODO [ivan vnucec]: we dont need to send data with uart one by one byte
 void sendDataWithUart(std::uint8_t *data, unsigned len)
 {
     // TODO: check if buffer is full
