@@ -24,13 +24,6 @@ extern "C" {
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-static osThreadId_t angleRegulationTaskHandle;
-const static osThreadAttr_t angleRegulationTask_attributes = {
-    .name       = "angleRegulationTask",
-    .stack_size = 128 * 4,
-    .priority   = (osPriority_t)osPriorityNormal1,    // TODO: Set priorities
-};
-
 static osThreadId_t optimalRequestHandle;
 const static osThreadAttr_t optimalRequest_attributes = {
     .name       = "optimalRequestTask",
@@ -50,19 +43,16 @@ const static osThreadAttr_t inertialMeasUnit_attributes = {
 /* Private application code --------------------------------------------------*/
 void initAdcsThreads()
 {
-    // angle regulation thread
-    angleRegulationTaskHandle =
-        osThreadNew(REG_ANGLE_thread, NULL, &angleRegulationTask_attributes);
+    // TODO [Ivan Vnucec]: Check handles for null ptrs
+    // inertial measurement unit thread
+    inertialMeasUnitHandle = osThreadNew(InertialMeasUnit::inertialMeasUnitThread,
+                                         NULL,
+                                         &inertialMeasUnit_attributes);
 
     // optimal request thread
     optimalRequestHandle = osThreadNew(OptimalRequestInterface::optimalRequestThread,
                                        NULL,
                                        &optimalRequest_attributes);
-
-    // inertial measurement unit thread
-    inertialMeasUnitHandle = osThreadNew(InertialMeasUnit::inertialMeasUnitThread,
-                                         NULL,
-                                         &inertialMeasUnit_attributes);
 }
 
 #ifdef __cplusplus
