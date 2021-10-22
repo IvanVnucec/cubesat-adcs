@@ -23,7 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 #include "mpu9250.hpp"
 
+#include "FreeRTOS.h"
 #include "i2c.h"
+#include "i2c_user.hpp"
+#include "semphr.h"
 #include "stm32l4xx.h"
 
 #include <cmath>
@@ -33,7 +36,7 @@ static void delay(int delay);
 static long map(long x, long in_min, long in_max, long out_min, long out_max);
 
 /* MPU9250 object, input the I2C address */
-MPU9250::MPU9250(uint8_t address)
+MPU9250::MPU9250(I2C_HandleTypeDef *hi2c, uint8_t address) : I2C_User(hi2c)
 {
     _address = address << 1;    // I2C address
 }
@@ -42,7 +45,7 @@ MPU9250::MPU9250(uint8_t address)
 int MPU9250::begin()
 {
     // select clock source to gyro
-    if (writeRegister(PWR_MGMNT_1, CLOCK_SEL_PLL) < 0) {
+    if (writeRegisterAsync(PWR_MGMNT_1, CLOCK_SEL_PLL) < 0) {
         return -1;
     }
     // enable I2C master mode
@@ -1073,11 +1076,29 @@ void MPU9250::setMagCalZ(float bias, float scaleFactor)
     _hzs = scaleFactor;
 }
 
+// TODO: Add asyncronus register writing over DMA and Freertos tasks suspending
+int MPU9250::writeRegisterAsync(uint8_t subAddress, uint8_t data)
+{
+    sendOverDMA(_address, subAddress, &data, 1);
+
+    /* read back the register */
+    if (readRegisters(subAddress, 1, _buffer) != 1) {
+        return -1;
+    }
+    /* check the read back register against the written register */
+    if (_buffer[0] == data) {
+        return 1;
+    } else {
+        return -1;
+    }
+}
+
 /* writes a byte to MPU9250 register given a register address and data */
 int MPU9250::writeRegister(uint8_t subAddress, uint8_t data)
 {
     HAL_StatusTypeDef retval;
 
+    // TODO: See can we use HAL_I2C_Master_Transmit and not HAL_I2C_Mem_Write
     retval = HAL_I2C_Mem_Write(&hi2c1,
                                _address,
                                subAddress,

@@ -12,10 +12,9 @@
 
 #include <cstdint>
 
-
 namespace InertialMeasUnit {
 
-class InertialMeasUnit {
+class InertialMeasUnit : public MPU9250 {
   private:
     static constexpr uint8_t m_imu_i2c_address = (uint8_t)0x68;
 

@@ -24,10 +24,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #ifndef MPU9250_HPP
 #define MPU9250_HPP
 
+#include "i2c_user.hpp"
+
 #include <cstddef>
 #include <cstdint>
 
-class MPU9250 {
+class MPU9250 : public I2C_User {
   public:
     enum GyroRange {
         GYRO_RANGE_250DPS,
@@ -58,7 +60,7 @@ class MPU9250 {
         LP_ACCEL_ODR_250HZ   = 10,
         LP_ACCEL_ODR_500HZ   = 11
     };
-    MPU9250(uint8_t address);
+    MPU9250(I2C_HandleTypeDef *hi2c, uint8_t address);
     int begin();
     int setAccelRange(AccelRange range);
     int setGyroRange(GyroRange range);
@@ -108,6 +110,7 @@ class MPU9250 {
     void setMagCalZ(float bias, float scaleFactor);
 
   protected:
+    // TODO: Add m_ prefix to private variables
     // i2c
     uint8_t _address;
     // track success of interacting with sensor
@@ -251,6 +254,7 @@ class MPU9250 {
     const uint8_t AK8963_WHO_AM_I  = 0x00;
     // private functions
     int writeRegister(uint8_t subAddress, uint8_t data);
+    int writeRegisterAsync(uint8_t subAddress, uint8_t data);
     int readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest);
     int writeAK8963Register(uint8_t subAddress, uint8_t data);
     int readAK8963Registers(uint8_t subAddress, uint8_t count, uint8_t *dest);
