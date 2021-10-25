@@ -1079,7 +1079,7 @@ void MPU9250::setMagCalZ(float bias, float scaleFactor)
 // TODO: Add asyncronus register writing over DMA and Freertos tasks suspending
 int MPU9250::writeRegisterAsync(uint8_t subAddress, uint8_t data)
 {
-    sendOverDMA(_address, subAddress, &data, 1);
+    WriteMemAsync(_address, subAddress, &data, 1);
 
     /* read back the register */
     if (readRegisters(subAddress, 1, _buffer) != 1) {

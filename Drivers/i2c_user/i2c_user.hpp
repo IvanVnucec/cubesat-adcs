@@ -13,19 +13,25 @@
 #include "stm32l4xx.h"
 
 #include <cstdint>
+
 using namespace std;
 
 class I2C_User {
   private:
     I2C_HandleTypeDef *m_hi2c;
+    bool m_initialized = false;
 
-  public:
+  protected:
     I2C_User(I2C_HandleTypeDef *hi2c);
     ~I2C_User();
-    void sendOverDMA(uint16_t dev_address,
-                     uint16_t mem_address,
-                     uint8_t *data,
-                     unsigned data_len);
+    bool isInitialized();
+
+  public:
+    void WriteMemAsync(uint16_t dev_address,
+                       uint16_t mem_address,
+                       uint8_t *data,
+                       unsigned data_len);
+    void ReadMemAsync();
 };
 
 #endif /* I2C_USER_I2C_USER_HPP_ */
