@@ -17,61 +17,57 @@
 
 using namespace std;
 
+static constexpr I2C_HandleTypeDef *hal_i2c_handle_ptr = &hi2c1;
+
 static SemaphoreHandle_t i2cDmaSemaphore = NULL;
 
-I2C_User::I2C_User(I2C_HandleTypeDef *hi2c)
+I2C_User::I2C_User()
 {
-    // TODO [Ivan vnucec]: check if HAL driver is initialized
+    m_hi2c_ptr = hal_i2c_handle_ptr;
+    assert(m_hi2c_ptr != NULL);
+
     i2cDmaSemaphore = xSemaphoreCreateBinary();
     assert(i2cDmaSemaphore != NULL);
-    xSemaphoreGive(i2cDmaSemaphore);
-    m_initialized = true;
+
+    BaseType_t rtos_status = xSemaphoreGive(i2cDmaSemaphore);
+    assert(rtos_status == pdPASS);
 }
 
 I2C_User::~I2C_User()
 {
-    // TODO: call hal deinit functions  or something
-    m_initialized = false;
+    HAL_I2C_DeInit(m_hi2c_ptr);
 }
 
 void I2C_User::WriteMemAsync(uint16_t dev_address,
                              uint16_t mem_address,
                              uint8_t *data,
-                             unsigned data_len)
+                             uint16_t data_len)
 {
-    HAL_StatusTypeDef hal_status = HAL_ERROR;
-    BaseType_t rtos_status       = pdFAIL;
+    BaseType_t rtos_status = xSemaphoreTake(i2cDmaSemaphore, portMAX_DELAY);
+    assert(rtos_status == pdPASS);
 
-    assert(m_initialized == true);
+    HAL_StatusTypeDef hal_status = HAL_I2C_Mem_Write_DMA(m_hi2c_ptr,
+                                                         dev_address,
+                                                         mem_address,
+                                                         I2C_MEMADD_SIZE_8BIT,
+                                                         data,
+                                                         data_len);
 
-    // get i2c mutex (dma callback releases mutex)
-    rtos_status = xSemaphoreTake(i2cDmaSemaphore, portMAX_DELAY);
-    if (rtos_status == pdPASS) {
-        // send data over dma to i2c
-        hal_status = HAL_I2C_Mem_Write_DMA(&hi2c1,
-                                           dev_address,
-                                           mem_address,
-                                           I2C_MEMADD_SIZE_8BIT,
-                                           data,
-                                           data_len);
-    }
-
-    // TODO: implement error handling
-    (void)rtos_status;
-    (void)hal_status;
+    assert(hal_status == HAL_OK);
 }
 
-// TODO: Implement async reading
 void I2C_User::ReadMemAsync()
 {
-    assert(m_initialized == true);
+    // TODO: Implement async reading
 }
 
 void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
-    assert(i2cDmaSemaphore != NULL);
-    xSemaphoreGiveFromISR(i2cDmaSemaphore, &xHigherPriorityTaskWoken);
+    BaseType_t rtos_status =
+        xSemaphoreGiveFromISR(i2cDmaSemaphore, &xHigherPriorityTaskWoken);
+    assert(rtos_status == pdPASS);
+
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }

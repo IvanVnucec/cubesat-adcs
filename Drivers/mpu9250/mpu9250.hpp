@@ -60,7 +60,8 @@ class MPU9250 : public I2C_User {
         LP_ACCEL_ODR_250HZ   = 10,
         LP_ACCEL_ODR_500HZ   = 11
     };
-    MPU9250(I2C_HandleTypeDef *hi2c, uint8_t address);
+    MPU9250(uint8_t address);
+    ~MPU9250();
     int begin();
     int setAccelRange(AccelRange range);
     int setGyroRange(GyroRange range);

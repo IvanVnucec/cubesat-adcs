@@ -36,9 +36,10 @@ static void delay(int delay);
 static long map(long x, long in_min, long in_max, long out_min, long out_max);
 
 /* MPU9250 object, input the I2C address */
-MPU9250::MPU9250(I2C_HandleTypeDef *hi2c, uint8_t address) : I2C_User(hi2c)
+MPU9250::MPU9250(uint8_t address)
 {
     _address = address << 1;    // I2C address
+    begin();
 }
 
 /* starts communication with the MPU-9250 */
@@ -1076,7 +1077,6 @@ void MPU9250::setMagCalZ(float bias, float scaleFactor)
     _hzs = scaleFactor;
 }
 
-// TODO: Add asyncronus register writing over DMA and Freertos tasks suspending
 int MPU9250::writeRegisterAsync(uint8_t subAddress, uint8_t data)
 {
     WriteMemAsync(_address, subAddress, &data, 1);
