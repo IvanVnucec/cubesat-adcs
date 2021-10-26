@@ -35,7 +35,8 @@ I2C_User::I2C_User()
 
 I2C_User::~I2C_User()
 {
-    HAL_I2C_DeInit(m_hi2c_ptr);
+    HAL_StatusTypeDef hal_status = HAL_I2C_DeInit(m_hi2c_ptr);
+    assert(hal_status == HAL_OK);
 }
 
 void I2C_User::WriteMemAsync(uint16_t dev_address,
@@ -63,11 +64,18 @@ void I2C_User::ReadMemAsync()
 
 void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    if (hi2c->Instance == hal_i2c_handle_ptr->Instance) {
+        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
-    BaseType_t rtos_status =
-        xSemaphoreGiveFromISR(i2cDmaSemaphore, &xHigherPriorityTaskWoken);
-    assert(rtos_status == pdPASS);
+        BaseType_t rtos_status =
+            xSemaphoreGiveFromISR(i2cDmaSemaphore, &xHigherPriorityTaskWoken);
+        assert(rtos_status == pdPASS);
 
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    }
 }
+
+void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
+{
+}
+    
