@@ -9,11 +9,24 @@
 #define UART_USER_HPP_
 
 #include <cstdint>
+#include "usart.h"
 
 using namespace std;
 
-void startReceivingFromUart(void);
-void getDataFromUart(uint8_t *data, unsigned len);
-void sendDataWithUart(uint8_t *data, unsigned len);
+class UART_User {
+    private:
+        UART_HandleTypeDef *m_hal_uart_ptr;
+
+    
+    protected:
+        UART_User();
+        ~UART_User();
+
+    public:
+        void stopReceiving();
+        void startReceiving();
+        void writeDataAsync(uint8_t *data, unsigned len);
+        void readDataAsync();
+};
 
 #endif /* UART_USER_HPP_ */
