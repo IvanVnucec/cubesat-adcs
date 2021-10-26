@@ -14,17 +14,17 @@
 
 namespace InertialMeasUnit {
 
+struct Data {
+    double acc[3];    // m/s^2
+    double mag[3];    // uT
+    double gyr[3];    // rads
+};
+
 class InertialMeasUnit : public MPU9250 {
   private:
     static constexpr uint8_t m_imu_i2c_address = (uint8_t)0x68;
 
   public:
-    struct Data {
-        double acc[3];    // m/s^2
-        double mag[3];    // uT
-        double gyr[3];    // rads
-    };
-
     Data m_data;
 
     InertialMeasUnit();

@@ -24,32 +24,36 @@ InertialMeasUnit::~InertialMeasUnit()
 
 void InertialMeasUnit::calibrateGyro()
 {
-    MPU9250::calibrateGyro();
+    int retval = MPU9250::calibrateGyro();
+    assert(retval == 1);
 }
 
-InertialMeasUnit::Data InertialMeasUnit::getData()
+Data InertialMeasUnit::getData()
 {
-    MPU9250::readSensor();
+    Data data;
 
-    m_data.gyr[0] = MPU9250::getGyroX_rads();
-    m_data.gyr[1] = MPU9250::getGyroY_rads();
-    m_data.gyr[2] = MPU9250::getGyroZ_rads();
+    int retval = MPU9250::readSensor();
+    assert(retval == 1);
 
-    m_data.acc[0] = MPU9250::getAccelX_mss();
-    m_data.acc[1] = MPU9250::getAccelY_mss();
-    m_data.acc[2] = MPU9250::getAccelZ_mss();
+    data.gyr[0] = MPU9250::getGyroX_rads();
+    data.gyr[1] = MPU9250::getGyroY_rads();
+    data.gyr[2] = MPU9250::getGyroZ_rads();
 
-    m_data.mag[0] = MPU9250::getMagX_uT();
-    m_data.mag[1] = MPU9250::getMagY_uT();
-    m_data.mag[2] = MPU9250::getMagZ_uT();
+    data.acc[0] = MPU9250::getAccelX_mss();
+    data.acc[1] = MPU9250::getAccelY_mss();
+    data.acc[2] = MPU9250::getAccelZ_mss();
 
-    return m_data;
+    data.mag[0] = MPU9250::getMagX_uT();
+    data.mag[1] = MPU9250::getMagY_uT();
+    data.mag[2] = MPU9250::getMagZ_uT();
+
+    return data;
 }
 
 void inertialMeasUnitThread(void *argument)
 {
     InertialMeasUnit imu;
-    InertialMeasUnit::Data imu_data;
+    Data imu_data;
 
     for (;;) {
         imu_data = imu.getData();
@@ -57,7 +61,7 @@ void inertialMeasUnitThread(void *argument)
         // TODO: handle data
         (void)imu_data;
 
-        vTaskDelay(pdMS_TO_TICKS(10));
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
 
