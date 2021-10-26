@@ -36,17 +36,18 @@ static void delay(int delay);
 static long map(long x, long in_min, long in_max, long out_min, long out_max);
 
 /* MPU9250 object, input the I2C address */
-MPU9250::MPU9250(uint8_t address)
+MPU9250::MPU9250(uint8_t address) : I2C_User()
 {
-    _address = address << 1;    // I2C address
-    begin();
+    _address   = address << 1;    // I2C address
+    int retval = begin();
+    assert(retval == 1);
 }
 
 /* starts communication with the MPU-9250 */
 int MPU9250::begin()
 {
     // select clock source to gyro
-    if (writeRegisterAsync(PWR_MGMNT_1, CLOCK_SEL_PLL) < 0) {
+    if (writeRegister(PWR_MGMNT_1, CLOCK_SEL_PLL) < 0) {
         return -1;
     }
     // enable I2C master mode
@@ -1079,7 +1080,8 @@ void MPU9250::setMagCalZ(float bias, float scaleFactor)
 
 int MPU9250::writeRegisterAsync(uint8_t subAddress, uint8_t data)
 {
-    WriteMemAsync(_address, subAddress, &data, 1);
+    // TODO: see if mem size is 2 or 1?
+    WriteMemAsync(_address, subAddress, &data, 2);
 
     /* read back the register */
     if (readRegisters(subAddress, 1, _buffer) != 1) {

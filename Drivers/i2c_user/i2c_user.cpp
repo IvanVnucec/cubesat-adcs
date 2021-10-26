@@ -39,6 +39,7 @@ I2C_User::~I2C_User()
     assert(hal_status == HAL_OK);
 }
 
+// TODO: fix this function. After sending, reading returns with HAL busy retval
 void I2C_User::WriteMemAsync(uint16_t dev_address,
                              uint16_t mem_address,
                              uint8_t *data,
@@ -78,4 +79,3 @@ void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
 void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 {
 }
-    
