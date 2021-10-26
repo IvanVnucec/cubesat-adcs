@@ -24,17 +24,17 @@ extern "C" {
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-static osThreadId_t optimalRequestHandle;
+static osThreadId_t optimalRequestHandle              = NULL;
 const static osThreadAttr_t optimalRequest_attributes = {
     .name       = "optimalRequestTask",
     .stack_size = 128 * 4,
     .priority   = (osPriority_t)osPriorityNormal2,
 };
 
-static osThreadId_t inertialMeasUnitHandle;
+static osThreadId_t inertialMeasUnitHandle              = NULL;
 const static osThreadAttr_t inertialMeasUnit_attributes = {
     .name       = "inertialMeasUnitTask",
-    .stack_size = 128 * 4,
+    .stack_size = 1024 * 4,
     .priority   = (osPriority_t)osPriorityNormal3,
 };
 
@@ -49,10 +49,14 @@ void initAdcsThreads()
                                          NULL,
                                          &inertialMeasUnit_attributes);
 
+    assert(inertialMeasUnitHandle != NULL);
+
     // optimal request thread
     optimalRequestHandle = osThreadNew(OptimalRequestInterface::optimalRequestThread,
                                        NULL,
                                        &optimalRequest_attributes);
+
+    assert(optimalRequestHandle != NULL);
 }
 
 #ifdef __cplusplus
