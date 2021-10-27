@@ -27,7 +27,10 @@ class I2C_User {
                        uint16_t mem_address,
                        uint8_t *data,
                        uint16_t data_len);
-    void ReadMemAsync();
+    void ReadMemAsync(uint16_t dev_address,
+                      uint16_t mem_address,
+                      uint8_t *data,
+                      uint16_t data_len);
 };
 
 #endif /* I2C_USER_I2C_USER_HPP_ */

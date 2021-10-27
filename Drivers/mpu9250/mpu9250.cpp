@@ -36,6 +36,7 @@ static void delay(int delay);
 static long map(long x, long in_min, long in_max, long out_min, long out_max);
 
 /* MPU9250 object, input the I2C address */
+// TODO: return to this object from I2C_User takes ages
 MPU9250::MPU9250(uint8_t address) : I2C_User()
 {
     _address   = address << 1;    // I2C address
@@ -1081,10 +1082,10 @@ void MPU9250::setMagCalZ(float bias, float scaleFactor)
 int MPU9250::writeRegisterAsync(uint8_t subAddress, uint8_t data)
 {
     // TODO: see if mem size is 2 or 1?
-    WriteMemAsync(_address, subAddress, &data, 2);
+    WriteMemAsync(_address, subAddress, &data, 1);
 
     /* read back the register */
-    if (readRegisters(subAddress, 1, _buffer) != 1) {
+    if (readRegistersAsync(subAddress, 1, _buffer) != 1) {
         return -1;
     }
     /* check the read back register against the written register */
@@ -1098,22 +1099,9 @@ int MPU9250::writeRegisterAsync(uint8_t subAddress, uint8_t data)
 /* writes a byte to MPU9250 register given a register address and data */
 int MPU9250::writeRegister(uint8_t subAddress, uint8_t data)
 {
-    HAL_StatusTypeDef retval;
-
-    // TODO: See can we use HAL_I2C_Master_Transmit and not HAL_I2C_Mem_Write
-    retval = HAL_I2C_Mem_Write(&hi2c1,
-                               _address,
-                               subAddress,
-                               I2C_MEMADD_SIZE_8BIT,
-                               &data,
-                               1,
-                               1000);
+    writeRegisterAsync(subAddress, data);
 
     delay(10);
-
-    if (retval != HAL_OK) {
-        return -1;    // failure
-    }
 
     /* read back the register */
     if (readRegisters(subAddress, 1, _buffer) != 1) {
@@ -1130,21 +1118,16 @@ int MPU9250::writeRegister(uint8_t subAddress, uint8_t data)
 /* reads registers from MPU9250 given a starting register address, number of bytes, and a pointer to store data */
 int MPU9250::readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest)
 {
-    HAL_StatusTypeDef retval;
+    readRegistersAsync(subAddress, count, dest);
 
-    retval = HAL_I2C_Mem_Read(&hi2c1,
-                              _address,
-                              subAddress,
-                              I2C_MEMADD_SIZE_8BIT,
-                              dest,
-                              count,
-                              1000);
+    return 1;    // success
+}
 
-    if (retval != HAL_OK) {
-        return -1;    // failure
-    } else {
-        return 1;    // success
-    }
+int MPU9250::readRegistersAsync(uint8_t subAddress, uint8_t count, uint8_t *dest)
+{
+    ReadMemAsync(_address, subAddress, dest, count);
+
+    return 1;    // success
 }
 
 /* writes a register to the AK8963 given a register address and data */
@@ -1222,7 +1205,7 @@ int MPU9250::whoAmIAK8963()
 
 static void delay(int delay)
 {
-    HAL_Delay(delay);
+    vTaskDelay(pdMS_TO_TICKS(delay));
 }
 
 static long map(long x, long in_min, long in_max, long out_min, long out_max)

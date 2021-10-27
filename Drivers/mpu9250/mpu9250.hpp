@@ -257,6 +257,7 @@ class MPU9250 : public I2C_User {
     int writeRegister(uint8_t subAddress, uint8_t data);
     int writeRegisterAsync(uint8_t subAddress, uint8_t data);
     int readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest);
+    int readRegistersAsync(uint8_t subAddress, uint8_t count, uint8_t *dest);
     int writeAK8963Register(uint8_t subAddress, uint8_t data);
     int readAK8963Registers(uint8_t subAddress, uint8_t count, uint8_t *dest);
     int whoAmI();
