@@ -9,8 +9,13 @@
 
 #include "parser.hpp"
 
+#include "FreeRTOS.h"
+#include "cmsis_os.h"
+
 #include <memory>
 #include <string>
+
+namespace Parser {
 
 Parser::Parser(size_t num_of_commands)
     : m_commands(std::unique_ptr<std::string[]>(new std::string[num_of_commands])),
@@ -39,3 +44,12 @@ void Parser::sendCommand(std::string &command)
 void Parser::registerCommandWithCallback(std::string &command, callback_t callback)
 {
 }
+
+void parserThread(void *argument)
+{
+    for (;;) {
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
+}
+
+}    // namespace Parser

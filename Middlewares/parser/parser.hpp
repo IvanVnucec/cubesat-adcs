@@ -14,6 +14,8 @@
 
 typedef void (*callback_t)(void *argument);
 
+namespace Parser {
+
 class Parser {
   private:
     std::unique_ptr<std::string[]> m_commands;
@@ -27,5 +29,9 @@ class Parser {
     void sendCommand(std::string &command);
     void registerCommandWithCallback(std::string &command, callback_t callback);
 };
+
+void parserThread(void *argument);
+
+}    // namespace Parser
 
 #endif /* PARSER_PARSER_HPP_ */

@@ -11,6 +11,7 @@
 #include "cmsis_os.h"
 #include "inertial_meas_unit.hpp"
 #include "optimal_request_interface.hpp"
+#include "parser.hpp"
 #include "task.h"
 
 #ifdef __cplusplus
@@ -38,25 +39,33 @@ const static osThreadAttr_t inertialMeasUnit_attributes = {
     .priority   = (osPriority_t)osPriorityNormal3,
 };
 
+static osThreadId_t parserHandle              = NULL;
+const static osThreadAttr_t parser_attributes = {
+    .name       = "parserTask",
+    .stack_size = 128 * 4,
+    .priority   = (osPriority_t)osPriorityNormal4,
+};
+
 /* Private function prototypes -----------------------------------------------*/
 
 /* Private application code --------------------------------------------------*/
 void initAdcsThreads()
 {
-    // TODO [Ivan Vnucec]: Check handles for null ptrs
     // inertial measurement unit thread
     inertialMeasUnitHandle = osThreadNew(InertialMeasUnit::inertialMeasUnitThread,
                                          NULL,
                                          &inertialMeasUnit_attributes);
-
     assert(inertialMeasUnitHandle != NULL);
 
     // optimal request thread
     optimalRequestHandle = osThreadNew(OptimalRequestInterface::optimalRequestThread,
                                        NULL,
                                        &optimalRequest_attributes);
-
     assert(optimalRequestHandle != NULL);
+
+    // parser thread
+    parserHandle = osThreadNew(Parser::parserThread, NULL, &parser_attributes);
+    assert(parserHandle != NULL);
 }
 
 #ifdef __cplusplus
