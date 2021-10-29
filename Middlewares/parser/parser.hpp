@@ -8,26 +8,39 @@
 #ifndef PARSER_PARSER_HPP_
 #define PARSER_PARSER_HPP_
 
-#include <memory>
-#include <string>
-#include <vector>
+#include "uart_user.hpp"
 
-typedef void (*callback_t)(void *argument);
+#include <map>
+#include <string>
 
 namespace Parser {
 
-class Parser {
+using callback_t = void (*)(void *arg);
+using command_t  = std::string;
+
+struct commandAndArg {
+    std::string callback;
+    std::string arg;
+};
+
+class Parser : public UART_User {
   private:
-    std::unique_ptr<std::string[]> m_commands;
-    std::unique_ptr<callback_t[]> m_callbacks;
+    // clang-format off
+    std::map<command_t, callback_t> m_callbacks{
+    	{"start", nullptr},
+		  {"stop", nullptr}
+    };
+    // clang-format on
+
+    commandAndArg extractCommandAndArgument(const char *uart_data);
 
   public:
-    Parser(size_t num_of_commands);
+    Parser();
     ~Parser();
     bool commandReceived();
-    std::string getCommand();
-    void sendCommand(std::string &command);
-    void registerCommandWithCallback(std::string &command, callback_t callback);
+    command_t getCommandFromUart();
+    void callCallback(commandAndArg &command);
+    void registerCommandWithCallback(command_t &command, callback_t callback);
 };
 
 void parserThread(void *argument);
