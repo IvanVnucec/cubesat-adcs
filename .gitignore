@@ -2,3 +2,4 @@ Debug
 Release
 *.launch
 .settings/stm32cubeide.project.prefs
+.vscode/settings.json
