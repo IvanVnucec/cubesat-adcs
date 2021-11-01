@@ -19,7 +19,7 @@
 
 namespace Parser {
 
-Parser::Parser()
+Parser::Parser() : UART_User()
 {
 }
 
@@ -27,43 +27,41 @@ Parser::~Parser()
 {
 }
 
-bool Parser::commandReceived()
-{
-    return false;
-}
-
-commandAndArg Parser::extractCommandAndArgument(const char *uart_data)
+commandAndArg Parser::extractCommandAndArgument(const char *uart_data,
+                                                const unsigned uart_data_len)
 {
     commandAndArg retval;
 
-    // extract command and argument
-    (void)uart_data;
-    retval.callback = "asd";
-    retval.arg      = "0.03";
+    // command example: commandName(3.14) or commandName2(True) etc.
+    std::string data(uart_data, uart_data_len);
+    auto open_bracket_pos  = data.find('(');
+    auto close_bracket_pos = data.find(')');
+
+    assert(open_bracket_pos != std::string::npos);
+    assert(close_bracket_pos != std::string::npos);
+
+    retval.callback = data.substr(0, open_bracket_pos);
+    retval.arg      = data.substr(open_bracket_pos, close_bracket_pos);
 
     return retval;
 }
 
-command_t Parser::getCommandFromUart()
+commandAndArg Parser::getCommandFromUart()
 {
     static constexpr unsigned uart_data_max_len = 100;
     char uart_data[uart_data_max_len];
 
-    UART_User::readDataAsyncUntilChar((uint8_t *)uart_data, '\n', uart_data_max_len);
+    unsigned chars_read =
+        UART_User::readDataAsyncUntilChar((uint8_t *)uart_data, '\n', uart_data_max_len);
+    commandAndArg ca = extractCommandAndArgument(uart_data, chars_read);
 
-    commandAndArg ca = extractCommandAndArgument(uart_data);
-
-    return command_t((const char *)uart_data);
+    return ca;
 }
 
 void Parser::callCallback(commandAndArg &ca)
 {
-    m_callbacks[ca.callback](ca.arg);
-}
-
-void Parser::registerCommandWithCallback(command_t &command, callback_t callback)
-{
-    // add command and callback to the list of registers
+    // TODO: convert ca.arg (std::string) to function argument (void *)
+    m_callbacks[ca.callback](nullptr);
 }
 
 void parserThread(void *argument)
@@ -71,8 +69,8 @@ void parserThread(void *argument)
     Parser parser;
 
     for (;;) {
-        command_t command = parser.getCommandFromUart();
-        commandAndArg ca  = parser.callCallback(command);
+        commandAndArg command = parser.getCommandFromUart();
+        parser.callCallback(command);
     }
 }
 

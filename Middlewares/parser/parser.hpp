@@ -8,6 +8,7 @@
 #ifndef PARSER_PARSER_HPP_
 #define PARSER_PARSER_HPP_
 
+#include "callbacks.hpp"
 #include "uart_user.hpp"
 
 #include <map>
@@ -16,7 +17,6 @@
 namespace Parser {
 
 using callback_t = void (*)(void *arg);
-using command_t  = std::string;
 
 struct commandAndArg {
     std::string callback;
@@ -26,21 +26,20 @@ struct commandAndArg {
 class Parser : public UART_User {
   private:
     // clang-format off
-    std::map<command_t, callback_t> m_callbacks{
-    	{"start", nullptr},
-		  {"stop", nullptr}
+    std::map<std::string, callback_t> m_callbacks{
+    	{"RegulationStart", ParserCallback::RegulationStart},
+		  {"RegulationStop",  ParserCallback::RegulationStop}
     };
     // clang-format on
 
-    commandAndArg extractCommandAndArgument(const char *uart_data);
+    commandAndArg extractCommandAndArgument(const char *uart_data,
+                                            const unsigned uart_data_len);
 
   public:
     Parser();
     ~Parser();
-    bool commandReceived();
-    command_t getCommandFromUart();
+    commandAndArg getCommandFromUart();
     void callCallback(commandAndArg &command);
-    void registerCommandWithCallback(command_t &command, callback_t callback);
 };
 
 void parserThread(void *argument);
