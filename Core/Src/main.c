@@ -158,6 +158,10 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void SignalFaultCondition(void)
+{
+	HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
+}
 
 /* USER CODE END 4 */
 
