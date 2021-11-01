@@ -30,6 +30,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <sys/times.h>
+#include "cmsis_gcc.h"
 
 
 /* Variables */
@@ -60,6 +61,7 @@ int _kill(int pid, int sig)
 void _exit (int status)
 {
 	_kill(status, -1);
+	__disable_irq();
 	while (1) {}		/* Make sure we hang here */
 }
 
