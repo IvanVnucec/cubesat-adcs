@@ -56,7 +56,7 @@ void ReactionWheel::setAngularVelocity(int angular_vel)
  */
 void ReactionWheel::setDirection(ReactionWheelDirection dir)
 {
-    // TODO: add assert here. See how to assert Enums
+    assert(dir == CLOCKWISE || dir == ANTICLOCKWISE);
     m_dir = dir;
 
     if (dir == CLOCKWISE) {
