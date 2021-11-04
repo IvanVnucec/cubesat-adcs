@@ -22,7 +22,7 @@ class ReactionWheel {
     void setPWM(float pwm);
 
   public:
-    ReactionWheel(int ang_vel = 0);
+    ReactionWheel();
     ~ReactionWheel();
     void setAngularVelocity(int angular_vel);
 };

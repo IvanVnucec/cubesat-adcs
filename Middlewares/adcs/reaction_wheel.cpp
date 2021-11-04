@@ -9,15 +9,13 @@
 #include <limits.h>
 
 /**
- * Initialize MCU peripherals.
- * Set reaction wheel Angular velocity to zero.
- * @param angular_vel - Default 0 // TODO: add units and ranges here
+ * Initialize MCU peripherals and set reaction wheel Angular velocity to zero.
  *
  */
-ReactionWheel::ReactionWheel(int ang_vel)
+ReactionWheel::ReactionWheel()
 {
     startPWM();
-    setAngularVelocity(ang_vel);
+    setAngularVelocity(0.0f);
 }
 
 /**
@@ -25,7 +23,7 @@ ReactionWheel::ReactionWheel(int ang_vel)
  */
 ReactionWheel::~ReactionWheel()
 {
-    setAngularVelocity(0);
+    setAngularVelocity(0.0f);
     stopPWM();
 }
 
