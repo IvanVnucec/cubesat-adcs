@@ -8,12 +8,14 @@
 #ifndef INC_REACTION_WHEEL_HPP_
 #define INC_REACTION_WHEEL_HPP_
 
+#include "pwm_user.hpp"
+
 #include <climits>
 #include <cstdint>
 
 using namespace std;
 
-class ReactionWheel {
+class ReactionWheel : public Pwm_User {
   private:
     using pwm_value = uint32_t;
 
