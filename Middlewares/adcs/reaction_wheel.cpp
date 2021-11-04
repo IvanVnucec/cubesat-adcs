@@ -80,9 +80,15 @@ void ReactionWheel::setDirection(ReactionWheelDirection dir)
  */
 void ReactionWheel::startPWM()
 {
+    HAL_StatusTypeDef hal_status;
+
     // start Timer and PWM
-    HAL_TIM_Base_Start(&htim1);
-    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+    hal_status = HAL_TIM_Base_Start(&htim1);
+    assert(hal_status == HAL_OK);
+
+    hal_status = HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+    assert(hal_status == HAL_OK);
+
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
 }
 
@@ -92,10 +98,16 @@ void ReactionWheel::startPWM()
  */
 void ReactionWheel::stopPWM()
 {
+    HAL_StatusTypeDef hal_status;
+
     // stop PWM and Timer
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
-    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
-    HAL_TIM_Base_Stop(&htim1);
+
+    hal_status = HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+    assert(hal_status == HAL_OK);
+
+    hal_status = HAL_TIM_Base_Stop(&htim1);
+    assert(hal_status == HAL_OK);
 }
 
 /**
