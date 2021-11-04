@@ -6,7 +6,9 @@
 #include "tim.h"
 
 #include <cmath>
-#include <limits.h>
+#include <cstdint>
+
+using namespace std;
 
 /**
  * Initialize MCU peripherals and set reaction wheel Angular velocity to zero.
@@ -29,23 +31,25 @@ ReactionWheel::~ReactionWheel()
 
 /**
  * Set direction of rotation and the PWM based on angular velocity.
- * @param angular_vel - // TODO: add units and ranges here
+ * @param angular_vel - in rad/s. Values above MAX_ANG_VEL_RAD_P_SEC
+ * are limited to that value
  */
-void ReactionWheel::setAngularVelocity(int angular_vel)
+void ReactionWheel::setAngularVelocity(float ang_vel_rad_p_sec)
 {
-    // TODO: add assert here
-    m_ang_vel = angular_vel;
+    m_ang_vel_rad_p_sec = ang_vel_rad_p_sec;
 
-    if (m_ang_vel > 0) {
-        // TODO: determine experimentally which direction we should set here
+    if (m_ang_vel_rad_p_sec > 0.0f) {
         setDirection(CLOCKWISE);
     } else {
-        // TODO: determine experimentally which direction we should set here
         setDirection(ANTICLOCKWISE);
     }
 
-    // TODO: convert angular_vel to PWM value (this implementation is for example only!!!)
-    float pwm = std::abs(m_ang_vel) / INT_MAX;
+    float abs_ang_vel = abs(ang_vel_rad_p_sec);
+
+    if (abs_ang_vel > MAX_ANG_VEL_RAD_P_SEC)
+        abs_ang_vel = MAX_ANG_VEL_RAD_P_SEC;
+
+    pwm_value pwm = convertAbsAngVelRadPSecToPwm(abs_ang_vel);
     setPWM(pwm);
 }
 
@@ -110,15 +114,29 @@ void ReactionWheel::stopPWM()
 
 /**
  * Sets the PWM by setting the Timer Compare register.
- * @param pwm - // TODO: determine range of pwm variable.
+ * @param pwm_value - 0 to MAX_PWM_VALUE
  * @warning This function depends on MCU peripherals.
  */
-void ReactionWheel::setPWM(float pwm)
+void ReactionWheel::setPWM(pwm_value pwm)
 {
-    // TODO: add assert here
+    assert(pwm <= MAX_PWM_VALUE);
     m_pwm = pwm;
 
-    // TODO: convert pwm to pulse_width
-    uint32_t pulse_width = 0u;
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, pulse_width);
+    // convert pwm range to timer compare
+    uint32_t tim_compare = convertPwmToTimCompare(m_pwm);
+    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, tim_compare);
+}
+
+ReactionWheel::pwm_value
+    ReactionWheel::convertAbsAngVelRadPSecToPwm(float abs_ang_vel_rad_p_sec)
+{
+    pwm_value pwm =
+        (pwm_value)(abs_ang_vel_rad_p_sec / MAX_ANG_VEL_RAD_P_SEC) * MAX_PWM_VALUE;
+
+    return pwm;
+}
+
+uint32_t ReactionWheel::convertPwmToTimCompare(pwm_value pwm)
+{
+    return (uint32_t)(pwm / MAX_PWM_VALUE) * MAX_TIM_COMPARE_REG_VAL;
 }
