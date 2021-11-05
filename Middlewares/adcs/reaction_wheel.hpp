@@ -11,28 +11,20 @@
 #include "pwm_user.hpp"
 
 #include <climits>
-#include <cstdint>
 
-using namespace std;
+namespace ReactionWheel {
+
+using namespace Pwm_User;
 
 class ReactionWheel : public Pwm_User {
   private:
-    using pwm_value = uint32_t;
-
     enum ReactionWheelDirection { CLOCKWISE, ANTICLOCKWISE };
 
-    static constexpr pwm_value MAX_PWM_VALUE          = UINT32_MAX;
-    static constexpr uint32_t MAX_TIM_COMPARE_REG_VAL = UINT32_MAX;
     float m_ang_vel_rad_p_sec;    // rad/s
-    uint32_t m_pwm;               // range 0 - UINT32_MAX
     ReactionWheelDirection m_dir;
 
     void setDirection(ReactionWheelDirection dir);
-    void startPWM();
-    void stopPWM();
-    void setPWM(pwm_value pwm);
     pwm_value convertAbsAngVelRadPSecToPwm(float ang_vel_rad_p_sec);
-    uint32_t convertPwmToTimCompare(pwm_value pwm);
 
   public:
     static constexpr float MAX_ANG_VEL_RAD_P_SEC =
@@ -42,5 +34,7 @@ class ReactionWheel : public Pwm_User {
     ~ReactionWheel();
     void setAngularVelocity(float ang_vel_rad_p_sec);
 };
+
+} // namespace ReactionWheel
 
 #endif /* INC_REACTION_WHEEL_HPP_ */
