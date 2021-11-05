@@ -19,10 +19,12 @@ using namespace std;
 class UART_User {
   private:
     UART_HandleTypeDef *m_hal_uart_ptr;
+    void private_assert(bool condition);
 
   protected:
     UART_User();
     ~UART_User();
+    virtual void uartDriverErrorHandle();
     void stopReceiving();
     void startReceiving();
     void writeDataAsync(const uint8_t *data, unsigned len);
@@ -33,6 +35,6 @@ class UART_User {
   public:
 };
 
-} // namespace Uart_User
+}    // namespace Uart_User
 
 #endif /* UART_USER_HPP_ */

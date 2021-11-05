@@ -26,13 +26,13 @@ static SemaphoreHandle_t uartRxSemaphore = NULL;
 UART_User::UART_User()
 {
     m_hal_uart_ptr = hal_uart_handle_ptr;
-    assert(m_hal_uart_ptr != NULL);
+    private_assert(m_hal_uart_ptr != NULL);
 
     uartTxSemaphore = xSemaphoreCreateBinary();
-    assert(uartTxSemaphore != NULL);
+    private_assert(uartTxSemaphore != NULL);
 
     uartRxSemaphore = xSemaphoreCreateBinary();
-    assert(uartRxSemaphore != NULL);
+    private_assert(uartRxSemaphore != NULL);
 }
 
 UART_User::~UART_User()
@@ -42,13 +42,13 @@ UART_User::~UART_User()
 void UART_User::startReceiving()
 {
     HAL_StatusTypeDef hal_status = HAL_UART_Receive_IT(m_hal_uart_ptr, &data_received, 1);
-    assert(hal_status == HAL_OK);
+    private_assert(hal_status == HAL_OK);
 }
 
 void UART_User::stopReceiving()
 {
     HAL_StatusTypeDef hal_status = HAL_UART_AbortReceive_IT(m_hal_uart_ptr);
-    assert(hal_status == HAL_OK);
+    private_assert(hal_status == HAL_OK);
 }
 
 uint8_t UART_User::readByteAsync()
@@ -56,7 +56,7 @@ uint8_t UART_User::readByteAsync()
     startReceiving();
 
     BaseType_t rtos_status = xSemaphoreTake(uartRxSemaphore, portMAX_DELAY);
-    assert(rtos_status == pdPASS);
+    private_assert(rtos_status == pdPASS);
 
     stopReceiving();
 
@@ -91,7 +91,7 @@ unsigned UART_User::readDataAsyncUntilChar(uint8_t *data, char c, unsigned max_l
  */
 void UART_User::writeDataAsync(const uint8_t *data, unsigned len)
 {
-    assert(len <= buffer_out_len);
+    private_assert(len <= buffer_out_len);
 
     __disable_irq();
     for (unsigned i = 0; i < len; i++)
@@ -99,10 +99,24 @@ void UART_User::writeDataAsync(const uint8_t *data, unsigned len)
     __enable_irq();
 
     HAL_StatusTypeDef hal_status = HAL_UART_Transmit_IT(m_hal_uart_ptr, bufferOut, len);
-    assert(hal_status == HAL_OK);
+    private_assert(hal_status == HAL_OK);
 
     BaseType_t rtos_status = xSemaphoreTake(uartTxSemaphore, portMAX_DELAY);
-    assert(rtos_status == pdPASS);
+    private_assert(rtos_status == pdPASS);
+}
+
+void UART_User::private_assert(bool condition)
+{
+    if (not condition)
+        uartDriverErrorHandle();
+}
+
+void UART_User::uartDriverErrorHandle()
+{
+#ifdef DEBUG
+    while (true)
+        ;
+#endif
 }
 
 }    // namespace Uart_User
@@ -117,7 +131,7 @@ extern "C" void HAL_UART_TxCpltCallback(UART_HandleTypeDef *handle)
 
         BaseType_t rtos_status =
             xSemaphoreGiveFromISR(uartTxSemaphore, &xHigherPriorityTaskWoken);
-        assert(rtos_status == pdPASS);
+        assert(rtos_status == pdPASS);    // TODO: Replace assert() with private_assert()
 
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
@@ -132,7 +146,7 @@ extern "C" void HAL_UART_RxCpltCallback(UART_HandleTypeDef *handle)
 
         BaseType_t rtos_status =
             xSemaphoreGiveFromISR(uartRxSemaphore, &xHigherPriorityTaskWoken);
-        assert(rtos_status == pdPASS);
+        assert(rtos_status == pdPASS);    // TODO: Replace assert() with private_assert()
 
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
@@ -149,5 +163,5 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *handle)
 {
     using namespace Uart_User;
 
-    assert(0);
+    assert(0);    // TODO: Replace assert() with private_assert()
 }
