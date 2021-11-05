@@ -25,7 +25,7 @@ InertialMeasUnit::~InertialMeasUnit()
 void InertialMeasUnit::calibrateGyro()
 {
     int retval = MPU9250::calibrateGyro();
-    assert(retval == 1);
+    private_assert(retval == 1);
 }
 
 Data InertialMeasUnit::getData()
@@ -35,7 +35,7 @@ Data InertialMeasUnit::getData()
     Data data;
 
     int retval = readSensor();
-    assert(retval == 1);
+    private_assert(retval == 1);
 
     data.gyr[0] = getGyroX_rads();
     data.gyr[1] = getGyroY_rads();
@@ -65,6 +65,12 @@ void inertialMeasUnitThread(void *argument)
 
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
+}
+
+void InertialMeasUnit::private_assert(bool condition)
+{
+    if (not condition)
+        imuErrorHandle();
 }
 
 void InertialMeasUnit::mpuDriverErrorHandle()
