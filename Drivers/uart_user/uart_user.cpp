@@ -17,6 +17,8 @@ using namespace std;
 static constexpr UART_HandleTypeDef *hal_uart_handle_ptr = &huart1;
 static constexpr unsigned buffer_out_len                 = 100u;
 
+static bool uart_driver_initialized = false;
+
 static uint8_t data_received;
 static uint8_t bufferOut[buffer_out_len];
 
@@ -25,6 +27,8 @@ static SemaphoreHandle_t uartRxSemaphore = NULL;
 
 UART_User::UART_User()
 {
+    private_assert(uart_driver_initialized == false);
+
     m_hal_uart_ptr = hal_uart_handle_ptr;
     private_assert(m_hal_uart_ptr != NULL);
 
@@ -33,6 +37,8 @@ UART_User::UART_User()
 
     uartRxSemaphore = xSemaphoreCreateBinary();
     private_assert(uartRxSemaphore != NULL);
+
+    uart_driver_initialized = true;
 }
 
 UART_User::~UART_User()
