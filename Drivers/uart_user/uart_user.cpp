@@ -105,9 +105,13 @@ void UART_User::writeDataAsync(const uint8_t *data, unsigned len)
     assert(rtos_status == pdPASS);
 }
 
+}    // namespace Uart_User
+
+// ***************************** HAL Callback functions *****************************
 extern "C" void HAL_UART_TxCpltCallback(UART_HandleTypeDef *handle)
 {
-    return;
+    using namespace Uart_User;
+
     if (handle->Instance == hal_uart_handle_ptr->Instance) {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
@@ -121,6 +125,8 @@ extern "C" void HAL_UART_TxCpltCallback(UART_HandleTypeDef *handle)
 
 extern "C" void HAL_UART_RxCpltCallback(UART_HandleTypeDef *handle)
 {
+    using namespace Uart_User;
+
     if (handle->Instance == hal_uart_handle_ptr->Instance) {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
@@ -134,12 +140,14 @@ extern "C" void HAL_UART_RxCpltCallback(UART_HandleTypeDef *handle)
 
 void HAL_UART_AbortReceiveCpltCallback(UART_HandleTypeDef *huart)
 {
+    using namespace Uart_User;
+
     // called after HAL_UART_AbortReceive_IT
 }
 
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *handle)
 {
+    using namespace Uart_User;
+
     assert(0);
 }
-
-} // namespace Uart_User
