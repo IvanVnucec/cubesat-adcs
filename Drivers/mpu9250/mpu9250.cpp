@@ -69,9 +69,6 @@ void MPU9250::i2cDriverErrorHandle() {
 }
 
 void MPU9250::mpuDriverErrorHandle() {
-#ifdef DEBUG
-    while(true);
-#endif
 }
 
 /* starts communication with the MPU-9250 */

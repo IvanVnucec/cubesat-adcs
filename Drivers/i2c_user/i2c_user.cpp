@@ -96,10 +96,6 @@ void I2C_User::private_assert(bool condition)
 
 void I2C_User::i2cDriverErrorHandle()
 {
-#ifdef DEBUG
-    while (true)
-        ;
-#endif
 }
 
 }    // namespace I2C_User

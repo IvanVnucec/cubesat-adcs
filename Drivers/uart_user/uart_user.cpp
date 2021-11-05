@@ -120,10 +120,6 @@ void UART_User::private_assert(bool condition)
 
 void UART_User::uartDriverErrorHandle()
 {
-#ifdef DEBUG
-    while (true)
-        ;
-#endif
 }
 
 }    // namespace UART_User

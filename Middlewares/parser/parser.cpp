@@ -11,6 +11,7 @@
 
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
+#include "fault_handling.hpp"
 #include "uart_user.hpp"
 
 #include <map>
@@ -66,7 +67,7 @@ void Parser::callCallback(commandAndArg &ca)
     m_callbacks[ca.callback](nullptr);
 }
 
-void Parser::private_assert(bool condition) 
+void Parser::private_assert(bool condition)
 {
     if (not condition)
         parserErrorHandle();
@@ -77,12 +78,9 @@ void Parser::uartDriverErrorHandle()
     parserErrorHandle();
 }
 
-
 void Parser::parserErrorHandle()
 {
-#ifdef DEBUG
-    while(true);
-#endif
+    Fault::sendFaultState(Fault::PARSER_FAULT);
 }
 
 void parserThread(void *argument)
@@ -94,6 +92,5 @@ void parserThread(void *argument)
         parser.callCallback(command);
     }
 }
-
 
 }    // namespace Parser
