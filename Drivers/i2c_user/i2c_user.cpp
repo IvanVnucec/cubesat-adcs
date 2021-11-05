@@ -21,6 +21,7 @@ using namespace std;
 static constexpr I2C_HandleTypeDef *hal_i2c_handle_ptr = &hi2c1;
 
 static bool i2c_driver_initialized = false;
+static I2C_User *private_this      = nullptr;
 
 static SemaphoreHandle_t i2cTxSemaphore = NULL;
 static SemaphoreHandle_t i2cRxSemaphore = NULL;
@@ -37,6 +38,8 @@ I2C_User::I2C_User()
 
     i2cRxSemaphore = xSemaphoreCreateBinary();
     private_assert(i2cRxSemaphore != NULL);
+
+    private_this            = this;
 
     i2c_driver_initialized = true;
 }
@@ -102,6 +105,14 @@ void I2C_User::i2cDriverErrorHandle()
 }    // namespace I2C_User
 
 // ************************ HAL Callback functions ************************
+static void private_assert_hal(bool condition)
+{
+    using namespace I2C_User;
+
+    assert(private_this != nullptr);
+    private_this->private_assert(condition);
+}
+
 extern "C" void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
     using namespace I2C_User;
@@ -111,7 +122,7 @@ extern "C" void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
 
         BaseType_t rtos_status =
             xSemaphoreGiveFromISR(i2cTxSemaphore, &xHigherPriorityTaskWoken);
-        assert(rtos_status == pdPASS);  // TODO: replace assert() with private_assert()
+        private_assert_hal(rtos_status == pdPASS);
 
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
@@ -126,7 +137,7 @@ extern "C" void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 
         BaseType_t rtos_status =
             xSemaphoreGiveFromISR(i2cRxSemaphore, &xHigherPriorityTaskWoken);
-        assert(rtos_status == pdPASS); // TODO: replace assert() with private_assert()
+        private_assert_hal(rtos_status == pdPASS);
 
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
@@ -134,5 +145,5 @@ extern "C" void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 
 extern "C" void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 {
-    assert(0); // TODO: replace assert() with private_assert()
+    private_assert_hal(0);
 }

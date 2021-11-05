@@ -19,7 +19,7 @@ using namespace std;
 class I2C_User {
   private:
     I2C_HandleTypeDef *m_hi2c_ptr;
-    void private_assert(bool condition);
+    friend void private_assert_hal(bool condition);
 
   protected:
     I2C_User();
@@ -33,6 +33,9 @@ class I2C_User {
                       uint8_t *data,
                       uint16_t data_len);
     virtual void i2cDriverErrorHandle();
+  
+  public:
+    void private_assert(bool condition);
 };
 
 }    // namespace I2C_User
