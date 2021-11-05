@@ -21,8 +21,6 @@ class I2C_User {
   protected:
     I2C_User();
     ~I2C_User();
-
-  public:
     void WriteMemAsync(uint16_t dev_address,
                        uint16_t mem_address,
                        uint8_t *data,
