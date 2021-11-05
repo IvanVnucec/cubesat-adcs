@@ -178,5 +178,8 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *handle)
 {
     using namespace UART_User;
 
-    private_assert_hal(0);
+    uint32_t error_code = handle->ErrorCode;
+    (void)error_code;
+
+    //private_assert_hal(0);
 }
