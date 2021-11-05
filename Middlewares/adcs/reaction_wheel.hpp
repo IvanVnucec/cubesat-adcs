@@ -23,6 +23,7 @@ class ReactionWheel : public Pwm_User {
     float m_ang_vel_rad_p_sec;    // rad/s
     ReactionWheelDirection m_dir;
 
+    void private_assert(bool condition);
     void setDirection(ReactionWheelDirection dir);
     pwm_value convertAbsAngVelRadPSecToPwm(float ang_vel_rad_p_sec);
 

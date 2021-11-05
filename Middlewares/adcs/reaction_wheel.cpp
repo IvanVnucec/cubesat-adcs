@@ -60,7 +60,7 @@ void ReactionWheel::setAngularVelocity(float ang_vel_rad_p_sec)
  */
 void ReactionWheel::setDirection(ReactionWheelDirection dir)
 {
-    assert(dir == CLOCKWISE || dir == ANTICLOCKWISE);
+    private_assert(dir == CLOCKWISE || dir == ANTICLOCKWISE);
     m_dir = dir;
 
     if (dir == CLOCKWISE) {
@@ -84,6 +84,13 @@ pwm_value ReactionWheel::convertAbsAngVelRadPSecToPwm(float abs_ang_vel_rad_p_se
     return pwm;
 }
 
+void ReactionWheel::private_assert(bool condition)
+{
+    if (not condition)
+        errorHandle();
+}
+
+
 void ReactionWheel::pwmDriverErrorHandle()
 {
     errorHandle();
@@ -92,7 +99,7 @@ void ReactionWheel::pwmDriverErrorHandle()
 void ReactionWheel::errorHandle()
 {
 #ifdef DEBUG
-    assert(0);
+    while(1);
 #endif
 }
 
