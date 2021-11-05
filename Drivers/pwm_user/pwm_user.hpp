@@ -1,10 +1,3 @@
-/*
- * pwm_user.hpp
- *
- *  Created on: 4. stu 2021.
- *      Author: ivnucec
- */
-
 #ifndef PWM_USER_PWM_USER_HPP_
 #define PWM_USER_PWM_USER_HPP_
 
@@ -12,6 +5,8 @@
 class Pwm_User {
   private:
   protected:
+    Pwm_User();
+    ~Pwm_User();
 };
 
 #endif /* PWM_USER_PWM_USER_HPP_ */
