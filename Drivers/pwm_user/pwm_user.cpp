@@ -2,15 +2,13 @@
 
 #include "tim.h"
 
-#include <cassert>
-
 namespace Pwm_User {
 
 static bool pwm_driver_initialized = false;
 
 Pwm_User::Pwm_User()
 {
-    assert(pwm_driver_initialized == false);
+    private_assert(pwm_driver_initialized == false);
 
     startPWM();
 
@@ -29,7 +27,7 @@ Pwm_User::~Pwm_User()
  */
 void Pwm_User::setPWM(pwm_value pwm)
 {
-    assert(pwm <= MAX_PWM_VALUE);
+    private_assert(pwm <= MAX_PWM_VALUE);
     m_pwm = pwm;
 
     // convert pwm range to timer compare
@@ -52,10 +50,10 @@ void Pwm_User::startPWM()
 
     // start Timer and PWM
     hal_status = HAL_TIM_Base_Start(&htim1);
-    assert(hal_status == HAL_OK);
+    private_assert(hal_status == HAL_OK);
 
     hal_status = HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-    assert(hal_status == HAL_OK);
+    private_assert(hal_status == HAL_OK);
 
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
 }
@@ -72,10 +70,23 @@ void Pwm_User::stopPWM()
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
 
     hal_status = HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
-    assert(hal_status == HAL_OK);
+    private_assert(hal_status == HAL_OK);
 
     hal_status = HAL_TIM_Base_Stop(&htim1);
-    assert(hal_status == HAL_OK);
+    private_assert(hal_status == HAL_OK);
 }
 
-} // namespace Pwm_User
+void Pwm_User::private_assert(bool condition)
+{
+    if (not condition)
+        pwmDriverErrorHandle();
+}
+
+void Pwm_User::pwmDriverErrorHandle()
+{
+#ifdef DEBUG
+    while(true);
+#endif
+}
+
+}    // namespace Pwm_User

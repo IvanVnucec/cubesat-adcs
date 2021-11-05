@@ -84,4 +84,16 @@ pwm_value ReactionWheel::convertAbsAngVelRadPSecToPwm(float abs_ang_vel_rad_p_se
     return pwm;
 }
 
-} // namespace ReactionWheel
+void ReactionWheel::pwmDriverErrorHandle()
+{
+    errorHandle();
+}
+
+void ReactionWheel::errorHandle()
+{
+#ifdef DEBUG
+    assert(0);
+#endif
+}
+
+}    // namespace ReactionWheel

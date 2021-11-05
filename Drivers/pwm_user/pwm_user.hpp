@@ -13,6 +13,7 @@ class Pwm_User {
     uint32_t convertPwmToTimCompare(pwm_value pwm);
     void startPWM();
     void stopPWM();
+    void private_assert(bool condition);
 
   protected:
     static constexpr pwm_value MAX_PWM_VALUE          = UINT32_MAX;
@@ -21,8 +22,9 @@ class Pwm_User {
     Pwm_User();
     ~Pwm_User();
     void setPWM(pwm_value pwm);
+    virtual void pwmDriverErrorHandle();
 };
 
-} // namespace Pwm_User 
+}    // namespace Pwm_User
 
 #endif /* PWM_USER_PWM_USER_HPP_ */
