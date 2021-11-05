@@ -34,17 +34,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 namespace MPU9250 {
 
+using namespace I2C_User;
+
+static bool mpu_driver_initialized = true;
+
 static void delay(int delay);
 static long map(long x, long in_min, long in_max, long out_min, long out_max);
-
-using namespace I2C_User;
 
 /* MPU9250 object, input the I2C address */
 MPU9250::MPU9250(uint8_t address) : I2C_User()
 {
+    private_assert(mpu_driver_initialized == false);
+
     _address   = address << 1;    // I2C address
     int retval = begin();
     private_assert(retval == 1);
+
+    mpu_driver_initialized = true;
 }
 
 MPU9250::~MPU9250()
