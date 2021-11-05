@@ -51,6 +51,7 @@
 									<listOptionValue builtIn="false" value="../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy"/>
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32L4xx/Include"/>
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../Middlewares/fault_handling"/>
 									<listOptionValue builtIn="false" value="../Middlewares/adcs"/>
 									<listOptionValue builtIn="false" value="../Middlewares/optimal_request"/>
 									<listOptionValue builtIn="false" value="../Middlewares/parser"/>
@@ -80,6 +81,7 @@
 									<listOptionValue builtIn="false" value="../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy"/>
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32L4xx/Include"/>
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../Middlewares/fault_handling"/>
 									<listOptionValue builtIn="false" value="../Middlewares/adcs"/>
 									<listOptionValue builtIn="false" value="../Middlewares/optimal_request"/>
 									<listOptionValue builtIn="false" value="../Middlewares/parser"/>
@@ -194,6 +196,7 @@
 									<listOptionValue builtIn="false" value="../Drivers/STM32L4xx_HAL_Driver/Inc/Legacy"/>
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Device/ST/STM32L4xx/Include"/>
 									<listOptionValue builtIn="false" value="../Drivers/CMSIS/Include"/>
+									<listOptionValue builtIn="false" value="../Middlewares/fault_handling"/>
 									<listOptionValue builtIn="false" value="../Middlewares/adcs"/>
 									<listOptionValue builtIn="false" value="../Middlewares/optimal_request"/>
 									<listOptionValue builtIn="false" value="../Middlewares/parser"/>
