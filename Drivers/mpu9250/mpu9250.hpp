@@ -34,6 +34,9 @@ namespace MPU9250 {
 using namespace I2C_User;
 
 class MPU9250 : public I2C_User {
+  private:
+    void private_assert(bool condition);
+
   public:
     enum GyroRange {
         GYRO_RANGE_250DPS,
@@ -66,6 +69,9 @@ class MPU9250 : public I2C_User {
     };
     MPU9250(uint8_t address);
     ~MPU9250();
+    void i2cDriverErrorHandle() override;
+    virtual void mpuDriverErrorHandle();
+
     int begin();
     int setAccelRange(AccelRange range);
     int setGyroRange(GyroRange range);

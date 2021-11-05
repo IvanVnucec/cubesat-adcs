@@ -40,12 +40,32 @@ static long map(long x, long in_min, long in_max, long out_min, long out_max);
 using namespace I2C_User;
 
 /* MPU9250 object, input the I2C address */
-// TODO: return to this object from I2C_User takes ages
 MPU9250::MPU9250(uint8_t address) : I2C_User()
 {
     _address   = address << 1;    // I2C address
     int retval = begin();
-    assert(retval == 1);
+    private_assert(retval == 1);
+}
+
+MPU9250::~MPU9250()
+{
+}
+
+void MPU9250::private_assert(bool condition)
+{
+    if (not condition) {
+        mpuDriverErrorHandle();
+    }
+}
+
+void MPU9250::i2cDriverErrorHandle() {
+    mpuDriverErrorHandle();
+}
+
+void MPU9250::mpuDriverErrorHandle() {
+#ifdef DEBUG
+    while(true);
+#endif
 }
 
 /* starts communication with the MPU-9250 */
@@ -1088,6 +1108,7 @@ int MPU9250::writeRegisterAsync(uint8_t subAddress, uint8_t data)
     // TODO: see if mem size is 2 or 1?
     WriteMemAsync(_address, subAddress, &data, 1);
 
+    // TODO: add error handling with private_assert and not with integer retvals. Change this throughtout project
     /* read back the register */
     if (readRegistersAsync(subAddress, 1, _buffer) != 1) {
         return -1;

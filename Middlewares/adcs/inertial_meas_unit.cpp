@@ -67,4 +67,17 @@ void inertialMeasUnitThread(void *argument)
     }
 }
 
+void InertialMeasUnit::mpuDriverErrorHandle()
+{
+    imuErrorHandle();
+}
+
+void InertialMeasUnit::imuErrorHandle()
+{
+#ifdef DEBUG
+    while (true)
+        ;
+#endif
+}
+
 }    // namespace InertialMeasUnit
