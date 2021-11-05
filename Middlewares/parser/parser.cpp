@@ -39,8 +39,8 @@ commandAndArg Parser::extractCommandAndArgument(const char *uart_data,
     auto open_bracket_pos  = data.find('(');
     auto close_bracket_pos = data.find(')');
 
-    assert(open_bracket_pos != std::string::npos);
-    assert(close_bracket_pos != std::string::npos);
+    private_assert(open_bracket_pos != std::string::npos);
+    private_assert(close_bracket_pos != std::string::npos);
 
     retval.callback = data.substr(0, open_bracket_pos);
     retval.arg      = data.substr(open_bracket_pos, close_bracket_pos);
@@ -66,6 +66,25 @@ void Parser::callCallback(commandAndArg &ca)
     m_callbacks[ca.callback](nullptr);
 }
 
+void Parser::private_assert(bool condition) 
+{
+    if (not condition)
+        parserErrorHandle();
+}
+
+void Parser::uartDriverErrorHandle()
+{
+    parserErrorHandle();
+}
+
+
+void Parser::parserErrorHandle()
+{
+#ifdef DEBUG
+    while(true);
+#endif
+}
+
 void parserThread(void *argument)
 {
     Parser parser;
@@ -75,5 +94,6 @@ void parserThread(void *argument)
         parser.callCallback(command);
     }
 }
+
 
 }    // namespace Parser
