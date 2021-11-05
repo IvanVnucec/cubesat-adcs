@@ -15,6 +15,8 @@
 #include <cassert>
 #include <cstdint>
 
+namespace I2C_User {
+
 using namespace std;
 
 static constexpr I2C_HandleTypeDef *hal_i2c_handle_ptr = &hi2c1;
@@ -84,8 +86,12 @@ void I2C_User::ReadMemAsync(uint16_t dev_address,
     assert(rtos_status == pdPASS);
 }
 
+}    // namespace I2C_User
+
 extern "C" void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
+    using namespace I2C_User;
+
     if (hi2c->Instance == hal_i2c_handle_ptr->Instance) {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 
@@ -99,6 +105,8 @@ extern "C" void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
 
 extern "C" void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
+    using namespace I2C_User;
+
     if (hi2c->Instance == hal_i2c_handle_ptr->Instance) {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
 

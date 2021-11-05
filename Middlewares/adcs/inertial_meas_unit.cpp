@@ -14,7 +14,7 @@
 
 namespace InertialMeasUnit {
 
-InertialMeasUnit::InertialMeasUnit() : MPU9250(m_imu_i2c_address)
+InertialMeasUnit::InertialMeasUnit() : MPU9250::MPU9250(m_imu_i2c_address)
 {
 }
 
@@ -30,22 +30,24 @@ void InertialMeasUnit::calibrateGyro()
 
 Data InertialMeasUnit::getData()
 {
+    using namespace MPU9250;
+
     Data data;
 
-    int retval = MPU9250::readSensor();
+    int retval = readSensor();
     assert(retval == 1);
 
-    data.gyr[0] = MPU9250::getGyroX_rads();
-    data.gyr[1] = MPU9250::getGyroY_rads();
-    data.gyr[2] = MPU9250::getGyroZ_rads();
+    data.gyr[0] = getGyroX_rads();
+    data.gyr[1] = getGyroY_rads();
+    data.gyr[2] = getGyroZ_rads();
 
-    data.acc[0] = MPU9250::getAccelX_mss();
-    data.acc[1] = MPU9250::getAccelY_mss();
-    data.acc[2] = MPU9250::getAccelZ_mss();
+    data.acc[0] = getAccelX_mss();
+    data.acc[1] = getAccelY_mss();
+    data.acc[2] = getAccelZ_mss();
 
-    data.mag[0] = MPU9250::getMagX_uT();
-    data.mag[1] = MPU9250::getMagY_uT();
-    data.mag[2] = MPU9250::getMagZ_uT();
+    data.mag[0] = getMagX_uT();
+    data.mag[1] = getMagY_uT();
+    data.mag[2] = getMagZ_uT();
 
     return data;
 }

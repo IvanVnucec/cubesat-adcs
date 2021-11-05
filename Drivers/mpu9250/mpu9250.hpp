@@ -29,6 +29,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <cstddef>
 #include <cstdint>
 
+namespace MPU9250 {
+
+using namespace I2C_User;
+
 class MPU9250 : public I2C_User {
   public:
     enum GyroRange {
@@ -293,5 +297,7 @@ class MPU9250FIFO : public MPU9250 {
     float _tFifo[256];
     size_t _tSize;
 };
+
+}    // namespace MPU9250
 
 #endif

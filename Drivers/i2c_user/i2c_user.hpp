@@ -12,6 +12,8 @@
 
 #include <cstdint>
 
+namespace I2C_User {
+
 using namespace std;
 
 class I2C_User {
@@ -30,5 +32,7 @@ class I2C_User {
                       uint8_t *data,
                       uint16_t data_len);
 };
+
+} // namespace I2C_User 
 
 #endif /* I2C_USER_I2C_USER_HPP_ */

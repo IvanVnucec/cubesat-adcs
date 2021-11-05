@@ -32,8 +32,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include <cmath>
 #include <cstring>
 
+namespace MPU9250 {
+
 static void delay(int delay);
 static long map(long x, long in_min, long in_max, long out_min, long out_max);
+
+using namespace I2C_User;
 
 /* MPU9250 object, input the I2C address */
 // TODO: return to this object from I2C_User takes ages
@@ -1212,3 +1216,5 @@ static long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+
+}    // namespace MPU9250
