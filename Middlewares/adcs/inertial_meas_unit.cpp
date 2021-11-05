@@ -10,6 +10,7 @@
 #include "inertial_meas_unit.hpp"
 
 #include "cmsis_os.h"
+#include "fault_handling.hpp"
 #include "mpu9250.hpp"
 
 namespace InertialMeasUnit {
@@ -80,10 +81,7 @@ void InertialMeasUnit::mpuDriverErrorHandle()
 
 void InertialMeasUnit::imuErrorHandle()
 {
-#ifdef DEBUG
-    while (true)
-        ;
-#endif
+    Fault::sendFaultState(Fault::IMU_FAULT);    // TODO: See if we need to send from ISR
 }
 
 }    // namespace InertialMeasUnit

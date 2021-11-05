@@ -2,6 +2,7 @@
 
 #include "reaction_wheel.hpp"
 
+#include "fault_handling.hpp"
 #include "main.h"
 
 #include <cmath>
@@ -90,7 +91,6 @@ void ReactionWheel::private_assert(bool condition)
         errorHandle();
 }
 
-
 void ReactionWheel::pwmDriverErrorHandle()
 {
     errorHandle();
@@ -98,9 +98,7 @@ void ReactionWheel::pwmDriverErrorHandle()
 
 void ReactionWheel::errorHandle()
 {
-#ifdef DEBUG
-    while(1);
-#endif
+    Fault::sendFaultState(Fault::REACTION_WHEEL_FAULT);
 }
 
 }    // namespace ReactionWheel
