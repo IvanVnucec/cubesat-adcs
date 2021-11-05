@@ -19,7 +19,7 @@ using namespace std;
 class UART_User {
   private:
     UART_HandleTypeDef *m_hal_uart_ptr;
-    void private_assert(bool condition);
+    friend void private_assert_hal(bool condition);
 
   protected:
     UART_User();
@@ -33,6 +33,7 @@ class UART_User {
     unsigned readDataAsyncUntilChar(uint8_t *data, char c, unsigned max_len);
 
   public:
+    void private_assert(bool condition);
 };
 
 }    // namespace UART_User

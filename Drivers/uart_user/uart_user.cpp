@@ -18,6 +18,7 @@ static constexpr UART_HandleTypeDef *hal_uart_handle_ptr = &huart1;
 static constexpr unsigned buffer_out_len                 = 100u;
 
 static bool uart_driver_initialized = false;
+static UART_User *private_this      = nullptr;
 
 static uint8_t data_received;
 static uint8_t bufferOut[buffer_out_len];
@@ -38,6 +39,7 @@ UART_User::UART_User()
     uartRxSemaphore = xSemaphoreCreateBinary();
     private_assert(uartRxSemaphore != NULL);
 
+    private_this            = this;
     uart_driver_initialized = true;
 }
 
@@ -128,6 +130,14 @@ void UART_User::uartDriverErrorHandle()
 }    // namespace UART_User
 
 // ***************************** HAL Callback functions *****************************
+static void private_assert_hal(bool condition)
+{
+    using namespace UART_User;
+
+    assert(private_this != nullptr);
+    private_this->private_assert(condition);
+}
+
 extern "C" void HAL_UART_TxCpltCallback(UART_HandleTypeDef *handle)
 {
     using namespace UART_User;
@@ -137,7 +147,7 @@ extern "C" void HAL_UART_TxCpltCallback(UART_HandleTypeDef *handle)
 
         BaseType_t rtos_status =
             xSemaphoreGiveFromISR(uartTxSemaphore, &xHigherPriorityTaskWoken);
-        assert(rtos_status == pdPASS);    // TODO: Replace assert() with private_assert()
+        private_assert_hal(rtos_status == pdPASS);
 
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
@@ -152,7 +162,7 @@ extern "C" void HAL_UART_RxCpltCallback(UART_HandleTypeDef *handle)
 
         BaseType_t rtos_status =
             xSemaphoreGiveFromISR(uartRxSemaphore, &xHigherPriorityTaskWoken);
-        assert(rtos_status == pdPASS);    // TODO: Replace assert() with private_assert()
+        private_assert_hal(rtos_status == pdPASS);
 
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
@@ -169,5 +179,5 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *handle)
 {
     using namespace UART_User;
 
-    assert(0);    // TODO: Replace assert() with private_assert()
+    private_assert_hal(0);
 }
