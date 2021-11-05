@@ -10,7 +10,7 @@
 #include <cstdint>
 #include <sys/_stdint.h>
 
-namespace Uart_User {
+namespace UART_User {
 
 using namespace std;
 
@@ -125,12 +125,12 @@ void UART_User::uartDriverErrorHandle()
 #endif
 }
 
-}    // namespace Uart_User
+}    // namespace UART_User
 
 // ***************************** HAL Callback functions *****************************
 extern "C" void HAL_UART_TxCpltCallback(UART_HandleTypeDef *handle)
 {
-    using namespace Uart_User;
+    using namespace UART_User;
 
     if (handle->Instance == hal_uart_handle_ptr->Instance) {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
@@ -145,7 +145,7 @@ extern "C" void HAL_UART_TxCpltCallback(UART_HandleTypeDef *handle)
 
 extern "C" void HAL_UART_RxCpltCallback(UART_HandleTypeDef *handle)
 {
-    using namespace Uart_User;
+    using namespace UART_User;
 
     if (handle->Instance == hal_uart_handle_ptr->Instance) {
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
@@ -160,14 +160,14 @@ extern "C" void HAL_UART_RxCpltCallback(UART_HandleTypeDef *handle)
 
 void HAL_UART_AbortReceiveCpltCallback(UART_HandleTypeDef *huart)
 {
-    using namespace Uart_User;
+    using namespace UART_User;
 
     // called after HAL_UART_AbortReceive_IT
 }
 
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *handle)
 {
-    using namespace Uart_User;
+    using namespace UART_User;
 
     assert(0);    // TODO: Replace assert() with private_assert()
 }

@@ -12,7 +12,7 @@
 
 #include <cstdint>
 
-namespace Uart_User {
+namespace UART_User {
 
 using namespace std;
 
@@ -35,6 +35,6 @@ class UART_User {
   public:
 };
 
-}    // namespace Uart_User
+}    // namespace UART_User
 
 #endif /* UART_USER_HPP_ */

@@ -16,7 +16,7 @@
 
 namespace Parser {
 
-using namespace Uart_User;
+using namespace UART_User;
 using callback_t = void (*)(void *arg);
 
 struct commandAndArg {

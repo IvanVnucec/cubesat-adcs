@@ -19,7 +19,7 @@
 
 namespace Parser {
 
-using namespace Uart_User;
+using namespace UART_User;
 
 Parser::Parser() : UART_User()
 {
