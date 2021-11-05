@@ -19,11 +19,15 @@ using namespace std;
 
 static constexpr I2C_HandleTypeDef *hal_i2c_handle_ptr = &hi2c1;
 
+static bool i2c_driver_initialized = false;
+
 static SemaphoreHandle_t i2cTxSemaphore = NULL;
 static SemaphoreHandle_t i2cRxSemaphore = NULL;
 
 I2C_User::I2C_User()
 {
+    assert(i2c_driver_initialized == false);
+
     m_hi2c_ptr = hal_i2c_handle_ptr;
     assert(m_hi2c_ptr != NULL);
 
@@ -32,6 +36,8 @@ I2C_User::I2C_User()
 
     i2cRxSemaphore = xSemaphoreCreateBinary();
     assert(i2cRxSemaphore != NULL);
+
+    i2c_driver_initialized = true;
 }
 
 I2C_User::~I2C_User()
