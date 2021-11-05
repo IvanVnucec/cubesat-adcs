@@ -9,6 +9,7 @@
 #include "FreeRTOS.h"
 #include "angle_regulation.hpp"
 #include "cmsis_os.h"
+#include "fault_handling.hpp"
 #include "inertial_meas_unit.hpp"
 #include "optimal_request_interface.hpp"
 #include "parser.hpp"
@@ -46,6 +47,13 @@ const static osThreadAttr_t parser_attributes = {
     .priority   = (osPriority_t)osPriorityNormal4,
 };
 
+static osThreadId_t faultHandlingHandle              = NULL;
+const static osThreadAttr_t faultHandling_attributes = {
+    .name       = "faultHandlingTask",
+    .stack_size = 256 * 4,
+    .priority   = (osPriority_t)osPriorityNormal5,
+};
+
 /* Private function prototypes -----------------------------------------------*/
 
 /* Private application code --------------------------------------------------*/
@@ -66,6 +74,11 @@ void initAdcsThreads()
     // parser thread
     parserHandle = osThreadNew(Parser::parserThread, NULL, &parser_attributes);
     assert(parserHandle != NULL);
+
+    // fault handling thread
+    faultHandlingHandle =
+        osThreadNew(Fault::faultHandlingThread, NULL, &faultHandling_attributes);
+    assert(faultHandlingHandle != NULL);
 }
 
 #ifdef __cplusplus
