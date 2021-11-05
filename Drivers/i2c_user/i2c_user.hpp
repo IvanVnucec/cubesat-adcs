@@ -35,6 +35,6 @@ class I2C_User {
     virtual void i2cDriverErrorHandle();
 };
 
-} // namespace I2C_User 
+}    // namespace I2C_User
 
 #endif /* I2C_USER_I2C_USER_HPP_ */

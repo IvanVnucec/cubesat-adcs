@@ -94,10 +94,10 @@ void I2C_User::private_assert(bool condition)
 void I2C_User::i2cDriverErrorHandle()
 {
 #ifdef DEBUG
-    while(true);
+    while (true)
+        ;
 #endif
 }
-
 
 }    // namespace I2C_User
 
@@ -111,7 +111,7 @@ extern "C" void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
 
         BaseType_t rtos_status =
             xSemaphoreGiveFromISR(i2cTxSemaphore, &xHigherPriorityTaskWoken);
-        assert(rtos_status == pdPASS);
+        assert(rtos_status == pdPASS);  // TODO: replace assert() with private_assert()
 
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
@@ -126,7 +126,7 @@ extern "C" void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 
         BaseType_t rtos_status =
             xSemaphoreGiveFromISR(i2cRxSemaphore, &xHigherPriorityTaskWoken);
-        assert(rtos_status == pdPASS);
+        assert(rtos_status == pdPASS); // TODO: replace assert() with private_assert()
 
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
@@ -134,5 +134,5 @@ extern "C" void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 
 extern "C" void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 {
-    assert(0);
+    assert(0); // TODO: replace assert() with private_assert()
 }
