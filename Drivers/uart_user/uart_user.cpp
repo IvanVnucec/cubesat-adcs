@@ -6,7 +6,6 @@
 #include "semphr.h"
 #include "usart.h"
 
-#include <cassert>
 #include <cstdint>
 #include <sys/_stdint.h>
 
