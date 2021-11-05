@@ -81,7 +81,9 @@ void InertialMeasUnit::mpuDriverErrorHandle()
 
 void InertialMeasUnit::imuErrorHandle()
 {
-    Fault::sendFaultState(Fault::IMU_FAULT);    // TODO: See if we need to send from ISR
+    Fault::sendFaultState(Fault::IMU_FAULT);
+    // TODO: yield task thread here because private asserts in drivers wont stop execution.
+    // this also needs to be fixed across repo
 }
 
 }    // namespace InertialMeasUnit

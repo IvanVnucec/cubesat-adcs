@@ -39,7 +39,7 @@ I2C_User::I2C_User()
     i2cRxSemaphore = xSemaphoreCreateBinary();
     private_assert(i2cRxSemaphore != NULL);
 
-    private_this            = this;
+    private_this = this;
 
     i2c_driver_initialized = true;
 }
@@ -96,6 +96,8 @@ void I2C_User::private_assert(bool condition)
 
 void I2C_User::i2cDriverErrorHandle()
 {
+    // TODO: This function is NOT being overshadowed by derived class method.
+    // fix this across other files
 }
 
 }    // namespace I2C_User
