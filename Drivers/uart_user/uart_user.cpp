@@ -10,6 +10,8 @@
 #include <cstdint>
 #include <sys/_stdint.h>
 
+namespace Uart_User {
+
 using namespace std;
 
 static constexpr UART_HandleTypeDef *hal_uart_handle_ptr = &huart1;
@@ -139,3 +141,5 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *handle)
 {
     assert(0);
 }
+
+} // namespace Uart_User

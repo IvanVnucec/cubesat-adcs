@@ -11,13 +11,15 @@
 
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
-#include "uart_user.hpp"    // TODO: Delete me
+#include "uart_user.hpp"
 
 #include <map>
 #include <memory>
 #include <string>
 
 namespace Parser {
+
+using namespace Uart_User;
 
 Parser::Parser() : UART_User()
 {
@@ -52,7 +54,7 @@ commandAndArg Parser::getCommandFromUart()
     char uart_data[uart_data_max_len];
 
     unsigned chars_read =
-        UART_User::readDataAsyncUntilChar((uint8_t *)uart_data, '\n', uart_data_max_len);
+        readDataAsyncUntilChar((uint8_t *)uart_data, '\n', uart_data_max_len);
     commandAndArg ca = extractCommandAndArgument(uart_data, chars_read);
 
     return ca;
