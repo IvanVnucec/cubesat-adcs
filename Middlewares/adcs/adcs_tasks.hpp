@@ -8,6 +8,9 @@
 #ifndef ADCS_ADCS_TASKS_HPP_
 #define ADCS_ADCS_TASKS_HPP_
 
+#include "FreeRTOS.h"
+#include "cmsis_os.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -15,6 +18,7 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
+extern osThreadId_t faultHandlingHandle;
 
 /* Exported constants --------------------------------------------------------*/
 

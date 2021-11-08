@@ -47,7 +47,7 @@ const static osThreadAttr_t parser_attributes = {
     .priority   = (osPriority_t)osPriorityNormal4,
 };
 
-static osThreadId_t faultHandlingHandle              = NULL;
+osThreadId_t faultHandlingHandle                     = NULL;
 const static osThreadAttr_t faultHandling_attributes = {
     .name       = "faultHandlingTask",
     .stack_size = 256 * 4,
