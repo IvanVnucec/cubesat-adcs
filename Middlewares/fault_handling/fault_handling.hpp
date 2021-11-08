@@ -17,14 +17,6 @@ enum class State : uint32_t {
 void setFaultState(State state);
 void faultHandlingThread(void *argument);
 
-class Fault {
-  private:
-  public:
-    Fault();
-    ~Fault();
-    State getFaultState();
-};
-
 }    // namespace Fault
 
 #endif /* FAULT_HANDLING_FAULT_HANDLING_HPP_ */

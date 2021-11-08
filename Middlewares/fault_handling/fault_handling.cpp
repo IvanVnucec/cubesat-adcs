@@ -1,51 +1,53 @@
 #include "fault_handling.hpp"
 
 #include "FreeRTOS.h"
+#include "adcs_tasks.hpp"
 #include "cmsis_os.h"
 #include "main.h"
 #include "semphr.h"
+#include "task.h"
 
 namespace Fault {
 
-static State private_state = NO_FAULT;
-
-Fault::Fault()
-{
-}
-
-Fault::~Fault()
-{
-}
-
-State Fault::getFaultState()
-{
-    __disable_irq();
-    State state = private_state;
-    __enable_irq();
-
-    return state;
-}
-
 void setFaultState(State state)
 {
-    // TODO: implement task wait if the state is already set
-    __disable_irq();
-    private_state = state;
-    __enable_irq();
+    assert(faultHandlingHandle);
+    BaseType_t rtos_status =
+        xTaskNotify(static_cast<TaskHandle_t>(
+                        faultHandlingHandle),        // safe conversion, see "task.h" file
+                    static_cast<uint32_t>(state),    // safe conversion
+                    eSetValueWithOverwrite);
+    assert(rtos_status == pdPASS);
 }
 
 void setFaultStateFromISR(State state)
 {
-    // TODO: See if we need to use FromISR function or not
-    setFaultState(state);
+    BaseType_t woken          = pdFALSE;
+    uint32_t prevNotification = 0u;
+
+    assert(faultHandlingHandle);
+    BaseType_t rtos_status = xTaskGenericNotifyFromISR(
+        static_cast<TaskHandle_t>(
+            faultHandlingHandle),        // safe conversion, see "task.h" file
+        static_cast<uint32_t>(state),    // safe conversion,
+        eSetValueWithOverwrite,
+        &prevNotification,
+        &woken);
+    assert(rtos_status == pdPASS);
+
+    // TODO: see what to do with prevNotification value
+    (void)prevNotification;
+
+    portYIELD_FROM_ISR(woken);
 }
 
 void faultHandlingThread(void *argument)
 {
-    Fault fault_handler;
-
     for (;;) {
-        State state = fault_handler.getFaultState();
+        uint32_t notification;
+        BaseType_t rtos_status = xTaskNotifyWait(0u, 0u, &notification, portMAX_DELAY);
+        assert(rtos_status == pdPASS);
+        State state = static_cast<State>(notification);    // TODO: test this
 
         switch (state) {
             case State::NO_FAULT: {
