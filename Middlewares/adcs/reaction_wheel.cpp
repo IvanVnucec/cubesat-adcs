@@ -98,7 +98,7 @@ void ReactionWheel::pwmDriverErrorHandle()
 
 void ReactionWheel::errorHandle()
 {
-    Fault::setFaultState(Fault::REACTION_WHEEL_FAULT);
+    Fault::setFaultState(Fault::State::REACTION_WHEEL_FAULT);
 }
 
 }    // namespace ReactionWheel

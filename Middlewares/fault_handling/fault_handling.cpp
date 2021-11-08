@@ -48,13 +48,13 @@ void faultHandlingThread(void *argument)
         State state = fault_handler.getFaultState();
 
         switch (state) {
-            case NO_FAULT: {
+            case State::NO_FAULT: {
                 HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
                 break;
             }
-            case IMU_FAULT:
-            case PARSER_FAULT:
-            case REACTION_WHEEL_FAULT:
+            case State::IMU_FAULT:
+            case State::PARSER_FAULT:
+            case State::REACTION_WHEEL_FAULT:
             default: {
                 HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
                 break;

@@ -81,7 +81,7 @@ void InertialMeasUnit::mpuDriverErrorHandle()
 
 void InertialMeasUnit::imuErrorHandle()
 {
-    Fault::setFaultState(Fault::IMU_FAULT);
+    Fault::setFaultState(Fault::State::IMU_FAULT);
     // TODO: yield task thread here because private asserts in drivers wont stop execution.
     // this also needs to be fixed across repo
 }
