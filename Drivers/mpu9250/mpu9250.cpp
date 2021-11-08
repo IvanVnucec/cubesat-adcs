@@ -64,10 +64,6 @@ void MPU9250::private_assert(bool condition)
     }
 }
 
-void MPU9250::i2cDriverErrorHandle() {
-    mpuDriverErrorHandle();
-}
-
 void MPU9250::mpuDriverErrorHandle() {
 }
 

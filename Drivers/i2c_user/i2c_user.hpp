@@ -32,7 +32,7 @@ class I2C_User {
                       uint16_t mem_address,
                       uint8_t *data,
                       uint16_t data_len);
-    virtual void i2cDriverErrorHandle();
+    void i2cDriverErrorHandle();
   
   public:
     void private_assert(bool condition);

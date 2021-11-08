@@ -69,8 +69,7 @@ class MPU9250 : public I2C_User {
     };
     MPU9250(uint8_t address);
     ~MPU9250();
-    void i2cDriverErrorHandle() override;
-    virtual void mpuDriverErrorHandle();
+    void mpuDriverErrorHandle();
 
     int begin();
     int setAccelRange(AccelRange range);
