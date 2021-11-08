@@ -22,7 +22,7 @@ class Pwm_User {
     Pwm_User();
     ~Pwm_User();
     void setPWM(pwm_value pwm);
-    virtual void pwmDriverErrorHandle();
+    void pwmDriverErrorHandle();
 };
 
 }    // namespace Pwm_User

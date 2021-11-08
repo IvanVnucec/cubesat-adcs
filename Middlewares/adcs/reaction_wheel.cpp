@@ -91,11 +91,6 @@ void ReactionWheel::private_assert(bool condition)
         errorHandle();
 }
 
-void ReactionWheel::pwmDriverErrorHandle()
-{
-    errorHandle();
-}
-
 void ReactionWheel::errorHandle()
 {
     Fault::setFaultState(Fault::State::REACTION_WHEEL_FAULT);

@@ -35,7 +35,6 @@ class ReactionWheel : public Pwm_User {
     ~ReactionWheel();
     void errorHandle();
     void setAngularVelocity(float ang_vel_rad_p_sec);
-    void pwmDriverErrorHandle() override;
 };
 
 }    // namespace ReactionWheel
