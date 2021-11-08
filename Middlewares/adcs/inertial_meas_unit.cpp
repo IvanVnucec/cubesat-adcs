@@ -74,11 +74,6 @@ void InertialMeasUnit::private_assert(bool condition)
         imuErrorHandle();
 }
 
-void InertialMeasUnit::mpuDriverErrorHandle()
-{
-    imuErrorHandle();
-}
-
 void InertialMeasUnit::imuErrorHandle()
 {
     Fault::setFaultState(Fault::State::IMU_FAULT);
