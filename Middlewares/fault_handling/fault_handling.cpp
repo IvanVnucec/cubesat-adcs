@@ -4,7 +4,6 @@
 #include "adcs_tasks.hpp"
 #include "cmsis_os.h"
 #include "main.h"
-#include "semphr.h"
 #include "task.h"
 
 namespace Fault {
