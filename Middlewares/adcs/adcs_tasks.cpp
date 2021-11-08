@@ -26,21 +26,21 @@ extern "C" {
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-static osThreadId_t optimalRequestHandle              = NULL;
+osThreadId_t optimalRequestHandle              = NULL;
 const static osThreadAttr_t optimalRequest_attributes = {
     .name       = "optimalRequestTask",
     .stack_size = 128 * 4,
     .priority   = (osPriority_t)osPriorityNormal2,
 };
 
-static osThreadId_t inertialMeasUnitHandle              = NULL;
+osThreadId_t inertialMeasUnitHandle              = NULL;
 const static osThreadAttr_t inertialMeasUnit_attributes = {
     .name       = "inertialMeasUnitTask",
     .stack_size = 1024 * 4,
     .priority   = (osPriority_t)osPriorityNormal3,
 };
 
-static osThreadId_t parserHandle              = NULL;
+osThreadId_t parserHandle              = NULL;
 const static osThreadAttr_t parser_attributes = {
     .name       = "parserTask",
     .stack_size = 128 * 4,

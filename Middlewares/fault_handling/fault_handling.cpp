@@ -54,9 +54,17 @@ void faultHandlingThread(void *argument)
                 HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
                 break;
             }
-            case State::IMU_FAULT:
-            case State::PARSER_FAULT:
-            case State::REACTION_WHEEL_FAULT:
+            case State::IMU_FAULT: {
+                osThreadSuspend(inertialMeasUnitHandle);
+                // intentionally fall through case
+            }
+            case State::PARSER_FAULT: {
+                osThreadSuspend(parserHandle);
+                // intentionally fall through case
+            }
+            case State::REACTION_WHEEL_FAULT: {
+                // intentionally fall through case
+            }
             default: {
                 HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
                 break;

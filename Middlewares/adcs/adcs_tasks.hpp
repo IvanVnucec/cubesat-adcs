@@ -18,6 +18,9 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
+extern osThreadId_t optimalRequestHandle;
+extern osThreadId_t inertialMeasUnitHandle;
+extern osThreadId_t parserHandle;
 extern osThreadId_t faultHandlingHandle;
 
 /* Exported constants --------------------------------------------------------*/

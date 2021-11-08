@@ -120,8 +120,6 @@ void StartDefaultTask(void *argument)
   /* USER CODE BEGIN StartDefaultTask */
     /* Infinite loop */
     for (;;) {
-      // Suspend ourselves.
-      vTaskSuspend(NULL);
     }
   /* USER CODE END StartDefaultTask */
 }
