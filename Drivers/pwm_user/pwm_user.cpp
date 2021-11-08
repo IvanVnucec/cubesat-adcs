@@ -84,9 +84,6 @@ void Pwm_User::private_assert(bool condition)
 
 void Pwm_User::pwmDriverErrorHandle()
 {
-#ifdef DEBUG
-    while(true);
-#endif
 }
 
 }    // namespace Pwm_User

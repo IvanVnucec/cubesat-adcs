@@ -5,15 +5,11 @@ namespace Fault {
 
 enum State { NO_FAULT, IMU_FAULT, PARSER_FAULT, REACTION_WHEEL_FAULT };
 
-void sendFaultStateFromIRQ(State state);
 void sendFaultState(State state);
+void faultHandlingThread(void *argument);
 
 class Fault {
   private:
-    State m_state = NO_FAULT;
-    friend void sendFaultStateFromIRS(State state);
-    friend void sendFaultState(State state);
-
   public:
     Fault();
     ~Fault();

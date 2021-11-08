@@ -7,18 +7,10 @@
 
 namespace Fault {
 
-static Fault *private_this           = nullptr;
-static SemaphoreHandle_t fault_mutex = NULL;
+static State m_state = NO_FAULT;
 
 Fault::Fault()
 {
-    fault_mutex = xSemaphoreCreateBinary();
-    assert(fault_mutex);
-
-    BaseType_t rtos_status = xSemaphoreGive(fault_mutex);
-    assert(rtos_status == pdPASS);
-
-    private_this = this;
 }
 
 Fault::~Fault()
@@ -27,13 +19,9 @@ Fault::~Fault()
 
 State Fault::getFaultState()
 {
-    BaseType_t rtos_status = xSemaphoreTake(fault_mutex, portMAX_DELAY);
-    assert(rtos_status == pdPASS);
-
+    __disable_irq();
     State retval = m_state;
-
-    rtos_status = xSemaphoreGive(fault_mutex);
-    assert(rtos_status == pdPASS);
+    __enable_irq();
 
     return retval;
 }
@@ -48,22 +36,11 @@ void Fault::signalNotFault()
     HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
 }
 
-void sendFaultStateFromIRS(State state)
-{
-    assert(private_this);
-
-    // get mutex from IRQ
-    private_this->m_state = state;
-    // release mutex from IRQ
-}
-
 void sendFaultState(State state)
 {
-    assert(private_this);
-
-    // get mutex
-    private_this->m_state = state;
-    // release mutex
+    __disable_irq();
+    m_state = state;
+    __enable_irq();
 }
 
 void faultHandlingThread(void *argument)
