@@ -80,7 +80,7 @@ void Parser::uartDriverErrorHandle()
 
 void Parser::parserErrorHandle()
 {
-    Fault::sendFaultState(Fault::PARSER_FAULT);
+    Fault::setFaultState(Fault::PARSER_FAULT);
 }
 
 void parserThread(void *argument)

@@ -7,7 +7,7 @@
 
 namespace Fault {
 
-static State m_state = NO_FAULT;
+static State private_state = NO_FAULT;
 
 Fault::Fault()
 {
@@ -20,27 +20,24 @@ Fault::~Fault()
 State Fault::getFaultState()
 {
     __disable_irq();
-    State retval = m_state;
+    State state = private_state;
     __enable_irq();
 
-    return retval;
+    return state;
 }
 
-void Fault::signalFault()
+void setFaultState(State state)
 {
-    HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
-}
-
-void Fault::signalNotFault()
-{
-    HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-}
-
-void sendFaultState(State state)
-{
+    // TODO: implement task wait if the state is already set
     __disable_irq();
-    m_state = state;
+    private_state = state;
     __enable_irq();
+}
+
+void setFaultStateFromISR(State state)
+{
+    // TODO: See if we need to use FromISR function or not
+    setFaultState(state);
 }
 
 void faultHandlingThread(void *argument)
@@ -52,14 +49,14 @@ void faultHandlingThread(void *argument)
 
         switch (state) {
             case NO_FAULT: {
-                fault_handler.signalNotFault();
+                HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
                 break;
             }
             case IMU_FAULT:
             case PARSER_FAULT:
             case REACTION_WHEEL_FAULT:
             default: {
-                fault_handler.signalFault();
+                HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
                 break;
             }
         }
