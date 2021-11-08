@@ -24,7 +24,7 @@ class UART_User {
   protected:
     UART_User();
     ~UART_User();
-    virtual void uartDriverErrorHandle();
+    void uartDriverErrorHandle();
     void stopReceiving();
     void startReceiving();
     void writeDataAsync(const uint8_t *data, unsigned len);

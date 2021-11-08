@@ -73,11 +73,6 @@ void Parser::private_assert(bool condition)
         parserErrorHandle();
 }
 
-void Parser::uartDriverErrorHandle()
-{
-    parserErrorHandle();
-}
-
 void Parser::parserErrorHandle()
 {
     Fault::setFaultState(Fault::State::PARSER_FAULT);

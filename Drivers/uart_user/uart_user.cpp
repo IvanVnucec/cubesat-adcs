@@ -120,6 +120,7 @@ void UART_User::private_assert(bool condition)
 
 void UART_User::uartDriverErrorHandle()
 {
+    // TODO: call here error handler
 }
 
 }    // namespace UART_User

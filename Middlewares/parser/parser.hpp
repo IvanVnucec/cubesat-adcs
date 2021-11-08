@@ -36,7 +36,6 @@ class Parser : public UART_User {
     commandAndArg extractCommandAndArgument(const char *uart_data,
                                             const unsigned uart_data_len);
     void private_assert(bool condition);
-    void uartDriverErrorHandle() override;
 
   public:
     Parser();
