@@ -74,6 +74,7 @@ void faultHandlingThread(void *argument)
             case State::REACTION_WHEEL_FAULT: {
                 // intentionally fall through case
             }
+            case State::GENERIC_FAULT:
             default: {
                 HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
                 break;
