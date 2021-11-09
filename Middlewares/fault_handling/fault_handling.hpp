@@ -15,9 +15,9 @@ enum class State : uint32_t {
     REACTION_WHEEL_FAULT
 };
 
-void setFaultState(State state);
+void setFaultState(State state = State::GENERIC_FAULT);
+void assertAndRaiseFault(bool condition, State fault_state = State::GENERIC_FAULT);
 void faultHandlingThread(void *argument);
-void assertAndRaiseFault(bool condition, State fault_state);
 
 }    // namespace Fault
 
