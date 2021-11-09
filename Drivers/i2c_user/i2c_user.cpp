@@ -8,6 +8,7 @@
 #include "i2c_user.hpp"
 
 #include "FreeRTOS.h"
+#include "fault_handling.hpp"
 #include "i2c.h"
 #include "semphr.h"
 #include "stm32l4xx.h"
@@ -96,8 +97,7 @@ void I2C_User::private_assert(bool condition)
 
 void I2C_User::i2cDriverErrorHandle()
 {
-    // TODO: This function is NOT being overshadowed by derived class method.
-    // fix this across other files
+    Fault::setFaultState(Fault::State::I2C_DRIVER_FAULT);
 }
 
 }    // namespace I2C_User

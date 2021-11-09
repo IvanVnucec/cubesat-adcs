@@ -63,6 +63,7 @@ void faultHandlingThread(void *argument)
                 HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
                 break;
             }
+            case State::I2C_DRIVER_FAULT:
             case State::IMU_FAULT: {
                 osThreadSuspend(inertialMeasUnitHandle);
                 // intentionally fall through case
