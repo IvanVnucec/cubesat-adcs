@@ -9,7 +9,7 @@
 
 namespace Fault {
 
-void setFaultState(State state=State::GENERIC_FAULT)
+void setFaultState(State state = State::GENERIC_FAULT)
 {
     BaseType_t rtos_status = pdFAIL;
 
@@ -42,6 +42,12 @@ void setFaultState(State state=State::GENERIC_FAULT)
     }
 
     assert(rtos_status == pdPASS);
+}
+
+void assertAndRaiseFault(bool condition, State fault_state = State::GENERIC_FAULT)
+{
+    if (not condition)
+        setFaultState(fault_state);
 }
 
 void faultHandlingThread(void *argument)

@@ -17,6 +17,7 @@ enum class State : uint32_t {
 
 void setFaultState(State state);
 void faultHandlingThread(void *argument);
+void assertAndRaiseFault(bool condition, State fault_state);
 
 }    // namespace Fault
 
