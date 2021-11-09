@@ -58,13 +58,16 @@ void faultHandlingThread(void *argument)
         assert(rtos_status == pdPASS);
         State state = static_cast<State>(notification);    // TODO: test this
 
+        // TODO: fix switch case because if IMU_FAULT triggers, it will also suspend parser handle
         switch (state) {
             case State::NO_FAULT: {
                 HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
                 break;
             }
             case State::I2C_DRIVER_FAULT:
+            case State::MPU9250_FAULT:
             case State::IMU_FAULT: {
+                // TODO: check retval from rtos, also below
                 osThreadSuspend(inertialMeasUnitHandle);
                 // intentionally fall through case
             }
