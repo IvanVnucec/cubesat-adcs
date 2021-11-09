@@ -8,10 +8,11 @@ namespace Fault {
 using namespace std;
 
 enum class State : uint32_t {
-    NO_FAULT             = 0u,
-    IMU_FAULT            = 1u,
-    PARSER_FAULT         = 2u,
-    REACTION_WHEEL_FAULT = 3u
+    NO_FAULT,
+    GENERIC_FAULT,
+    IMU_FAULT,
+    PARSER_FAULT,
+    REACTION_WHEEL_FAULT
 };
 
 void setFaultState(State state);

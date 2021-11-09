@@ -8,7 +8,7 @@
 
 namespace Fault {
 
-void setFaultState(State state)
+void setFaultState(State state=State::GENERIC_FAULT)
 {
     assert(faultHandlingHandle);
     BaseType_t rtos_status =
