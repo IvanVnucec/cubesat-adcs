@@ -4,40 +4,44 @@
 #include "adcs_tasks.hpp"
 #include "cmsis_os.h"
 #include "main.h"
+#include "portmacro.h"
 #include "task.h"
 
 namespace Fault {
 
 void setFaultState(State state=State::GENERIC_FAULT)
 {
-    assert(faultHandlingHandle);
-    BaseType_t rtos_status =
-        xTaskNotify(static_cast<TaskHandle_t>(
-                        faultHandlingHandle),        // safe conversion, see "task.h" file
-                    static_cast<uint32_t>(state),    // safe conversion
-                    eSetValueWithOverwrite);
-    assert(rtos_status == pdPASS);
-}
-
-void setFaultStateFromISR(State state)
-{
-    BaseType_t woken          = pdFALSE;
-    uint32_t prevNotification = 0u;
+    BaseType_t rtos_status = pdFAIL;
 
     assert(faultHandlingHandle);
-    BaseType_t rtos_status = xTaskGenericNotifyFromISR(
-        static_cast<TaskHandle_t>(
-            faultHandlingHandle),        // safe conversion, see "task.h" file
-        static_cast<uint32_t>(state),    // safe conversion,
-        eSetValueWithOverwrite,
-        &prevNotification,
-        &woken);
+
+    bool inISR = xPortIsInsideInterrupt();
+    if (inISR) {
+        BaseType_t woken          = pdFALSE;
+        uint32_t prevNotification = 0u;
+
+        rtos_status = xTaskGenericNotifyFromISR(
+            static_cast<TaskHandle_t>(
+                faultHandlingHandle),        // safe conversion, see "task.h" file
+            static_cast<uint32_t>(state),    // safe conversion,
+            eSetValueWithOverwrite,
+            &prevNotification,
+            &woken);
+
+        // TODO: see what to do with prevNotification value
+        (void)prevNotification;
+
+        portYIELD_FROM_ISR(woken);
+
+    } else {
+        rtos_status =
+            xTaskNotify(static_cast<TaskHandle_t>(
+                            faultHandlingHandle),    // safe conversion, see "task.h" file
+                        static_cast<uint32_t>(state),    // safe conversion
+                        eSetValueWithOverwrite);
+    }
+
     assert(rtos_status == pdPASS);
-
-    // TODO: see what to do with prevNotification value
-    (void)prevNotification;
-
-    portYIELD_FROM_ISR(woken);
 }
 
 void faultHandlingThread(void *argument)
