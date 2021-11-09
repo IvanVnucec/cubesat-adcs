@@ -164,14 +164,14 @@ extern "C" void HAL_UART_RxCpltCallback(UART_HandleTypeDef *handle)
     }
 }
 
-void HAL_UART_AbortReceiveCpltCallback(UART_HandleTypeDef *huart)
+extern "C" void HAL_UART_AbortReceiveCpltCallback(UART_HandleTypeDef *huart)
 {
     using namespace UART_User;
 
     // called after HAL_UART_AbortReceive_IT
 }
 
-void HAL_UART_ErrorCallback(UART_HandleTypeDef *handle)
+extern "C" void HAL_UART_ErrorCallback(UART_HandleTypeDef *handle)
 {
     using namespace UART_User;
 
