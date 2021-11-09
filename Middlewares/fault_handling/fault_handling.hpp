@@ -11,6 +11,7 @@ enum class State : uint32_t {
     NO_FAULT,
     GENERIC_FAULT,
     I2C_DRIVER_FAULT,
+    UART_DRIVER_FAULT,
     IMU_FAULT,
     PARSER_FAULT,
     REACTION_WHEEL_FAULT

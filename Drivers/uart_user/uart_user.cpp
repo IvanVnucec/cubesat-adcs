@@ -2,6 +2,7 @@
 
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
+#include "fault_handling.hpp"
 #include "queue.h"
 #include "semphr.h"
 #include "usart.h"
@@ -120,7 +121,7 @@ void UART_User::private_assert(bool condition)
 
 void UART_User::uartDriverErrorHandle()
 {
-    // TODO: call here error handler
+    Fault::setFaultState(Fault::State::UART_DRIVER_FAULT);
 }
 
 }    // namespace UART_User
@@ -128,6 +129,8 @@ void UART_User::uartDriverErrorHandle()
 // ***************************** HAL Callback functions *****************************
 static void private_assert_hal(bool condition)
 {
+    // TODO: delete this method and call directly assertAndRaiseFault function.
+    // Change it throughout project
     using namespace UART_User;
 
     assert(private_this != nullptr);

@@ -68,6 +68,7 @@ void faultHandlingThread(void *argument)
                 osThreadSuspend(inertialMeasUnitHandle);
                 // intentionally fall through case
             }
+            case State::UART_DRIVER_FAULT:
             case State::PARSER_FAULT: {
                 osThreadSuspend(parserHandle);
                 // intentionally fall through case
