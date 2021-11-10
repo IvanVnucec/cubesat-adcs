@@ -59,6 +59,7 @@ void faultHandlingThread(void *argument)
         State state = static_cast<State>(notification);    // TODO: test this
 
         // TODO: fix switch case because if IMU_FAULT triggers, it will also suspend parser handle
+        // TODO: if fault occurs, osThreadSuspend will be called on every fault handling thread pass
         switch (state) {
             case State::NO_FAULT: {
                 HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
