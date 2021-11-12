@@ -8,23 +8,35 @@
 #ifndef INC_REACTION_WHEEL_HPP_
 #define INC_REACTION_WHEEL_HPP_
 
-enum ReactionWheelDirection { CLOCKWISE, ANTICLOCKWISE };
+#include "pwm_user.hpp"
 
-class ReactionWheel {
+#include <climits>
+
+namespace ReactionWheel {
+
+using namespace Pwm_User;
+
+class ReactionWheel : public Pwm_User {
   private:
-    int m_ang_vel;    // TODO: define units, write range
-    float m_pwm;      // TODO: define units, write range
+    enum ReactionWheelDirection { CLOCKWISE, ANTICLOCKWISE };
+
+    float m_ang_vel_rad_p_sec;    // rad/s
     ReactionWheelDirection m_dir;
 
+    void private_assert(bool condition);
     void setDirection(ReactionWheelDirection dir);
-    void startPWM();
-    void stopPWM();
-    void setPWM(float pwm);
+    pwm_value convertAbsAngVelRadPSecToPwm(float ang_vel_rad_p_sec);
 
   public:
-    ReactionWheel(int ang_vel = 0);
+    static constexpr float MAX_ANG_VEL_RAD_P_SEC =
+        2.0f;    //	rad/s TODO: determine this for max pwm
+
+    ReactionWheel();
     ~ReactionWheel();
-    void setAngularVelocity(int angular_vel);
+    void errorHandle();
+    void setAngularVelocity(float ang_vel_rad_p_sec);
 };
+
+}    // namespace ReactionWheel
 
 #endif /* INC_REACTION_WHEEL_HPP_ */

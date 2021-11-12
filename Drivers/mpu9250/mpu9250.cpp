@@ -23,60 +23,56 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 #include "mpu9250.hpp"
 
+#include "FreeRTOS.h"
+#include "fault_handling.hpp"
+#include "i2c.h"
+#include "i2c_user.hpp"
+#include "semphr.h"
+#include "stm32l4xx.h"
+
 #include <cmath>
 #include <cstring>
 
-// TODO: Implement MOCKS Functions below
-// MOCKS
-void delay(int)
-{
-}
-void pinMode(uint8_t, int)
-{
-}
-void digitalWrite(uint8_t, int)
-{
-}
-float map(float, float, float, float, float)
-{
-    return 0.0f;
-}    // https://www.arduino.cc/reference/en/language/functions/math/map/
-// END MOCKS
+namespace MPU9250 {
 
-/* MPU9250 object, input the I2C bus and address */
-MPU9250::MPU9250(TwoWire &bus, uint8_t address)
+using namespace I2C_User;
+
+static bool mpu_driver_initialized = true;
+
+static void delay(int delay);
+static long map(long x, long in_min, long in_max, long out_min, long out_max);
+
+/* MPU9250 object, input the I2C address */
+MPU9250::MPU9250(uint8_t address) : I2C_User()
 {
-    _i2c     = &bus;       // I2C bus
-    _address = address;    // I2C address
-    _useSPI  = false;      // set to use I2C
+    private_assert(mpu_driver_initialized == false);
+
+    _address   = address << 1;    // I2C address
+    int retval = begin();
+    private_assert(retval == 1);
+
+    mpu_driver_initialized = true;
 }
 
-/* MPU9250 object, input the SPI bus and chip select pin */
-MPU9250::MPU9250(SPIClass &bus, uint8_t csPin)
+MPU9250::~MPU9250()
 {
-    _spi    = &bus;     // SPI bus
-    _csPin  = csPin;    // chip select pin
-    _useSPI = true;     // set to use SPI
+}
+
+void MPU9250::private_assert(bool condition)
+{
+    if (not condition) {
+        mpuDriverErrorHandle();
+    }
+}
+
+void MPU9250::mpuDriverErrorHandle()
+{
+    Fault::setFaultState(Fault::State::MPU9250_FAULT);
 }
 
 /* starts communication with the MPU-9250 */
 int MPU9250::begin()
 {
-    if (_useSPI) {    // using SPI for communication
-        // use low speed SPI for register setting
-        _useSPIHS = false;
-        // setting CS pin to output
-        pinMode(_csPin, OUTPUT);
-        // setting CS pin high
-        digitalWrite(_csPin, HIGH);
-        // begin SPI communication
-        _spi->begin();
-    } else {    // using I2C for communication
-        // starting the I2C bus
-        _i2c->begin();
-        // setting the I2C clock
-        _i2c->setClock(_i2cRate);
-    }
     // select clock source to gyro
     if (writeRegister(PWR_MGMNT_1, CLOCK_SEL_PLL) < 0) {
         return -1;
@@ -192,8 +188,6 @@ int MPU9250::begin()
 /* sets the accelerometer full scale range to values other than default */
 int MPU9250::setAccelRange(AccelRange range)
 {
-    // use low speed SPI for register setting
-    _useSPIHS = false;
     switch (range) {
         case ACCEL_RANGE_2G: {
             // setting the accel range to 2G
@@ -235,8 +229,6 @@ int MPU9250::setAccelRange(AccelRange range)
 /* sets the gyro full scale range to values other than default */
 int MPU9250::setGyroRange(GyroRange range)
 {
-    // use low speed SPI for register setting
-    _useSPIHS = false;
     switch (range) {
         case GYRO_RANGE_250DPS: {
             // setting the gyro range to 250DPS
@@ -280,8 +272,6 @@ int MPU9250::setGyroRange(GyroRange range)
 /* sets the DLPF bandwidth to values other than default */
 int MPU9250::setDlpfBandwidth(DlpfBandwidth bandwidth)
 {
-    // use low speed SPI for register setting
-    _useSPIHS = false;
     switch (bandwidth) {
         case DLPF_BANDWIDTH_184HZ: {
             if (writeRegister(ACCEL_CONFIG2, ACCEL_DLPF_184)
@@ -357,8 +347,6 @@ int MPU9250::setDlpfBandwidth(DlpfBandwidth bandwidth)
 /* sets the sample rate divider to values other than default */
 int MPU9250::setSrd(uint8_t srd)
 {
-    // use low speed SPI for register setting
-    _useSPIHS = false;
     /* setting the sample rate divider to 19 to facilitate setting up magnetometer */
     if (writeRegister(SMPDIV, 19) < 0) {    // setting the sample rate divider
         return -1;
@@ -401,8 +389,6 @@ int MPU9250::setSrd(uint8_t srd)
 /* enables the data ready interrupt */
 int MPU9250::enableDataReadyInterrupt()
 {
-    // use low speed SPI for register setting
-    _useSPIHS = false;
     /* setting the interrupt */
     if (writeRegister(INT_PIN_CFG, INT_PULSE_50US)
         < 0) {    // setup interrupt, 50 us pulse
@@ -417,8 +403,6 @@ int MPU9250::enableDataReadyInterrupt()
 /* disables the data ready interrupt */
 int MPU9250::disableDataReadyInterrupt()
 {
-    // use low speed SPI for register setting
-    _useSPIHS = false;
     if (writeRegister(INT_ENABLE, INT_DISABLE) < 0) {    // disable interrupt
         return -1;
     }
@@ -428,8 +412,6 @@ int MPU9250::disableDataReadyInterrupt()
 /* configures and enables wake on motion, low power mode */
 int MPU9250::enableWakeOnMotion(float womThresh_mg, LpAccelOdr odr)
 {
-    // use low speed SPI for register setting
-    _useSPIHS = false;
     // set AK8963 to Power Down
     writeAK8963Register(AK8963_CNTL1, AK8963_PWR_DOWN);
     // reset the MPU9250
@@ -471,8 +453,6 @@ int MPU9250::enableWakeOnMotion(float womThresh_mg, LpAccelOdr odr)
 /* configures and enables the FIFO buffer  */
 int MPU9250FIFO::enableFifo(bool accel, bool gyro, bool mag, bool temp)
 {
-    // use low speed SPI for register setting
-    _useSPIHS = false;
     if (writeRegister(USER_CTRL, (0x40 | I2C_MST_EN)) < 0) {
         return -1;
     }
@@ -493,8 +473,6 @@ int MPU9250FIFO::enableFifo(bool accel, bool gyro, bool mag, bool temp)
 /* reads the most current data from MPU9250 and stores in buffer */
 int MPU9250::readSensor()
 {
-    _useSPIHS = true;    // use the high speed SPI for data readout
-    // grab the data from the MPU9250
     if (readRegisters(ACCEL_OUT, 21, _buffer) < 0) {
         return -1;
     }
@@ -601,7 +579,6 @@ float MPU9250::getTemperature_C()
 /* reads data from the MPU9250 FIFO and stores in buffer */
 int MPU9250FIFO::readFifo()
 {
-    _useSPIHS = true;    // use the high speed SPI for data readout
     // get the fifo size
     readRegisters(FIFO_COUNT, 2, _buffer);
     _fifoSize = (((uint16_t)(_buffer[0] & 0x0F)) << 8) + (((uint16_t)_buffer[1]));
@@ -1128,29 +1105,35 @@ void MPU9250::setMagCalZ(float bias, float scaleFactor)
     _hzs = scaleFactor;
 }
 
+int MPU9250::writeRegisterAsync(uint8_t subAddress, uint8_t data)
+{
+    // TODO: see if mem size is 2 or 1?
+    WriteMemAsync(_address, subAddress, &data, 1);
+
+    // TODO: add error handling with private_assert and not with integer retvals. Change this throughtout project
+    /* read back the register */
+    if (readRegistersAsync(subAddress, 1, _buffer) != 1) {
+        return -1;
+    }
+    /* check the read back register against the written register */
+    if (_buffer[0] == data) {
+        return 1;
+    } else {
+        return -1;
+    }
+}
+
 /* writes a byte to MPU9250 register given a register address and data */
 int MPU9250::writeRegister(uint8_t subAddress, uint8_t data)
 {
-    /* write data to device */
-    if (_useSPI) {
-        _spi->beginTransaction(
-            SPISettings(SPI_LS_CLOCK, MSBFIRST, SPI_MODE3));    // begin the transaction
-        digitalWrite(_csPin, LOW);                              // select the MPU9250 chip
-        _spi->transfer(subAddress);    // write the register address
-        _spi->transfer(data);          // write the data
-        digitalWrite(_csPin, HIGH);    // deselect the MPU9250 chip
-        _spi->endTransaction();        // end the transaction
-    } else {
-        _i2c->beginTransmission(_address);    // open the device
-        _i2c->write(subAddress);              // write the register address
-        _i2c->write(data);                    // write the data
-        _i2c->endTransmission();
-    }
+    writeRegisterAsync(subAddress, data);
 
     delay(10);
 
     /* read back the register */
-    readRegisters(subAddress, 1, _buffer);
+    if (readRegisters(subAddress, 1, _buffer) != 1) {
+        return -1;
+    }
     /* check the read back register against the written register */
     if (_buffer[0] == data) {
         return 1;
@@ -1162,36 +1145,16 @@ int MPU9250::writeRegister(uint8_t subAddress, uint8_t data)
 /* reads registers from MPU9250 given a starting register address, number of bytes, and a pointer to store data */
 int MPU9250::readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest)
 {
-    if (_useSPI) {
-        // begin the transaction
-        if (_useSPIHS) {
-            _spi->beginTransaction(SPISettings(SPI_HS_CLOCK, MSBFIRST, SPI_MODE3));
-        } else {
-            _spi->beginTransaction(SPISettings(SPI_LS_CLOCK, MSBFIRST, SPI_MODE3));
-        }
-        digitalWrite(_csPin, LOW);                // select the MPU9250 chip
-        _spi->transfer(subAddress | SPI_READ);    // specify the starting register address
-        for (uint8_t i = 0; i < count; i++) {
-            dest[i] = _spi->transfer(0x00);    // read the data
-        }
-        digitalWrite(_csPin, HIGH);    // deselect the MPU9250 chip
-        _spi->endTransaction();        // end the transaction
-        return 1;
-    } else {
-        _i2c->beginTransmission(_address);    // open the device
-        _i2c->write(subAddress);              // specify the starting register address
-        _i2c->endTransmission(false);
-        _numBytes = _i2c->requestFrom(_address,
-                                      count);    // specify the number of bytes to receive
-        if (_numBytes == count) {
-            for (uint8_t i = 0; i < count; i++) {
-                dest[i] = _i2c->read();
-            }
-            return 1;
-        } else {
-            return -1;
-        }
-    }
+    readRegistersAsync(subAddress, count, dest);
+
+    return 1;    // success
+}
+
+int MPU9250::readRegistersAsync(uint8_t subAddress, uint8_t count, uint8_t *dest)
+{
+    ReadMemAsync(_address, subAddress, dest, count);
+
+    return 1;    // success
 }
 
 /* writes a register to the AK8963 given a register address and data */
@@ -1266,3 +1229,15 @@ int MPU9250::whoAmIAK8963()
     // return the register value
     return _buffer[0];
 }
+
+static void delay(int delay)
+{
+    vTaskDelay(pdMS_TO_TICKS(delay));
+}
+
+static long map(long x, long in_min, long in_max, long out_min, long out_max)
+{
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+}    // namespace MPU9250

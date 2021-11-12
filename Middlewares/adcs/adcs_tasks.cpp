@@ -9,8 +9,10 @@
 #include "FreeRTOS.h"
 #include "angle_regulation.hpp"
 #include "cmsis_os.h"
+#include "fault_handling.hpp"
 #include "inertial_meas_unit.hpp"
 #include "optimal_request_interface.hpp"
+#include "parser.hpp"
 #include "task.h"
 
 #ifdef __cplusplus
@@ -24,25 +26,32 @@ extern "C" {
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-static osThreadId_t angleRegulationTaskHandle;
-const static osThreadAttr_t angleRegulationTask_attributes = {
-    .name       = "angleRegulationTask",
-    .stack_size = 128 * 4,
-    .priority   = (osPriority_t)osPriorityNormal1,    // TODO: Set priorities
-};
-
-static osThreadId_t optimalRequestHandle;
+osThreadId_t optimalRequestHandle              = NULL;
 const static osThreadAttr_t optimalRequest_attributes = {
     .name       = "optimalRequestTask",
     .stack_size = 128 * 4,
     .priority   = (osPriority_t)osPriorityNormal2,
 };
 
-static osThreadId_t inertialMeasUnitHandle;
+osThreadId_t inertialMeasUnitHandle              = NULL;
 const static osThreadAttr_t inertialMeasUnit_attributes = {
     .name       = "inertialMeasUnitTask",
-    .stack_size = 128 * 4,
+    .stack_size = 1024 * 4,
     .priority   = (osPriority_t)osPriorityNormal3,
+};
+
+osThreadId_t parserHandle              = NULL;
+const static osThreadAttr_t parser_attributes = {
+    .name       = "parserTask",
+    .stack_size = 128 * 4,
+    .priority   = (osPriority_t)osPriorityNormal4,
+};
+
+osThreadId_t faultHandlingHandle                     = NULL;
+const static osThreadAttr_t faultHandling_attributes = {
+    .name       = "faultHandlingTask",
+    .stack_size = 256 * 4,
+    .priority   = (osPriority_t)osPriorityNormal5,
 };
 
 /* Private function prototypes -----------------------------------------------*/
@@ -50,19 +59,26 @@ const static osThreadAttr_t inertialMeasUnit_attributes = {
 /* Private application code --------------------------------------------------*/
 void initAdcsThreads()
 {
-    // angle regulation thread
-    angleRegulationTaskHandle =
-        osThreadNew(REG_ANGLE_thread, NULL, &angleRegulationTask_attributes);
+    // inertial measurement unit thread
+    inertialMeasUnitHandle = osThreadNew(InertialMeasUnit::inertialMeasUnitThread,
+                                         NULL,
+                                         &inertialMeasUnit_attributes);
+    assert(inertialMeasUnitHandle != NULL);
 
     // optimal request thread
     optimalRequestHandle = osThreadNew(OptimalRequestInterface::optimalRequestThread,
                                        NULL,
                                        &optimalRequest_attributes);
+    assert(optimalRequestHandle != NULL);
 
-    // inertial measurement unit thread
-    inertialMeasUnitHandle = osThreadNew(InertialMeasUnit::inertialMeasUnitThread,
-                                         NULL,
-                                         &inertialMeasUnit_attributes);
+    // parser thread
+    parserHandle = osThreadNew(Parser::parserThread, NULL, &parser_attributes);
+    assert(parserHandle != NULL);
+
+    // fault handling thread
+    faultHandlingHandle =
+        osThreadNew(Fault::faultHandlingThread, NULL, &faultHandling_attributes);
+    assert(faultHandlingHandle != NULL);
 }
 
 #ifdef __cplusplus

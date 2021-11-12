@@ -10,16 +10,13 @@
 #include "inertial_meas_unit.hpp"
 
 #include "cmsis_os.h"
+#include "fault_handling.hpp"
 #include "mpu9250.hpp"
 
 namespace InertialMeasUnit {
 
-static TwoWire Wire;    // TODO: Delete this when mpu9250 driver is implemented
-static MPU9250 imu(Wire, 0x68);
-
-InertialMeasUnit::InertialMeasUnit()
+InertialMeasUnit::InertialMeasUnit() : MPU9250::MPU9250(m_imu_i2c_address)
 {
-    imu.begin();
 }
 
 InertialMeasUnit::~InertialMeasUnit()
@@ -28,46 +25,60 @@ InertialMeasUnit::~InertialMeasUnit()
 
 void InertialMeasUnit::calibrateGyro()
 {
-    imu.calibrateGyro();
+    int retval = MPU9250::calibrateGyro();
+    private_assert(retval == 1);
 }
 
-void InertialMeasUnit::getDataFromSensorAsync()
+Data InertialMeasUnit::getData()
 {
-    imu.readSensor();
-}
+    using namespace MPU9250;
 
-void InertialMeasUnit::getGyroData(float g[3])
-{
-    g[0] = imu.getGyroX_rads();
-    g[1] = imu.getGyroX_rads();
-    g[2] = imu.getGyroX_rads();
-}
+    Data data;
 
-void InertialMeasUnit::getAccData(float a[3])
-{
-    a[0] = imu.getAccelX_mss();
-    a[1] = imu.getAccelY_mss();
-    a[2] = imu.getAccelZ_mss();
-}
+    int retval = readSensor();
+    private_assert(retval == 1);
 
-void InertialMeasUnit::getMagData(float m[3])
-{
-    m[0] = imu.getMagX_uT();
-    m[1] = imu.getMagY_uT();
-    m[2] = imu.getMagZ_uT();
+    data.gyr[0] = getGyroX_rads();
+    data.gyr[1] = getGyroY_rads();
+    data.gyr[2] = getGyroZ_rads();
+
+    data.acc[0] = getAccelX_mss();
+    data.acc[1] = getAccelY_mss();
+    data.acc[2] = getAccelZ_mss();
+
+    data.mag[0] = getMagX_uT();
+    data.mag[1] = getMagY_uT();
+    data.mag[2] = getMagZ_uT();
+
+    return data;
 }
 
 void inertialMeasUnitThread(void *argument)
 {
-    static InertialMeasUnit imu;
+    InertialMeasUnit imu;
+    Data imu_data;
 
     for (;;) {
-        imu.getDataFromSensorAsync();
-        // TODO: Add data buffering and send notification 
-        //       that we have data to the other threads using IMU
+        imu_data = imu.getData();
 
-        vTaskDelay(pdMS_TO_TICKS(10));
+        // TODO: handle data
+        (void)imu_data;
+
+        vTaskDelay(pdMS_TO_TICKS(1000));
     }
+}
+
+void InertialMeasUnit::private_assert(bool condition)
+{
+    if (not condition)
+        imuErrorHandle();
+}
+
+void InertialMeasUnit::imuErrorHandle()
+{
+    Fault::setFaultState(Fault::State::IMU_FAULT);
+    // TODO: yield task thread here because private asserts in drivers wont stop execution.
+    // this also needs to be fixed across repo
 }
 
 }    // namespace InertialMeasUnit

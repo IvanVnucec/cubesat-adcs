@@ -21,7 +21,7 @@ OptimalRequest::OptimalRequest()
     // these values are not changing
     m_or_handle.Mu_noise_var  = 0.0008117f;
     m_or_handle.Eta_noise_var = 0.0000010f;
-    m_or_handle.dT = m_iterationPeriodInMiliSec / 1000.0f;    // ms to s
+    m_or_handle.dT            = m_iterationPeriodInMiliSec / 1000.0f;    // ms to s
 
     // TODO [Ivan Vnucec]: Uncomment code below
     // TODO [Ivan Vnucec]: Get first measuerements
@@ -81,7 +81,7 @@ void OptimalRequest::fill_w(float bdy_gyr[3])
 
 void optimalRequestThread(void *argument)
 {
-    static OptimalRequest optimal_request;
+    OptimalRequest optimal_request;
 
     for (;;) {
         // TODO: Get data from IMU here

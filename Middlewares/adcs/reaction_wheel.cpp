@@ -2,22 +2,24 @@
 
 #include "reaction_wheel.hpp"
 
+#include "fault_handling.hpp"
 #include "main.h"
-#include "tim.h"
 
 #include <cmath>
-#include <limits.h>
+#include <cstdint>
+
+namespace ReactionWheel {
+
+using namespace std;
+using namespace Pwm_User;
 
 /**
- * Initialize MCU peripherals.
- * Set reaction wheel Angular velocity to zero.
- * @param angular_vel - Default 0 // TODO: add units and ranges here
+ * Initialize MCU peripherals and set reaction wheel Angular velocity to zero.
  *
  */
-ReactionWheel::ReactionWheel(int ang_vel)
+ReactionWheel::ReactionWheel() : Pwm_User()
 {
-    startPWM();
-    setAngularVelocity(ang_vel);
+    setAngularVelocity(0.0f);
 }
 
 /**
@@ -25,29 +27,30 @@ ReactionWheel::ReactionWheel(int ang_vel)
  */
 ReactionWheel::~ReactionWheel()
 {
-    setAngularVelocity(0);
-    stopPWM();
+    setAngularVelocity(0.0f);
 }
 
 /**
  * Set direction of rotation and the PWM based on angular velocity.
- * @param angular_vel - // TODO: add units and ranges here
+ * @param angular_vel - in rad/s. Values above MAX_ANG_VEL_RAD_P_SEC
+ * are limited to that value
  */
-void ReactionWheel::setAngularVelocity(int angular_vel)
+void ReactionWheel::setAngularVelocity(float ang_vel_rad_p_sec)
 {
-    // TODO: add assert here
-    m_ang_vel = angular_vel;
+    m_ang_vel_rad_p_sec = ang_vel_rad_p_sec;
 
-    if (m_ang_vel > 0) {
-        // TODO: determine experimentally which direction we should set here
+    if (m_ang_vel_rad_p_sec > 0.0f) {
         setDirection(CLOCKWISE);
     } else {
-        // TODO: determine experimentally which direction we should set here
         setDirection(ANTICLOCKWISE);
     }
 
-    // TODO: convert angular_vel to PWM value (this implementation is for example only!!!)
-    float pwm = std::abs(m_ang_vel) / INT_MAX;
+    float abs_ang_vel = abs(ang_vel_rad_p_sec);
+
+    if (abs_ang_vel > MAX_ANG_VEL_RAD_P_SEC)
+        abs_ang_vel = MAX_ANG_VEL_RAD_P_SEC;
+
+    pwm_value pwm = convertAbsAngVelRadPSecToPwm(abs_ang_vel);
     setPWM(pwm);
 }
 
@@ -58,7 +61,7 @@ void ReactionWheel::setAngularVelocity(int angular_vel)
  */
 void ReactionWheel::setDirection(ReactionWheelDirection dir)
 {
-    // TODO: add assert here. See how to assert Enums
+    private_assert(dir == CLOCKWISE || dir == ANTICLOCKWISE);
     m_dir = dir;
 
     if (dir == CLOCKWISE) {
@@ -74,41 +77,23 @@ void ReactionWheel::setDirection(ReactionWheelDirection dir)
     }
 }
 
-/**
- * Starts the Timer and PWM.
- * @warning This function depends on MCU peripherals.
- */
-void ReactionWheel::startPWM()
+pwm_value ReactionWheel::convertAbsAngVelRadPSecToPwm(float abs_ang_vel_rad_p_sec)
 {
-    // start Timer and PWM
-    HAL_TIM_Base_Start(&htim1);
-    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
+    pwm_value pwm =
+        (pwm_value)(abs_ang_vel_rad_p_sec / MAX_ANG_VEL_RAD_P_SEC) * MAX_PWM_VALUE;
+
+    return pwm;
 }
 
-/**
- * Stops the Timer and PWM.
- * @warning This function depends on MCU peripherals.
- */
-void ReactionWheel::stopPWM()
+void ReactionWheel::private_assert(bool condition)
 {
-    // stop PWM and Timer
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 0);
-    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
-    HAL_TIM_Base_Stop(&htim1);
+    if (not condition)
+        errorHandle();
 }
 
-/**
- * Sets the PWM by setting the Timer Compare register.
- * @param pwm - // TODO: determine range of pwm variable.
- * @warning This function depends on MCU peripherals.
- */
-void ReactionWheel::setPWM(float pwm)
+void ReactionWheel::errorHandle()
 {
-    // TODO: add assert here
-    m_pwm = pwm;
-
-    // TODO: convert pwm to pulse_width
-    uint32_t pulse_width = 0u;
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, pulse_width);
+    Fault::setFaultState(Fault::State::REACTION_WHEEL_FAULT);
 }
+
+}    // namespace ReactionWheel

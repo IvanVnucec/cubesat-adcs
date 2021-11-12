@@ -24,74 +24,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #ifndef MPU9250_HPP
 #define MPU9250_HPP
 
+#include "i2c_user.hpp"
+
 #include <cstddef>
 #include <cstdint>
 
-// TODO: Implement MOCKS Functions below
-// MOCKS
+namespace MPU9250 {
 
-#define OUTPUT 0
-#define HIGH 0
-#define LOW 0
-#define MSBFIRST 0
-#define SPI_MODE3 0
+using namespace I2C_User;
 
-class TwoWire {
-  public:
-    void begin()
-    {
-    }
-    void setClock(const uint32_t)
-    {
-    }
-    void beginTransmission(uint8_t)
-    {
-    }
-    void write(uint8_t)
-    {
-    }
-    void endTransmission()
-    {
-    }
-    void endTransmission(bool)
-    {
-    }
-    size_t requestFrom(uint8_t, uint8_t)
-    {
-        return 0;
-    }
-    uint8_t read()
-    {
-        return 0;
-    }
-};
+class MPU9250 : public I2C_User {
+  private:
+    void private_assert(bool condition);
 
-class SPISettings {
-  public:
-    SPISettings(const uint32_t, int, int)
-    {
-    }    // https://www.arduino.cc/en/Reference/SPISettings
-};
-
-class SPIClass {
-  public:
-    void begin()
-    {
-    }
-    void beginTransaction(SPISettings)
-    {
-    }
-    uint8_t transfer(uint8_t)
-    {
-        return 0;
-    }
-    void endTransaction()
-    {
-    }
-};
-// END OF MOCKS
-
-class MPU9250 {
   public:
     enum GyroRange {
         GYRO_RANGE_250DPS,
@@ -122,8 +67,10 @@ class MPU9250 {
         LP_ACCEL_ODR_250HZ   = 10,
         LP_ACCEL_ODR_500HZ   = 11
     };
-    MPU9250(TwoWire &bus, uint8_t address);
-    MPU9250(SPIClass &bus, uint8_t csPin);
+    MPU9250(uint8_t address);
+    ~MPU9250();
+    void mpuDriverErrorHandle();
+
     int begin();
     int setAccelRange(AccelRange range);
     int setGyroRange(GyroRange range);
@@ -173,19 +120,9 @@ class MPU9250 {
     void setMagCalZ(float bias, float scaleFactor);
 
   protected:
+    // TODO: Add m_ prefix to private variables
     // i2c
     uint8_t _address;
-    TwoWire *_i2c;
-    const uint32_t _i2cRate = 400000;    // 400 kHz
-    size_t _numBytes;                    // number of bytes received from I2C
-    // spi
-    SPIClass *_spi;
-    uint8_t _csPin;
-    bool _useSPI;
-    bool _useSPIHS;
-    const uint8_t SPI_READ      = 0x80;
-    const uint32_t SPI_LS_CLOCK = 1000000;     // 1 MHz
-    const uint32_t SPI_HS_CLOCK = 15000000;    // 15 MHz
     // track success of interacting with sensor
     int _status;
     // buffer for reading from sensor
@@ -327,7 +264,9 @@ class MPU9250 {
     const uint8_t AK8963_WHO_AM_I  = 0x00;
     // private functions
     int writeRegister(uint8_t subAddress, uint8_t data);
+    int writeRegisterAsync(uint8_t subAddress, uint8_t data);
     int readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest);
+    int readRegistersAsync(uint8_t subAddress, uint8_t count, uint8_t *dest);
     int writeAK8963Register(uint8_t subAddress, uint8_t data);
     int readAK8963Registers(uint8_t subAddress, uint8_t count, uint8_t *dest);
     int whoAmI();
@@ -363,5 +302,7 @@ class MPU9250FIFO : public MPU9250 {
     float _tFifo[256];
     size_t _tSize;
 };
+
+}    // namespace MPU9250
 
 #endif
