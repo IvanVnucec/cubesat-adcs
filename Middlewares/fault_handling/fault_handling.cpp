@@ -52,13 +52,16 @@ void assertAndRaiseFault(bool condition, State fault_state)
 
 void faultHandlingThread(void *argument)
 {
+    State state = State::NO_FAULT;
+
     for (;;) {
         uint32_t notification;
-        BaseType_t rtos_status = xTaskNotifyWait(0u, 0u, &notification, portMAX_DELAY);
-        assert(rtos_status == pdPASS);
-        State state = static_cast<State>(notification);    // TODO: test this
 
-        // TODO: fix switch case because if IMU_FAULT triggers, it will also suspend parser handle
+        BaseType_t rtos_status = xTaskNotifyWait(0u, 0u, &notification, portMAX_DELAY);
+        // if timeout occured leave fault state as before
+        if (rtos_status == pdPASS)
+            state = static_cast<State>(notification);
+
         switch (state) {
             case State::NO_FAULT: {
                 HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);

@@ -17,6 +17,8 @@ using namespace std;
 static constexpr UART_HandleTypeDef *hal_uart_handle_ptr = &huart1;
 static constexpr unsigned buffer_out_len                 = 100u;
 
+static constexpr int TRANSMIT_TIMEOUT_MS = 100;    // miliseconds
+
 static bool uart_driver_initialized = false;
 static UART_User *private_this      = nullptr;
 
@@ -63,8 +65,11 @@ uint8_t UART_User::readByteAsync()
 {
     startReceiving();
 
-    BaseType_t rtos_status = xSemaphoreTake(uartRxSemaphore, portMAX_DELAY);
-    private_assert(rtos_status == pdPASS);
+    // enable indefinite waiting
+    BaseType_t rtos_status;
+    do {
+        rtos_status = xSemaphoreTake(uartRxSemaphore, portMAX_DELAY);
+    } while (rtos_status != pdPASS);
 
     stopReceiving();
 
@@ -109,7 +114,8 @@ void UART_User::writeDataAsync(const uint8_t *data, unsigned len)
     HAL_StatusTypeDef hal_status = HAL_UART_Transmit_IT(m_hal_uart_ptr, bufferOut, len);
     private_assert(hal_status == HAL_OK);
 
-    BaseType_t rtos_status = xSemaphoreTake(uartTxSemaphore, portMAX_DELAY);
+    BaseType_t rtos_status =
+        xSemaphoreTake(uartTxSemaphore, pdMS_TO_TICKS(TRANSMIT_TIMEOUT_MS));
     private_assert(rtos_status == pdPASS);
 }
 
