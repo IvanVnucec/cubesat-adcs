@@ -69,19 +69,10 @@ void faultHandlingThread(void *argument)
             }
             case State::I2C_DRIVER_FAULT:
             case State::MPU9250_FAULT:
-            case State::IMU_FAULT: {
-                // TODO: check retval from rtos, also below
-                osThreadSuspend(inertialMeasUnitHandle);
-                // intentionally fall through case
-            }
+            case State::IMU_FAULT:
             case State::UART_DRIVER_FAULT:
-            case State::PARSER_FAULT: {
-                osThreadSuspend(parserHandle);
-                // intentionally fall through case
-            }
-            case State::REACTION_WHEEL_FAULT: {
-                // intentionally fall through case
-            }
+            case State::PARSER_FAULT:
+            case State::REACTION_WHEEL_FAULT:
             case State::GENERIC_FAULT:
             default: {
                 HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
