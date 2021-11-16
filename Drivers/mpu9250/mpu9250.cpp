@@ -37,7 +37,7 @@ namespace MPU9250 {
 
 using namespace I2C_User;
 
-static bool mpu_driver_initialized = true;
+static bool mpu_driver_initialized = false;
 
 static void delay(int delay);
 static long map(long x, long in_min, long in_max, long out_min, long out_max);
