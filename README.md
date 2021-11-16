@@ -18,3 +18,7 @@
 	3. Go to Windows - Preferences - C/C++ - CppStyle and 
 		- add Clang-format path and
 		- check Run clang-format on file save
+
+### Problem with the UART Baudrate
+	STM32 Nucleo board for STM32L412 is configured by default to use internal clock. We had problems with the UART baudrate. When configured to 115200 bits/s we would have about 108000 bits/s. In order to configure Nucleo board to use external crystal (from the STM Link) we have unsoldered SB5 and SB7 solder bridges and soldered SB17 solder bridge. Doing that we have introduced a bug where initial pins PB7 and PB6 for UART did not work, they were in high state when transmitting. To fix the bug we have changed pinout to PA10 and PA9 for the UART1. 
+	

@@ -19,7 +19,7 @@ namespace I2C_User {
 
 using namespace std;
 
-static constexpr I2C_HandleTypeDef *hal_i2c_handle_ptr = &hi2c1;
+static constexpr I2C_HandleTypeDef *hal_i2c_handle_ptr = &hi2c3;
 
 static bool i2c_driver_initialized = false;
 static I2C_User *private_this      = nullptr;

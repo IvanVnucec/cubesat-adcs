@@ -8,15 +8,15 @@ SPI1
 	- ~SS: (not generated/assigned by the tool)
 
 UART1:
-	- Rx: Pin A15
-	- Tx: Pin A2
+	- Rx: Pin A10
+	- Tx: Pin A9
 
 LED:
 	- Pin B3
 	
-I2C1:
-	- SDA: Pin A10
-	- SCL: Pin A9
+I2C3:
+	- SDA: Pin B4
+	- SCL: Pin A7
 
 TIM1_CH1 PWM:
 	- Pin A8
@@ -25,10 +25,6 @@ Debug Serial Wire:
 	- CLK: Pin A14
 	- DIO: Pin A13
 
-Low Speed Crystal:
-	- In: Pin C14
-	- Out: Pin C15
-	
 High Speed Crystal:
 	- In: Pin A0
 	- Out: (No out pin, idk why)  
