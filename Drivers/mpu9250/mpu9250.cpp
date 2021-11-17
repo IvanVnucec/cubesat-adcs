@@ -1147,6 +1147,7 @@ int MPU9250::readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest)
 {
     readRegistersAsync(subAddress, count, dest);
 
+    // TODO: Add error handling
     return 1;    // success
 }
 
@@ -1154,6 +1155,7 @@ int MPU9250::readRegistersAsync(uint8_t subAddress, uint8_t count, uint8_t *dest
 {
     ReadMemAsync(_address, subAddress, dest, count);
 
+    // TODO: Add error handling
     return 1;    // success
 }
 
