@@ -9,6 +9,8 @@
 
 namespace Fault {
 
+static State getFaultState();
+
 void setFaultState(State state)
 {
     BaseType_t rtos_status = pdFAIL;
@@ -44,6 +46,19 @@ void setFaultState(State state)
     assert(rtos_status == pdPASS);
 }
 
+static State getFaultState()
+{
+    static State retval = State::NO_FAULT;
+    uint32_t notification;
+
+    BaseType_t rtos_status = xTaskNotifyWait(0u, 0u, &notification, pdMS_TO_TICKS(1000));
+    // if timeout occured leave fault state as before
+    if (rtos_status == pdPASS)
+        retval = static_cast<State>(notification);
+
+    return retval;
+}
+
 void assertAndRaiseFault(bool condition, State fault_state)
 {
     if (not condition)
@@ -52,15 +67,8 @@ void assertAndRaiseFault(bool condition, State fault_state)
 
 void faultHandlingThread(void *argument)
 {
-    State state = State::NO_FAULT;
-
     for (;;) {
-        uint32_t notification;
-
-        BaseType_t rtos_status = xTaskNotifyWait(0u, 0u, &notification, portMAX_DELAY);
-        // if timeout occured leave fault state as before
-        if (rtos_status == pdPASS)
-            state = static_cast<State>(notification);
+        State state = getFaultState();
 
         switch (state) {
             case State::NO_FAULT: {
