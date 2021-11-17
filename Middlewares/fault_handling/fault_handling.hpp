@@ -19,6 +19,7 @@ enum class State : uint32_t {
 };
 
 void setFaultState(State state = State::GENERIC_FAULT);
+State getFaultState();
 void assertAndRaiseFault(bool condition, State fault_state = State::GENERIC_FAULT);
 void faultHandlingThread(void *argument);
 

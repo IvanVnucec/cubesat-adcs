@@ -9,52 +9,22 @@
 
 namespace Fault {
 
-static State getFaultState();
+static State private_state = State::NO_FAULT;
 
 void setFaultState(State state)
 {
-    BaseType_t rtos_status = pdFAIL;
-
-    assert(faultHandlingHandle);
-
-    bool inISR = xPortIsInsideInterrupt();
-    if (inISR) {
-        BaseType_t woken          = pdFALSE;
-        uint32_t prevNotification = 0u;
-
-        rtos_status = xTaskGenericNotifyFromISR(
-            static_cast<TaskHandle_t>(
-                faultHandlingHandle),        // safe conversion, see "task.h" file
-            static_cast<uint32_t>(state),    // safe conversion,
-            eSetValueWithOverwrite,
-            &prevNotification,
-            &woken);
-
-        // TODO: see what to do with prevNotification value
-        (void)prevNotification;
-
-        portYIELD_FROM_ISR(woken);
-
-    } else {
-        rtos_status =
-            xTaskNotify(static_cast<TaskHandle_t>(
-                            faultHandlingHandle),    // safe conversion, see "task.h" file
-                        static_cast<uint32_t>(state),    // safe conversion
-                        eSetValueWithOverwrite);
-    }
-
-    assert(rtos_status == pdPASS);
+    __disable_irq();
+    private_state = state;
+    __enable_irq();
 }
 
-static State getFaultState()
+State getFaultState()
 {
-    static State retval = State::NO_FAULT;
-    uint32_t notification;
+    State retval;
 
-    BaseType_t rtos_status = xTaskNotifyWait(0u, 0u, &notification, pdMS_TO_TICKS(1000));
-    // if timeout occured leave fault state as before
-    if (rtos_status == pdPASS)
-        retval = static_cast<State>(notification);
+    __disable_irq();
+    retval = private_state;
+    __enable_irq();
 
     return retval;
 }
