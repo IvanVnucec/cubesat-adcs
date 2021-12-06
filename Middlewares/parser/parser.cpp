@@ -20,10 +20,13 @@
 
 namespace Parser {
 
+static Parser *private_this = nullptr;
+
 using namespace UART_User;
 
 Parser::Parser() : UART_User()
 {
+    private_this = this;
 }
 
 Parser::~Parser()
@@ -90,6 +93,13 @@ void parserThread(void *argument)
         commandAndArg command = parser.getCommandFromUart();
         parser.callCallback(command);
     }
+}
+
+void sendString(std::string str)
+{
+    assert(private_this != nullptr);
+    private_this->writeDataAsync(reinterpret_cast<const uint8_t *>(str.c_str()),
+                                 str.length());
 }
 
 }    // namespace Parser

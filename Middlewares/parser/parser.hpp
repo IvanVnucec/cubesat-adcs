@@ -46,6 +46,7 @@ class Parser : public UART_User {
 };
 
 void parserThread(void *argument);
+void sendString(std::string str);
 
 }    // namespace Parser
 

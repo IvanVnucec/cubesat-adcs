@@ -27,12 +27,12 @@ class UART_User {
     void uartDriverErrorHandle();
     void stopReceiving();
     void startReceiving();
-    void writeDataAsync(const uint8_t *data, unsigned len);
     uint8_t readByteAsync();
     void readDataAsync(uint8_t *data, unsigned len);
     unsigned readDataAsyncUntilChar(uint8_t *data, char c, unsigned max_len);
 
   public:
+    void writeDataAsync(const uint8_t *data, unsigned len);
     void private_assert(bool condition);
 };
 
