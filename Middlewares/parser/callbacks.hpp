@@ -8,10 +8,12 @@
 #ifndef PARSER_CALLBACKS_HPP_
 #define PARSER_CALLBACKS_HPP_
 
+#include <string>
+
 namespace ParserCallback {
 
-void RegulationStart(void *arg);
-void RegulationStop(void *arg);
+void regulationStart(std::string arg);
+void regulationStop(std::string arg);
 
 }    // namespace ParserCallback
 

@@ -17,7 +17,7 @@
 namespace Parser {
 
 using namespace UART_User;
-using callback_t = void (*)(void *arg);
+using callback_t = void (*)(std::string arg);
 
 struct commandAndArg {
     std::string callback;
@@ -28,8 +28,8 @@ class Parser : public UART_User {
   private:
     // clang-format off
     std::map<std::string, callback_t> m_callbacks{
-    	{"RegulationStart", ParserCallback::RegulationStart},
-		  {"RegulationStop",  ParserCallback::RegulationStop}
+    	{"regulationStart", ParserCallback::regulationStart},
+		  {"regulationStop",  ParserCallback::regulationStop},
     };
     // clang-format on
 

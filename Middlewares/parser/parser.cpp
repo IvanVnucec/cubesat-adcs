@@ -73,7 +73,7 @@ void Parser::callCallback(commandAndArg &ca)
     private_assert(has_callback);
     // ignore if no callback
     if (has_callback)
-        m_callbacks[ca.callback](nullptr);
+        m_callbacks[ca.callback](ca.arg);
 }
 
 void Parser::private_assert(bool condition)

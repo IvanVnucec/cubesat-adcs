@@ -1,14 +1,16 @@
 #include "callbacks.hpp"
 
+#include <string>
+
 namespace ParserCallback {
 
-void RegulationStart(void *arg)
+void regulationStart(std::string arg)
 {
     (void)arg;
     // turn regulation on
 }
 
-void RegulationStop(void *arg)
+void regulationStop(std::string arg)
 {
     (void)arg;
     // turn regulation off
