@@ -9,39 +9,24 @@
 
 namespace Fault {
 
+static State private_state = State::NO_FAULT;
+
 void setFaultState(State state)
 {
-    BaseType_t rtos_status = pdFAIL;
+    __disable_irq();
+    private_state = state;
+    __enable_irq();
+}
 
-    assert(faultHandlingHandle);
+State getFaultState()
+{
+    State retval;
 
-    bool inISR = xPortIsInsideInterrupt();
-    if (inISR) {
-        BaseType_t woken          = pdFALSE;
-        uint32_t prevNotification = 0u;
+    __disable_irq();
+    retval = private_state;
+    __enable_irq();
 
-        rtos_status = xTaskGenericNotifyFromISR(
-            static_cast<TaskHandle_t>(
-                faultHandlingHandle),        // safe conversion, see "task.h" file
-            static_cast<uint32_t>(state),    // safe conversion,
-            eSetValueWithOverwrite,
-            &prevNotification,
-            &woken);
-
-        // TODO: see what to do with prevNotification value
-        (void)prevNotification;
-
-        portYIELD_FROM_ISR(woken);
-
-    } else {
-        rtos_status =
-            xTaskNotify(static_cast<TaskHandle_t>(
-                            faultHandlingHandle),    // safe conversion, see "task.h" file
-                        static_cast<uint32_t>(state),    // safe conversion
-                        eSetValueWithOverwrite);
-    }
-
-    assert(rtos_status == pdPASS);
+    return retval;
 }
 
 void assertAndRaiseFault(bool condition, State fault_state)
@@ -53,13 +38,8 @@ void assertAndRaiseFault(bool condition, State fault_state)
 void faultHandlingThread(void *argument)
 {
     for (;;) {
-        uint32_t notification;
-        BaseType_t rtos_status = xTaskNotifyWait(0u, 0u, &notification, portMAX_DELAY);
-        assert(rtos_status == pdPASS);
-        State state = static_cast<State>(notification);    // TODO: test this
+        State state = getFaultState();
 
-        // TODO: fix switch case because if IMU_FAULT triggers, it will also suspend parser handle
-        // TODO: if fault occurs, osThreadSuspend will be called on every fault handling thread pass
         switch (state) {
             case State::NO_FAULT: {
                 HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
@@ -67,19 +47,10 @@ void faultHandlingThread(void *argument)
             }
             case State::I2C_DRIVER_FAULT:
             case State::MPU9250_FAULT:
-            case State::IMU_FAULT: {
-                // TODO: check retval from rtos, also below
-                osThreadSuspend(inertialMeasUnitHandle);
-                // intentionally fall through case
-            }
+            case State::IMU_FAULT:
             case State::UART_DRIVER_FAULT:
-            case State::PARSER_FAULT: {
-                osThreadSuspend(parserHandle);
-                // intentionally fall through case
-            }
-            case State::REACTION_WHEEL_FAULT: {
-                // intentionally fall through case
-            }
+            case State::PARSER_FAULT:
+            case State::REACTION_WHEEL_FAULT:
             case State::GENERIC_FAULT:
             default: {
                 HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);

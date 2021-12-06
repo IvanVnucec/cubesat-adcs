@@ -19,7 +19,10 @@ namespace I2C_User {
 
 using namespace std;
 
-static constexpr I2C_HandleTypeDef *hal_i2c_handle_ptr = &hi2c1;
+static constexpr int WRITE_TIMEOUT_MS = 100;    // miliseconds
+static constexpr int READ_TIMEOUT_MS  = 100;    // miliseconds
+
+static constexpr I2C_HandleTypeDef *hal_i2c_handle_ptr = &hi2c3;
 
 static bool i2c_driver_initialized = false;
 static I2C_User *private_this      = nullptr;
@@ -67,7 +70,8 @@ void I2C_User::WriteMemAsync(uint16_t dev_address,
                                                         data_len);
     private_assert(hal_status == HAL_OK);
 
-    BaseType_t rtos_status = xSemaphoreTake(i2cTxSemaphore, portMAX_DELAY);
+    BaseType_t rtos_status =
+        xSemaphoreTake(i2cTxSemaphore, pdMS_TO_TICKS(WRITE_TIMEOUT_MS));
     private_assert(rtos_status == pdPASS);
 }
 
@@ -85,7 +89,8 @@ void I2C_User::ReadMemAsync(uint16_t dev_address,
                                                        data_len);
     private_assert(hal_status == HAL_OK);
 
-    BaseType_t rtos_status = xSemaphoreTake(i2cRxSemaphore, portMAX_DELAY);
+    BaseType_t rtos_status =
+        xSemaphoreTake(i2cRxSemaphore, pdMS_TO_TICKS(READ_TIMEOUT_MS));
     private_assert(rtos_status == pdPASS);
 }
 

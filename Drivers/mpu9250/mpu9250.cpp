@@ -37,7 +37,7 @@ namespace MPU9250 {
 
 using namespace I2C_User;
 
-static bool mpu_driver_initialized = true;
+static bool mpu_driver_initialized = false;
 
 static void delay(int delay);
 static long map(long x, long in_min, long in_max, long out_min, long out_max);
@@ -1147,6 +1147,7 @@ int MPU9250::readRegisters(uint8_t subAddress, uint8_t count, uint8_t *dest)
 {
     readRegistersAsync(subAddress, count, dest);
 
+    // TODO: Add error handling
     return 1;    // success
 }
 
@@ -1154,6 +1155,7 @@ int MPU9250::readRegistersAsync(uint8_t subAddress, uint8_t count, uint8_t *dest
 {
     ReadMemAsync(_address, subAddress, dest, count);
 
+    // TODO: Add error handling
     return 1;    // success
 }
 

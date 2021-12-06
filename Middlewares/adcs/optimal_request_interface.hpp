@@ -16,9 +16,9 @@ class OptimalRequest {
   private:
     struct0_T m_or_handle;
 
-    void fill_r(float vec1[3], float vec2[3]);
-    void fill_b(float vec1[3], float vec2[3]);
-    void fill_w(float vec_w[3]);
+    void fill_r(float ref_acc[3], float ref_mag[3]);
+    void fill_b(float bdy_acc[3], float bdy_mag[3]);
+    void fill_w(float bdy_gyr[3]);
 
   public:
     static constexpr unsigned m_iterationPeriodInMiliSec = 1000u;
