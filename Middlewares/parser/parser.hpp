@@ -30,6 +30,8 @@ class Parser : public UART_User {
     std::map<std::string, callback_t> m_callbacks{
     	{"regulationStart", ParserCallback::regulationStart},
 		  {"regulationStop",  ParserCallback::regulationStop},
+		  {"echo",            ParserCallback::echo},
+		  {"is_pi",           ParserCallback::is_pi}
     };
     // clang-format on
 

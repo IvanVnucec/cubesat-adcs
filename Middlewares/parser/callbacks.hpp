@@ -14,6 +14,8 @@ namespace ParserCallback {
 
 void regulationStart(std::string arg);
 void regulationStop(std::string arg);
+void echo(std::string arg);
+void is_pi(std::string arg);
 
 }    // namespace ParserCallback
 
