@@ -66,7 +66,11 @@ commandAndArg Parser::getCommandFromUart()
 void Parser::callCallback(commandAndArg &ca)
 {
     // TODO: convert ca.arg (std::string) to function argument (void *)
-    m_callbacks[ca.callback](nullptr);
+    auto has_callback = m_callbacks.find(ca.callback) != m_callbacks.end();
+    private_assert(has_callback);
+    // ignore if no callback
+    if (has_callback)
+        m_callbacks[ca.callback](nullptr);
 }
 
 void Parser::private_assert(bool condition)
