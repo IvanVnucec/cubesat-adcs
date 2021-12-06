@@ -1,5 +1,7 @@
 #include "callbacks.hpp"
 
+#include "parser.hpp"
+
 #include <string>
 
 namespace ParserCallback {
@@ -7,13 +9,16 @@ namespace ParserCallback {
 void regulationStart(std::string arg)
 {
     (void)arg;
-    // turn regulation on
+    Parser::sendString("regulation started\n");
+    // TODO: turn regulation on
 }
 
 void regulationStop(std::string arg)
 {
     (void)arg;
-    // turn regulation off
+    Parser::sendString("regulation stopped\n");
+    // TODO: turn regulation off
+}
 }
 
 }    // namespace ParserCallback
