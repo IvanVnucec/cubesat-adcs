@@ -46,8 +46,10 @@ commandAndArg Parser::extractCommandAndArgument(const char *uart_data,
     private_assert(open_bracket_pos != std::string::npos);
     private_assert(close_bracket_pos != std::string::npos);
 
+    auto len = close_bracket_pos - open_bracket_pos - 1;
+
     retval.callback = data.substr(0, open_bracket_pos);
-    retval.arg      = data.substr(open_bracket_pos, close_bracket_pos);
+    retval.arg      = data.substr(open_bracket_pos + 1, len);
 
     return retval;
 }
