@@ -46,6 +46,7 @@
 									<listOptionValue builtIn="false" value="../Drivers/uart_user"/>
 									<listOptionValue builtIn="false" value="../Drivers/i2c_user"/>
 									<listOptionValue builtIn="false" value="../Drivers/mpu9250"/>
+									<listOptionValue builtIn="false" value="../Middlewares"/>
 									<listOptionValue builtIn="false" value="../Middlewares/fault_handling"/>
 									<listOptionValue builtIn="false" value="../Middlewares/adcs"/>
 									<listOptionValue builtIn="false" value="../Middlewares/optimal_request"/>
@@ -76,6 +77,7 @@
 									<listOptionValue builtIn="false" value="../Drivers/uart_user"/>
 									<listOptionValue builtIn="false" value="../Drivers/i2c_user"/>
 									<listOptionValue builtIn="false" value="../Drivers/mpu9250"/>
+									<listOptionValue builtIn="false" value="../Middlewares"/>
 									<listOptionValue builtIn="false" value="../Middlewares/fault_handling"/>
 									<listOptionValue builtIn="false" value="../Middlewares/adcs"/>
 									<listOptionValue builtIn="false" value="../Middlewares/optimal_request"/>
@@ -165,6 +167,8 @@
 									<listOptionValue builtIn="false" value="../Drivers/uart_user"/>
 									<listOptionValue builtIn="false" value="../Drivers/i2c_user"/>
 									<listOptionValue builtIn="false" value="../Drivers/mpu9250"/>
+									<listOptionValue builtIn="false" value="../Middlewares"/>
+									<listOptionValue builtIn="false" value="../Middlewares/fault_handling"/>
 									<listOptionValue builtIn="false" value="../Middlewares/adcs"/>
 									<listOptionValue builtIn="false" value="../Middlewares/optimal_request"/>
 									<listOptionValue builtIn="false" value="../Middlewares/parser"/>
@@ -191,6 +195,7 @@
 									<listOptionValue builtIn="false" value="../Drivers/uart_user"/>
 									<listOptionValue builtIn="false" value="../Drivers/i2c_user"/>
 									<listOptionValue builtIn="false" value="../Drivers/mpu9250"/>
+									<listOptionValue builtIn="false" value="../Middlewares"/>
 									<listOptionValue builtIn="false" value="../Middlewares/fault_handling"/>
 									<listOptionValue builtIn="false" value="../Middlewares/adcs"/>
 									<listOptionValue builtIn="false" value="../Middlewares/optimal_request"/>
