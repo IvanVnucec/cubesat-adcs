@@ -70,9 +70,9 @@ void inertialMeasUnitThread(void *argument)
 
         int cx = snprintf_(imu_data_str,
                            IMU_DATA_STR_LEN,
-                           "acc[x y z]: %f %f %f \n"
-                           "mag[x y z]: %f %f %f \n"
-                           "gyr[x y z]: %f %f %f\n\n",
+                           "acc[x y z]: %f %f %f m/s^2\n"
+                           "mag[x y z]: %f %f %f uT\n"
+                           "gyr[x y z]: %f %f %f rad/s\n\n",
                            imu_data.acc[0],
                            imu_data.acc[1],
                            imu_data.acc[2],
