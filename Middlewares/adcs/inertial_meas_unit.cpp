@@ -12,6 +12,11 @@
 #include "cmsis_os.h"
 #include "fault_handling.hpp"
 #include "mpu9250.hpp"
+#include "parser.hpp"
+#include "printf-5.1.0/src/printf.h"
+
+#include <cstring>
+#include <string>
 
 namespace InertialMeasUnit {
 
@@ -57,12 +62,29 @@ void inertialMeasUnitThread(void *argument)
 {
     InertialMeasUnit imu;
     Data imu_data;
+    static const unsigned IMU_DATA_STR_LEN = 200u;
+    char imu_data_str[IMU_DATA_STR_LEN];    // TODO: Count exactly how many chars
 
     for (;;) {
         imu_data = imu.getData();
 
-        // TODO: handle data
-        (void)imu_data;
+        int cx = snprintf_(imu_data_str,
+                           IMU_DATA_STR_LEN,
+                           "acc[x y z]: %f %f %f \n"
+                           "mag[x y z]: %f %f %f \n"
+                           "gyr[x y z]: %f %f %f\n\n",
+                           imu_data.acc[0],
+                           imu_data.acc[1],
+                           imu_data.acc[2],
+                           imu_data.mag[0],
+                           imu_data.mag[1],
+                           imu_data.mag[2],
+                           imu_data.gyr[0],
+                           imu_data.gyr[1],
+                           imu_data.gyr[2]);
+
+        if (cx >= 0 && cx < (int)IMU_DATA_STR_LEN)    // check returned value
+            Parser::sendString(imu_data_str, std::strlen(imu_data_str));
 
         vTaskDelay(pdMS_TO_TICKS(1000));
     }

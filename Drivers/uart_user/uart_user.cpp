@@ -15,9 +15,9 @@ namespace UART_User {
 using namespace std;
 
 static constexpr UART_HandleTypeDef *hal_uart_handle_ptr = &huart1;
-static constexpr unsigned buffer_out_len                 = 100u;
+static constexpr unsigned buffer_out_len                 = 200u;
 
-static constexpr int TRANSMIT_TIMEOUT_MS = 100;    // miliseconds
+static constexpr int TRANSMIT_TIMEOUT_MS = 1000;    // miliseconds
 
 static bool uart_driver_initialized = false;
 static UART_User *private_this      = nullptr;
