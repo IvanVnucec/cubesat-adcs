@@ -97,11 +97,15 @@ void parserThread(void *argument)
     }
 }
 
+void sendString(const char *str, unsigned len)
+{
+    if (private_this != nullptr)
+        private_this->writeDataAsync(reinterpret_cast<const uint8_t *>(str), len);
+}
+
 void sendString(std::string str)
 {
-    assert(private_this != nullptr);
-    private_this->writeDataAsync(reinterpret_cast<const uint8_t *>(str.c_str()),
-                                 str.length());
+    sendString(str.c_str(), str.length());
 }
 
 }    // namespace Parser
