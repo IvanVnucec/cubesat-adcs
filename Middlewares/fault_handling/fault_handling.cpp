@@ -38,8 +38,6 @@ void assertAndRaiseFault(bool condition, State fault_state)
 
 void faultHandlingThread(void *argument)
 {
-    static bool fault_not_sended = true;
-
     for (;;) {
         State state = getFaultState();
         std::string fault_str("Fault: ");
@@ -82,11 +80,8 @@ void faultHandlingThread(void *argument)
         if (state == State::NO_FAULT) {
             HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
         } else {
-            if (fault_not_sended) {    // transmit Fault state only once
-                HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
-                Parser::sendString(fault_str + '\n');
-                fault_not_sended = false;
-            }
+            HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
+            Parser::sendString(fault_str + '\n');
         }
 
         vTaskDelay(pdMS_TO_TICKS(1000));
