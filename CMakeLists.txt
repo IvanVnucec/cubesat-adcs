@@ -117,7 +117,9 @@ target_link_options(${EXECUTABLE} PRIVATE
     -mthumb
     -mfpu=fpv4-sp-d16
     -mfloat-abi=hard
-    -specs=nano.specs
+    -specs=nosys.specs
+    -fno-exceptions
+    -fno-rtti
     -lc
     -lm
     -lnosys
@@ -137,3 +139,6 @@ add_custom_command(TARGET ${EXECUTABLE}
     COMMAND arm-none-eabi-objcopy -O ihex ${EXECUTABLE} ${PROJECT_NAME}.hex
     COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE} ${PROJECT_NAME}.bin
 )
+
+set_target_properties(${EXECUTABLE} PROPERTIES ADDITIONAL_CLEAN_FILES
+        "${PROJECT_NAME}.bin;${PROJECT_NAME}.hex;${PROJECT_NAME}.map")
