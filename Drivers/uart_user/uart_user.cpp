@@ -9,6 +9,7 @@
 
 #include <cstdint>
 #include <sys/_stdint.h>
+#include <cassert>
 
 namespace UART_User {
 

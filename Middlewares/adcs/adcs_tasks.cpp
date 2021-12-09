@@ -14,6 +14,7 @@
 #include "optimal_request_interface.hpp"
 #include "parser.hpp"
 #include "task.h"
+#include <cassert>
 
 #ifdef __cplusplus
 extern "C" {

@@ -14,6 +14,7 @@
 #include "stm32l4xx.h"
 
 #include <cstdint>
+#include <cassert>
 
 namespace I2C_User {
 
