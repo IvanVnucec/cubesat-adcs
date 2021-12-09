@@ -71,7 +71,7 @@ set(STM32CUBEMX_GENERATED_FILES
     Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c
 )
 
-set(EXECUTABLE ${PROJECT_NAME}.out)
+set(EXECUTABLE ${PROJECT_NAME}.elf)
 
 add_executable(${EXECUTABLE} ${STM32CUBEMX_GENERATED_FILES})
 
