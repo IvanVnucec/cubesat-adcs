@@ -102,42 +102,54 @@ target_include_directories(${EXECUTABLE} PRIVATE
 )
 
 target_compile_options(${EXECUTABLE} PRIVATE
+    # COMMON FLAGS
     -mcpu=cortex-m4
+    -g3
+    -specs=nano.specs
     -mthumb
     -mfpu=fpv4-sp-d16
     -mfloat-abi=hard
-    -fdata-sections
-    -ffunction-sections
-    -Wall
-    $<$<CONFIG:Debug>:-Og>
-    -fstack-usage
-    -specs=nosys.specs
-    -specs=nano.specs 
-    -Wmissing-include-dirs
-    -g3 
-    $<$<COMPILE_LANGUAGE:CXX>:-fno-exceptions> 
+
+    # ASM FLAGS
+    $<$<COMPILE_LANGUAGE:ASM>:-x assembler-with-cpp>
+
+    # C FLAGS
+    $<$<COMPILE_LANGUAGE:C>:$<$<CONFIG:Debug>:-O0>>
+    $<$<COMPILE_LANGUAGE:C>:-ffunction-sections>
+    $<$<COMPILE_LANGUAGE:C>:-fdata-sections>
+    $<$<COMPILE_LANGUAGE:C>:-Wall>
+    $<$<COMPILE_LANGUAGE:C>:-Wmissing-include-dirs>
+    $<$<COMPILE_LANGUAGE:C>:-fstack-usage>
+
+    # CXX FLAGS
+    $<$<COMPILE_LANGUAGE:C>:$<$<CONFIG:Debug>:-O0>>
+    $<$<COMPILE_LANGUAGE:CXX>:-ffunction-sections>
+    $<$<COMPILE_LANGUAGE:CXX>:-fdata-sections>
+    $<$<COMPILE_LANGUAGE:CXX>:-fno-exceptions>
     $<$<COMPILE_LANGUAGE:CXX>:-fno-rtti>
     $<$<COMPILE_LANGUAGE:CXX>:-fno-use-cxa-atexit>
+    $<$<COMPILE_LANGUAGE:CXX>:-Wall>
+    $<$<COMPILE_LANGUAGE:CXX>:-Wmissing-include-dirs>
+    $<$<COMPILE_LANGUAGE:CXX>:-fstack-usage>
 )
 
 target_link_options(${EXECUTABLE} PRIVATE
+    -mcpu=cortex-m4 
     -T${CMAKE_SOURCE_DIR}/STM32L412KBUX_FLASH.ld
-    -mcpu=cortex-m4
-    -mthumb
-    -mfpu=fpv4-sp-d16
-    -mfloat-abi=hard
-    -specs=nosys.specs
-    -specs=nano.specs 
-    -lnosys
+    --specs=nosys.specs 
+    --specs=nano.specs 
     -Wl,-Map=${PROJECT_NAME}.map,--cref
-    -Wl,--gc-sections
+    -Wl,--gc-sections 
+    -static 
+    -mfpu=fpv4-sp-d16 
+    -mfloat-abi=hard 
+    -mthumb 
     -Wl,--start-group 
     -lc 
     -lm 
     -lstdc++ 
     -lsupc++ 
     -Wl,--end-group
-    -static 
 )
 
 # Print executable size
