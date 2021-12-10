@@ -76,8 +76,9 @@ set(EXECUTABLE ${PROJECT_NAME}.elf)
 add_executable(${EXECUTABLE} ${STM32CUBEMX_GENERATED_FILES})
 
 target_compile_definitions(${EXECUTABLE} PRIVATE
-    -DUSE_HAL_DRIVER
-    -DSTM32L412xx
+    $<$<CONFIG:Debug>:DEBUG>
+    USE_HAL_DRIVER
+    STM32L412xx
 )
 
 target_include_directories(${EXECUTABLE} PRIVATE
@@ -109,6 +110,14 @@ target_compile_options(${EXECUTABLE} PRIVATE
     -ffunction-sections
     -Wall
     $<$<CONFIG:Debug>:-Og>
+    -fstack-usage
+    -specs=nosys.specs
+    -specs=nano.specs 
+    -Wmissing-include-dirs
+    -g3 
+    $<$<COMPILE_LANGUAGE:CXX>:-fno-exceptions> 
+    $<$<COMPILE_LANGUAGE:CXX>:-fno-rtti>
+    $<$<COMPILE_LANGUAGE:CXX>:-fno-use-cxa-atexit>
 )
 
 target_link_options(${EXECUTABLE} PRIVATE
@@ -118,13 +127,17 @@ target_link_options(${EXECUTABLE} PRIVATE
     -mfpu=fpv4-sp-d16
     -mfloat-abi=hard
     -specs=nosys.specs
-    -fno-exceptions
-    -fno-rtti
-    -lc
-    -lm
+    -specs=nano.specs 
     -lnosys
     -Wl,-Map=${PROJECT_NAME}.map,--cref
     -Wl,--gc-sections
+    -Wl,--start-group 
+    -lc 
+    -lm 
+    -lstdc++ 
+    -lsupc++ 
+    -Wl,--end-group
+    -static 
 )
 
 # Print executable size
