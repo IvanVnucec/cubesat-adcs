@@ -36,6 +36,9 @@ TODO
 2. open gdb in another terminal
 3. connect to the running openocd target with `target remote localhost:5000`
 
+### Flashing
+1. run `make flash`
+
 ### Code structure
 - Middlewares/optimal_request - Optimal request algorithm copied from https://github.com/IvanVnucec/Optimal-REQUEST
 - Middlewares/adcs - Files for Attitude determination and control system files
