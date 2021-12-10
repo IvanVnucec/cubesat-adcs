@@ -138,7 +138,7 @@ target_compile_options(${EXECUTABLE} PRIVATE
 
 target_link_options(${EXECUTABLE} PRIVATE
     -mcpu=cortex-m4 
-    -T${CMAKE_SOURCE_DIR}/STM32L412KBUX_FLASH.ld
+    -T${CMAKE_SOURCE_DIR}/Linker/STM32L412KBUX_FLASH.ld
     --specs=nosys.specs 
     --specs=nano.specs 
     -Wl,-Map=${PROJECT_NAME}.map,--cref
