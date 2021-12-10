@@ -18,6 +18,7 @@
             ],
             "runToMain": true,
             "svdFile": "${workspaceRoot}/Docs/stm32l412.svd",
+            "preLaunchTask": "build",
         }
     ]
 }

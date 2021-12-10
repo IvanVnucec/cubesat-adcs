@@ -1,0 +1,41 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "ninja",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "type": "shell",
+            "args": [],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "presentation": {
+                "reveal": "always"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "flash",
+            "command": "ninja flash",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "type": "shell",
+            "args": [],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "presentation": {
+                "reveal": "always"
+            },
+            "group": "none",
+            "isBackground": true
+        }
+    ]
+}
