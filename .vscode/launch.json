@@ -17,7 +17,7 @@
                 "target/stm32l4x.cfg"
             ],
             "runToMain": true,
-            "svdFile": "${workspaceRoot}/stm32l412.svd",
+            "svdFile": "${workspaceRoot}/Docs/stm32l412.svd",
         }
     ]
 }
