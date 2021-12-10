@@ -75,6 +75,9 @@ set(EXECUTABLE ${PROJECT_NAME}.elf)
 
 add_executable(${EXECUTABLE} ${STM32CUBEMX_GENERATED_FILES})
 
+include("cmake/STM32_flash.cmake")
+include("cmake/STM32_debug_gdb.cmake")
+
 target_compile_definitions(${EXECUTABLE} PRIVATE
     $<$<CONFIG:Debug>:DEBUG>
     USE_HAL_DRIVER
@@ -167,3 +170,5 @@ add_custom_command(TARGET ${EXECUTABLE}
 
 set_target_properties(${EXECUTABLE} PROPERTIES ADDITIONAL_CLEAN_FILES
         "${PROJECT_NAME}.bin;${PROJECT_NAME}.hex;${PROJECT_NAME}.map")
+
+DEBUG_GDB_TARGET("${PROJECT_NAME}.hex")

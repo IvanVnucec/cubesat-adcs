@@ -27,9 +27,14 @@ TODO
 ```
 
 ### Debugging
+#### With vscode
 1. open vscode in project root folder
 2. download "Cortex-Debug" extension
 3. go to "Run and Debug" and run "Cortex Debug" debug configuration
+#### With GDB
+1. run `make debug_gdb`
+2. open gdb in another terminal
+3. connect to the running openocd target with `target remote localhost:5000`
 
 ### Code structure
 - Middlewares/optimal_request - Optimal request algorithm copied from https://github.com/IvanVnucec/Optimal-REQUEST
