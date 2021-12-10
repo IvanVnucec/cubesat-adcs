@@ -19,7 +19,7 @@ Make sure you install all required toolchains listed below. After you have all r
 ```console
 mkdir build
 cd build
-cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../arm-none-eabi-gcc.cmake -DCMAKE_BUILD_TYPE=Debug ..
+cmake -G "MinGW Makefiles" -DCMAKE_TOOLCHAIN_FILE=../cmake/CMakeSetCompiler.cmake -DCMAKE_BUILD_TYPE=Debug ..
 ```
 4. (optional) run clang-format on all the project files recursively.
 ```
