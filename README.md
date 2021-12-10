@@ -15,14 +15,9 @@ Make sure you install all required toolchains listed below. After you have all r
 
 ### Building
 1. (if on windows) open mingw console
-2. position yourself in the project root directory.  
-3. execute the commands below to compile the project.
-```console
-mkdir build
-cd build
-cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=../cmake/CMakeSetCompiler.cmake -DCMAKE_BUILD_TYPE=Debug ..
-ninja
-```
+2. position yourself in the project root directory
+3. run cmake setup with `make setup` (needed only once)
+4. build with `make build` or simply `make`
 
 ### Debugging
 #### With vscode
@@ -30,16 +25,16 @@ ninja
 2. download "Cortex-Debug" extension
 3. go to "Run and Debug" and run "Cortex Debug" debug configuration
 #### With GDB
-1. run `ninja debug_gdb`
+1. run `make debug_gdb`
 2. open gdb in another terminal
 3. connect to the running openocd target with `target remote localhost:5000`
 
 ### Flashing
-1. run `ninja flash` and then 
+1. run `make flash` and then 
 2. wait for completion
 
 ### Code formatting
-1. run `ninja clang_format`
+1. run `make clang_format`
 
 ### Code structure
 - Middlewares/optimal_request - Optimal request algorithm copied from https://github.com/IvanVnucec/Optimal-REQUEST
