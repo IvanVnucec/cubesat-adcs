@@ -77,6 +77,7 @@ add_executable(${EXECUTABLE} ${STM32CUBEMX_GENERATED_FILES})
 
 include("cmake/STM32_flash.cmake")
 include("cmake/STM32_debug_gdb.cmake")
+include("cmake/clang_format_run.cmake")
 
 target_compile_definitions(${EXECUTABLE} PRIVATE
     $<$<CONFIG:Debug>:DEBUG>
@@ -173,3 +174,4 @@ set_target_properties(${EXECUTABLE} PROPERTIES ADDITIONAL_CLEAN_FILES
 
 DEBUG_GDB_TARGET("${PROJECT_NAME}.hex")
 ADD_FLASH_TARGET("${PROJECT_NAME}.elf")
+ADD_CLANG_FORMAT_TARGET()

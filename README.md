@@ -39,6 +39,9 @@ TODO
 ### Flashing
 1. run `make flash`
 
+### Code formatting
+1. run `make clang_format`
+
 ### Code structure
 - Middlewares/optimal_request - Optimal request algorithm copied from https://github.com/IvanVnucec/Optimal-REQUEST
 - Middlewares/adcs - Files for Attitude determination and control system files
