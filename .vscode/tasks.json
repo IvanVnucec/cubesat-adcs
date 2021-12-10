@@ -2,13 +2,36 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
-            "command": "ninja",
+            "label": "setup",
+            "command": "make",
             "options": {
-                "cwd": "${workspaceRoot}/build"
+                "cwd": "${workspaceRoot}"
             },
             "type": "shell",
-            "args": [],
+            "args": [
+                "setup"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "presentation": {
+                "reveal": "always"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build",
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "type": "shell",
+            "args": [
+                "build"
+            ],
             "problemMatcher": [
                 "$gcc"
             ],
@@ -22,12 +45,14 @@
         },
         {
             "label": "flash",
-            "command": "ninja flash",
+            "command": "make",
             "options": {
-                "cwd": "${workspaceRoot}/build"
+                "cwd": "${workspaceRoot}"
             },
             "type": "shell",
-            "args": [],
+            "args": [
+                "flash"
+            ],
             "problemMatcher": [
                 "$gcc"
             ],
