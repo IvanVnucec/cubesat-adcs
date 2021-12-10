@@ -1,4 +1,4 @@
-set(STM32prog openocd.exe)
+set(STM32prog openocd)
 
 function(DEBUG_GDB_TARGET hex)
 

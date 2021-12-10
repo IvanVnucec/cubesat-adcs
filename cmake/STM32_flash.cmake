@@ -1,4 +1,4 @@
-set(STM32prog openocd.exe)
+set(STM32prog openocd)
 
 function(ADD_FLASH_TARGET elf)
 
