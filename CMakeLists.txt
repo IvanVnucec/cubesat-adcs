@@ -59,16 +59,16 @@ set(STM32CUBEMX_GENERATED_FILES
     src/middlewares/adcs/adcs_tasks.cpp
     src/middlewares/adcs/inertial_meas_unit.cpp
     src/middlewares/adcs/optimal_request_interface.cpp
-    src/middlewares/Third_Party/FreeRTOS/Source/croutine.c
-    src/middlewares/Third_Party/FreeRTOS/Source/event_groups.c
-    src/middlewares/Third_Party/FreeRTOS/Source/list.c
-    src/middlewares/Third_Party/FreeRTOS/Source/queue.c
-    src/middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c
-    src/middlewares/Third_Party/FreeRTOS/Source/tasks.c
-    src/middlewares/Third_Party/FreeRTOS/Source/timers.c
-    src/middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c
-    src/middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c
-    src/middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c
+    src/rtos/FreeRTOS/Source/croutine.c
+    src/rtos/FreeRTOS/Source/event_groups.c
+    src/rtos/FreeRTOS/Source/list.c
+    src/rtos/FreeRTOS/Source/queue.c
+    src/rtos/FreeRTOS/Source/stream_buffer.c
+    src/rtos/FreeRTOS/Source/tasks.c
+    src/rtos/FreeRTOS/Source/timers.c
+    src/rtos/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c
+    src/rtos/FreeRTOS/Source/portable/MemMang/heap_4.c
+    src/rtos/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c
 )
 
 set(EXECUTABLE ${PROJECT_NAME}.elf)
@@ -100,9 +100,9 @@ target_include_directories(${EXECUTABLE} PRIVATE
     src/middlewares/optimal_request
     src/middlewares/fault_handling
     src/middlewares/adcs
-    src/middlewares/Third_Party/FreeRTOS/Source/include
-    src/middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
-    src/middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
+    src/rtos/FreeRTOS/Source/include
+    src/rtos/FreeRTOS/Source/CMSIS_RTOS_V2
+    src/rtos/FreeRTOS/Source/portable/GCC/ARM_CM4F
 )
 
 target_compile_options(${EXECUTABLE} PRIVATE
