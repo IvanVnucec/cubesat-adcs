@@ -26,7 +26,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "adcs_tasks.hpp"
+#include "adcs/adcs_tasks.hpp"
 
 /* USER CODE END Includes */
 

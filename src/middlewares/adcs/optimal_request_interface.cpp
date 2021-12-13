@@ -8,11 +8,11 @@
 #include "optimal_request_interface.hpp"
 
 #include "cmsis_os.h"
-#include "get_quat_from_K.h"
-#include "get_quat_from_K_initialize.h"
-#include "get_quat_from_K_terminate.h"
-#include "optimal_request.h"
-#include "optimal_request_init.h"
+#include "optimal_request/get_quat_from_K.h"
+#include "optimal_request/get_quat_from_K_initialize.h"
+#include "optimal_request/get_quat_from_K_terminate.h"
+#include "optimal_request/optimal_request.h"
+#include "optimal_request/optimal_request_init.h"
 
 namespace OptimalRequestInterface {
 

@@ -1,10 +1,10 @@
 #include "fault_handling.hpp"
 
 #include "FreeRTOS.h"
-#include "adcs_tasks.hpp"
+#include "adcs/adcs_tasks.hpp"
 #include "cmsis_os.h"
 #include "core/main.h"
-#include "parser.hpp"
+#include "parser/parser.hpp"
 #include "portmacro.h"
 #include "task.h"
 

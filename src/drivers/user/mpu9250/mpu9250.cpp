@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #include "mpu9250.hpp"
 
 #include "FreeRTOS.h"
-#include "fault_handling.hpp"
+#include "fault_handling/fault_handling.hpp"
 #include "core/i2c.h"
 #include "i2c_user.hpp"
 #include "semphr.h"

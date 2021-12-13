@@ -8,7 +8,7 @@
 #include "i2c_user.hpp"
 
 #include "FreeRTOS.h"
-#include "fault_handling.hpp"
+#include "fault_handling/fault_handling.hpp"
 #include "core/i2c.h"
 #include "semphr.h"
 #include "stm32l4xx.h"

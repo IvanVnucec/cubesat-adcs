@@ -9,10 +9,10 @@
 #include "FreeRTOS.h"
 #include "angle_regulation.hpp"
 #include "cmsis_os.h"
-#include "fault_handling.hpp"
+#include "fault_handling/fault_handling.hpp"
 #include "inertial_meas_unit.hpp"
 #include "optimal_request_interface.hpp"
-#include "parser.hpp"
+#include "parser/parser.hpp"
 #include "task.h"
 #include <cassert>
 
