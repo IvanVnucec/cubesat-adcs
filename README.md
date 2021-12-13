@@ -1,3 +1,5 @@
+[![build-and-test](https://github.com/IvanVnucec/cubesat-adcs/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/IvanVnucec/cubesat-adcs/actions/workflows/build_and_test.yml)
+
 # README
 
 ## Development
