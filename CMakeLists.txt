@@ -24,34 +24,34 @@ set(STM32CUBEMX_GENERATED_FILES
     src/core/stm32l4xx_it.c
     src/core/stm32l4xx_hal_msp.c
     src/core/stm32l4xx_hal_timebase_tim.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_exti.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c
-    src/drivers/mpu9250/mpu9250.cpp
-    src/drivers/i2c_user/i2c_user.cpp
-    src/drivers/uart_user/uart_user.cpp
-    src/drivers/pwm_user/pwm_user.cpp
     src/core/syscalls.c
     src/core/sysmem.c
     src/core/system_stm32l4xx.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c_ex.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ex.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_exti.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi_ex.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c
+    src/drivers/external/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c
+    src/drivers/user/mpu9250/mpu9250.cpp
+    src/drivers/user/i2c_user/i2c_user.cpp
+    src/drivers/user/uart_user/uart_user.cpp
+    src/drivers/user/pwm_user/pwm_user.cpp
     src/middlewares/printf-5.1.0/src/printf.c
     src/middlewares/parser/parser.cpp
     src/middlewares/parser/callbacks.cpp
@@ -87,8 +87,14 @@ target_compile_definitions(${EXECUTABLE} PRIVATE
 
 target_include_directories(${EXECUTABLE} PRIVATE
     src/core
-    src/drivers/STM32L4xx_HAL_Driver/Inc
-    src/drivers/STM32L4xx_HAL_Driver/Inc/Legacy
+    src/drivers/external/STM32L4xx_HAL_Driver/Inc
+    src/drivers/external/STM32L4xx_HAL_Driver/Inc/Legacy
+    src/drivers/external/CMSIS/Device/ST/STM32L4xx/Include
+    src/drivers/external/CMSIS/Include
+    src/drivers/user/mpu9250
+    src/drivers/user/i2c_user
+    src/drivers/user/uart_user
+    src/drivers/user/pwm_user
     src/middlewares
     src/middlewares/parser
     src/middlewares/optimal_request
@@ -97,12 +103,6 @@ target_include_directories(${EXECUTABLE} PRIVATE
     src/middlewares/Third_Party/FreeRTOS/Source/include
     src/middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
     src/middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
-    src/drivers/mpu9250
-    src/drivers/i2c_user
-    src/drivers/uart_user
-    src/drivers/pwm_user
-    src/drivers/CMSIS/Device/ST/STM32L4xx/Include
-    src/drivers/CMSIS/Include
 )
 
 target_compile_options(${EXECUTABLE} PRIVATE
