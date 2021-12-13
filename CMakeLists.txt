@@ -59,16 +59,16 @@ set(STM32CUBEMX_GENERATED_FILES
     src/middlewares/adcs/adcs_tasks.cpp
     src/middlewares/adcs/inertial_meas_unit.cpp
     src/middlewares/adcs/optimal_request_interface.cpp
-    src/rtos/FreeRTOS/Source/croutine.c
-    src/rtos/FreeRTOS/Source/event_groups.c
-    src/rtos/FreeRTOS/Source/list.c
-    src/rtos/FreeRTOS/Source/queue.c
-    src/rtos/FreeRTOS/Source/stream_buffer.c
-    src/rtos/FreeRTOS/Source/tasks.c
-    src/rtos/FreeRTOS/Source/timers.c
-    src/rtos/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c
-    src/rtos/FreeRTOS/Source/portable/MemMang/heap_4.c
-    src/rtos/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c
+    src/rtos/FreeRTOS/source/croutine.c
+    src/rtos/FreeRTOS/source/event_groups.c
+    src/rtos/FreeRTOS/source/list.c
+    src/rtos/FreeRTOS/source/queue.c
+    src/rtos/FreeRTOS/source/stream_buffer.c
+    src/rtos/FreeRTOS/source/tasks.c
+    src/rtos/FreeRTOS/source/timers.c
+    src/rtos/FreeRTOS/source/CMSIS_RTOS_V2/cmsis_os2.c
+    src/rtos/FreeRTOS/source/portable/MemMang/heap_4.c
+    src/rtos/FreeRTOS/source/portable/GCC/ARM_CM4F/port.c
 )
 
 set(EXECUTABLE ${PROJECT_NAME}.elf)
@@ -101,9 +101,9 @@ target_include_directories(${EXECUTABLE} PRIVATE
     src/middlewares/fault_handling
     src/middlewares/adcs
     src/rtos/FreeRTOS/config
-    src/rtos/FreeRTOS/Source/include
-    src/rtos/FreeRTOS/Source/CMSIS_RTOS_V2
-    src/rtos/FreeRTOS/Source/portable/GCC/ARM_CM4F
+    src/rtos/FreeRTOS/source/include
+    src/rtos/FreeRTOS/source/CMSIS_RTOS_V2
+    src/rtos/FreeRTOS/source/portable/GCC/ARM_CM4F
 )
 
 target_compile_options(${EXECUTABLE} PRIVATE
