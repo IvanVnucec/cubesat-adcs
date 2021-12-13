@@ -34,6 +34,7 @@ debug_gdb:
 
 clean:
 	cd $(BUILD_FOLDER) && ninja clean
+    #cd $(TEST_FOLDER) && ninja clean
 
 help:
 	@echo all setup build flash clang_format help debug_gdb clean
