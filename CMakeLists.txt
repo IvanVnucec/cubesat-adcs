@@ -14,16 +14,16 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(STM32CUBEMX_GENERATED_FILES
     core/startup_stm32l412kbux.s
-    core/Src/main.c
-    core/Src/gpio.c
-    core/Src/freertos.c
-    core/Src/i2c.c
-    core/Src/spi.c
-    core/Src/tim.c
-    core/Src/usart.c
-    core/Src/stm32l4xx_it.c
-    core/Src/stm32l4xx_hal_msp.c
-    core/Src/stm32l4xx_hal_timebase_tim.c
+    core/main.c
+    core/gpio.c
+    core/freertos.c
+    core/i2c.c
+    core/spi.c
+    core/tim.c
+    core/usart.c
+    core/stm32l4xx_it.c
+    core/stm32l4xx_hal_msp.c
+    core/stm32l4xx_hal_timebase_tim.c
     drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
     drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c.c
     drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c_ex.c
@@ -49,9 +49,9 @@ set(STM32CUBEMX_GENERATED_FILES
     drivers/i2c_user/i2c_user.cpp
     drivers/uart_user/uart_user.cpp
     drivers/pwm_user/pwm_user.cpp
-    core/Src/syscalls.c
-    core/Src/sysmem.c
-    core/Src/system_stm32l4xx.c
+    core/syscalls.c
+    core/sysmem.c
+    core/system_stm32l4xx.c
     middlewares/printf-5.1.0/src/printf.c
     middlewares/parser/parser.cpp
     middlewares/parser/callbacks.cpp
@@ -86,7 +86,7 @@ target_compile_definitions(${EXECUTABLE} PRIVATE
 )
 
 target_include_directories(${EXECUTABLE} PRIVATE
-    core/Inc
+    core
     drivers/STM32L4xx_HAL_Driver/Inc
     drivers/STM32L4xx_HAL_Driver/Inc/Legacy
     middlewares

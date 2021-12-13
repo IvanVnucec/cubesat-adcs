@@ -35,7 +35,7 @@ gcc:
 -I../middlewares/Third_Party/FreeRTOS/Source/include 
 -I../middlewares/Third_Party/FreeRTOS/Source/portable/GCCARM_CM4F 
 -I../drivers/CMSIS/Include 
--I../core/Inc 
+-I../core
 -I../drivers/CMSIS/Device/ST/STM32L4xx/Include 
 -I../drivers/STM32L4xx_HAL_Driver/Inc 
 -I../middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 
@@ -71,7 +71,7 @@ g++:
 -I../middlewares/Third_Party/FreeRTOS/Source/include 
 -I../middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F 
 -I../drivers/CMSIS/Include 
--I../core/Inc 
+-I../core
 -I../drivers/CMSIS/Device/ST/STM32L4xx/Include 
 -I../drivers/STM32L4xx_HAL_Driver/Inc 
 -I../middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 
