@@ -100,6 +100,7 @@ target_include_directories(${EXECUTABLE} PRIVATE
     src/middlewares/optimal_request
     src/middlewares/fault_handling
     src/middlewares/adcs
+    src/rtos/FreeRTOS/config
     src/rtos/FreeRTOS/Source/include
     src/rtos/FreeRTOS/Source/CMSIS_RTOS_V2
     src/rtos/FreeRTOS/Source/portable/GCC/ARM_CM4F
