@@ -9,7 +9,7 @@
 
 #include "FreeRTOS.h"
 #include "fault_handling.hpp"
-#include "i2c.h"
+#include "core/i2c.h"
 #include "semphr.h"
 #include "stm32l4xx.h"
 

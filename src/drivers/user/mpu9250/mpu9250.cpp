@@ -25,7 +25,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 
 #include "FreeRTOS.h"
 #include "fault_handling.hpp"
-#include "i2c.h"
+#include "core/i2c.h"
 #include "i2c_user.hpp"
 #include "semphr.h"
 #include "stm32l4xx.h"

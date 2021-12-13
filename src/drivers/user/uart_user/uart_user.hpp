@@ -8,7 +8,7 @@
 #ifndef UART_USER_HPP_
 #define UART_USER_HPP_
 
-#include "usart.h"
+#include "core/usart.h"
 
 #include <cstdint>
 

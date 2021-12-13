@@ -5,7 +5,7 @@
 #include "fault_handling.hpp"
 #include "queue.h"
 #include "semphr.h"
-#include "usart.h"
+#include "core/usart.h"
 
 #include <cstdint>
 #include <sys/_stdint.h>

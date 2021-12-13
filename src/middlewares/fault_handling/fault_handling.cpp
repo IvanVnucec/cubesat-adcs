@@ -3,7 +3,7 @@
 #include "FreeRTOS.h"
 #include "adcs_tasks.hpp"
 #include "cmsis_os.h"
-#include "main.h"
+#include "core/main.h"
 #include "parser.hpp"
 #include "portmacro.h"
 #include "task.h"
