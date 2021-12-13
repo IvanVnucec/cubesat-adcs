@@ -43,4 +43,4 @@ clean:
     #cd $(TEST_FOLDER) && ninja clean
 
 help:
-	@echo all setup build flash clang_format help debug_gdb clean
+	@echo all install_deps setup_cmake build test flash clang_format cppcheck help debug_gdb clean
