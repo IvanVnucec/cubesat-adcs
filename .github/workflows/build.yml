@@ -1,0 +1,28 @@
+name: build
+
+on: [workflow_dispatch, push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get install  
+        sudo apt-get install -y ninja-build cmake gcc-arm-none-eabi
+
+    - name: Configure CMake
+      run: make setup
+
+    - name: Build
+      run: make build
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      # Execute tests defined by the CMake configuration.  
+      # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
+      run: echo "ctest -C ${{env.BUILD_TYPE}}"
+      
