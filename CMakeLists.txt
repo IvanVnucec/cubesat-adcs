@@ -87,15 +87,11 @@ target_compile_definitions(${EXECUTABLE} PRIVATE
 
 target_include_directories(${EXECUTABLE} PRIVATE
     src
+    
     src/drivers/third_party/STM32L4xx_HAL_Driver/Inc
     src/drivers/third_party/STM32L4xx_HAL_Driver/Inc/Legacy
     src/drivers/third_party/CMSIS/Device/ST/STM32L4xx/Include
     src/drivers/third_party/CMSIS/Include
-
-    src/drivers/user/mpu9250
-    src/drivers/user/i2c_user
-    src/drivers/user/uart_user
-    src/drivers/user/pwm_user
 
     src/middlewares
 

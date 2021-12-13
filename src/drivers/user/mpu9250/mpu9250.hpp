@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 #ifndef MPU9250_HPP
 #define MPU9250_HPP
 
-#include "i2c_user.hpp"
+#include "drivers/user/i2c_user/i2c_user.hpp"
 
 #include <cstddef>
 #include <cstdint>

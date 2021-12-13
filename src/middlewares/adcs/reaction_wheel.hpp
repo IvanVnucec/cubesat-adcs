@@ -8,7 +8,7 @@
 #ifndef INC_REACTION_WHEEL_HPP_
 #define INC_REACTION_WHEEL_HPP_
 
-#include "pwm_user.hpp"
+#include "drivers/user/pwm_user/pwm_user.hpp"
 
 #include <climits>
 

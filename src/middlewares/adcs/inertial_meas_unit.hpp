@@ -8,7 +8,7 @@
 #ifndef INC_INERTIAL_MEAS_UNIT_HPP_
 #define INC_INERTIAL_MEAS_UNIT_HPP_
 
-#include "mpu9250.hpp"
+#include "drivers/user/mpu9250/mpu9250.hpp"
 
 #include <cstdint>
 

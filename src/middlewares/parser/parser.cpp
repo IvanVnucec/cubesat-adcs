@@ -12,7 +12,7 @@
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
 #include "fault_handling/fault_handling.hpp"
-#include "uart_user.hpp"
+#include "drivers/user/uart_user/uart_user.hpp"
 
 #include <map>
 #include <memory>
