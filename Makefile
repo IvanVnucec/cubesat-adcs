@@ -1,7 +1,8 @@
 BUILD_FOLDER = build
 SCRIPTS_FOLDER = scripts
+TEST_FOLDER = tests
 
-.PHONY: all install_deps setup_cmake build flash clang_format help debug_gdb clean
+.PHONY: all install_deps setup_cmake build test flash clang_format help debug_gdb clean
 
 all: build
 
@@ -14,6 +15,13 @@ setup_cmake:
 
 build:
 	cd $(BUILD_FOLDER) && ninja
+
+test:
+	cd $(TEST_FOLDER) && \
+	cmake -S . -B build && \
+	cmake --build build && \
+	cd build && \
+	ctest
 
 flash:
 	cd $(BUILD_FOLDER) && ninja 
