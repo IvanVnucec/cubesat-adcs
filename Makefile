@@ -1,10 +1,14 @@
 BUILD_FOLDER = build
+SCRIPTS_FOLDER = scripts
 
-.PHONY: all setup build flash clang_format help debug_gdb clean
+.PHONY: all install_deps setup_cmake build flash clang_format help debug_gdb clean
 
 all: build
 
-setup: 
+install_deps:
+	sh ./$(SCRIPTS_FOLDER)/install_deps.sh
+
+setup_cmake: 
 	mkdir $(BUILD_FOLDER)
 	cd $(BUILD_FOLDER) && cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=../cmake/CMakeSetCompiler.cmake -DCMAKE_BUILD_TYPE=Debug ..
 

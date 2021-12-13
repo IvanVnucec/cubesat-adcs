@@ -1,9 +1,9 @@
 # README
 
 ## Development
-Make sure you install all required toolchains listed below. After you have all requirements then you can go to the building stage and finally to the debugging stage.
+Make sure you install all required dependencies listed below. After you have all requirements then you can go to the building stage and finally to the debugging stage.
 
-### Toolchain
+### Dependencies
 - ninja build system (latest version is ok)
 - vscode
 - mingw (if on windows)
@@ -13,10 +13,13 @@ Make sure you install all required toolchains listed below. After you have all r
 - clang-format version 12.0.0
 - OpenOCD (minimal version 0.11.0)
 
+### Install dependencies
+1. (if on ubuntu20.04) install dependencies with `make install_deps`. If on windows or other OS, you must install dependencies by hand.
+
 ### Building
 1. (if on windows) open mingw console
 2. position yourself in the project root directory
-3. run cmake setup with `make setup` (needed only once)
+3. run cmake setup with `make setup_cmake` (needed only once)
 4. build with `make build` or simply `make`
 
 ### Debugging
