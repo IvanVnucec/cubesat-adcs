@@ -14,6 +14,7 @@ Make sure you install all required dependencies listed below. After you have all
 - GNU Arm Embedded Toolchain (minimal version 10.3-2021.10)
 - clang-format version 12.0.0
 - OpenOCD (minimal version 0.11.0)
+- Cppcheck (minimal version 2.6)
 
 ### Install dependencies
 1. (if on ubuntu20.04) install dependencies with `make install_deps`. If on windows or other OS, you must install dependencies by hand.
@@ -40,6 +41,9 @@ Make sure you install all required dependencies listed below. After you have all
 
 ### Code formatting
 1. run `make clang_format`
+
+### Code checking
+1. run `make cppcheck`
 
 ### Code structure
 - src/middlewares/optimal_request - Optimal request algorithm copied from https://github.com/IvanVnucec/Optimal-REQUEST

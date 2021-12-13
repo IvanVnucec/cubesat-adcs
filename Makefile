@@ -1,8 +1,9 @@
 BUILD_FOLDER = build
 SCRIPTS_FOLDER = scripts
 TEST_FOLDER = tests
+CPPCHECK_BUILD_FOLDER = build_cppcheck
 
-.PHONY: all install_deps setup_cmake build test flash clang_format help debug_gdb clean
+.PHONY: all install_deps setup_cmake build test flash clang_format cppcheck help debug_gdb clean
 
 all: build
 
@@ -29,11 +30,16 @@ flash:
 clang_format:
 	cd $(BUILD_FOLDER) && ninja clang_format
 
+cppcheck:
+	mkdir -p $(CPPCHECK_BUILD_FOLDER)
+	cppcheck --template=gcc --cppcheck-build-dir=$(CPPCHECK_BUILD_FOLDER) src
+
 debug_gdb:
 	cd $(BUILD_FOLDER) && ninja debug_gdb
 
 clean:
 	cd $(BUILD_FOLDER) && ninja clean
+	rm -rf $(CPPCHECK_BUILD_FOLDER)
     #cd $(TEST_FOLDER) && ninja clean
 
 help:
