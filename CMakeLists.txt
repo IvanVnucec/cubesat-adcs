@@ -52,23 +52,23 @@ set(STM32CUBEMX_GENERATED_FILES
     core/Src/syscalls.c
     core/Src/sysmem.c
     core/Src/system_stm32l4xx.c
-    Middlewares/printf-5.1.0/src/printf.c
-    Middlewares/parser/parser.cpp
-    Middlewares/parser/callbacks.cpp
-    Middlewares/fault_handling/fault_handling.cpp
-    Middlewares/adcs/adcs_tasks.cpp
-    Middlewares/adcs/inertial_meas_unit.cpp
-    Middlewares/adcs/optimal_request_interface.cpp
-    Middlewares/Third_Party/FreeRTOS/Source/croutine.c
-    Middlewares/Third_Party/FreeRTOS/Source/event_groups.c
-    Middlewares/Third_Party/FreeRTOS/Source/list.c
-    Middlewares/Third_Party/FreeRTOS/Source/queue.c
-    Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c
-    Middlewares/Third_Party/FreeRTOS/Source/tasks.c
-    Middlewares/Third_Party/FreeRTOS/Source/timers.c
-    Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c
-    Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c
-    Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c
+    middlewares/printf-5.1.0/src/printf.c
+    middlewares/parser/parser.cpp
+    middlewares/parser/callbacks.cpp
+    middlewares/fault_handling/fault_handling.cpp
+    middlewares/adcs/adcs_tasks.cpp
+    middlewares/adcs/inertial_meas_unit.cpp
+    middlewares/adcs/optimal_request_interface.cpp
+    middlewares/Third_Party/FreeRTOS/Source/croutine.c
+    middlewares/Third_Party/FreeRTOS/Source/event_groups.c
+    middlewares/Third_Party/FreeRTOS/Source/list.c
+    middlewares/Third_Party/FreeRTOS/Source/queue.c
+    middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c
+    middlewares/Third_Party/FreeRTOS/Source/tasks.c
+    middlewares/Third_Party/FreeRTOS/Source/timers.c
+    middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c
+    middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c
+    middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c
 )
 
 set(EXECUTABLE ${PROJECT_NAME}.elf)
@@ -89,14 +89,14 @@ target_include_directories(${EXECUTABLE} PRIVATE
     core/Inc
     drivers/STM32L4xx_HAL_Driver/Inc
     drivers/STM32L4xx_HAL_Driver/Inc/Legacy
-    Middlewares
-    Middlewares/parser
-    Middlewares/optimal_request
-    Middlewares/fault_handling
-    Middlewares/adcs
-    Middlewares/Third_Party/FreeRTOS/Source/include
-    Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
-    Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
+    middlewares
+    middlewares/parser
+    middlewares/optimal_request
+    middlewares/fault_handling
+    middlewares/adcs
+    middlewares/Third_Party/FreeRTOS/Source/include
+    middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
+    middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
     drivers/mpu9250
     drivers/i2c_user
     drivers/uart_user

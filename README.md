@@ -37,8 +37,8 @@ Make sure you install all required toolchains listed below. After you have all r
 1. run `make clang_format`
 
 ### Code structure
-- Middlewares/optimal_request - Optimal request algorithm copied from https://github.com/IvanVnucec/Optimal-REQUEST
-- Middlewares/adcs - Files for Attitude determination and control system files
+- middlewares/optimal_request - Optimal request algorithm copied from https://github.com/IvanVnucec/Optimal-REQUEST
+- middlewares/adcs - Files for Attitude determination and control system files
 - drivers/mpu9250 - MPU9250 IMU drivers
 
 ### Problem with the UART Baudrate
