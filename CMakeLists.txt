@@ -13,7 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(STM32CUBEMX_GENERATED_FILES
-    core/Startup/startup_stm32l412kbux.s
+    core/startup_stm32l412kbux.s
     core/Src/main.c
     core/Src/gpio.c
     core/Src/freertos.c
