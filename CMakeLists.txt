@@ -150,6 +150,7 @@ target_link_options(${EXECUTABLE} PRIVATE
     -lstdc++ 
     -lsupc++ 
     -Wl,--end-group
+    -Wl,--print-memory-usage
 )
 
 # Print executable size
