@@ -170,4 +170,8 @@ standard names. */
 /* Section where parameter definitions can be added (for instance, to override default ones in FreeRTOS.h) */
 /* USER CODE END Defines */
 
+#ifdef DEBUG
+#define configCHECK_FOR_STACK_OVERFLOW 2
+#endif /* DEBUG */
+
 #endif /* FREERTOS_CONFIG_H */

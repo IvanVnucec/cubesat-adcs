@@ -127,6 +127,20 @@ void StartDefaultTask(void *argument)
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
 
+/* Stack overflow hook
+https://www.freertos.org/Stacks-and-stack-overflow-checking.html
+*/
+#ifdef DEBUG
+void vApplicationStackOverflowHook( TaskHandle_t xTask, signed char *pcTaskName )
+{
+  // TODO: Handle error here
+  __disable_irq();
+  while(1)
+  {
+  }
+}
+#endif /* DEBUG */
+
 /* USER CODE END Application */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
