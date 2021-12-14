@@ -25,7 +25,7 @@ test:
 	ctest
 
 flash:
-	cd $(BUILD_FOLDER) && ninja 
+	cd $(BUILD_FOLDER) && ninja flash
 
 clang_format:
 	cd $(BUILD_FOLDER) && ninja clang_format
