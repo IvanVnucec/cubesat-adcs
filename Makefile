@@ -11,8 +11,10 @@ install_deps:
 	sh ./$(SCRIPTS_FOLDER)/install_deps.sh
 
 setup_cmake: 
+	rm -rf $(BUILD_FOLDER)
 	mkdir $(BUILD_FOLDER)
-	cd $(BUILD_FOLDER) && cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=../cmake/CMakeSetCompiler.cmake -DCMAKE_BUILD_TYPE=Debug ..
+	cd $(BUILD_FOLDER) && \
+	cmake -GNinja -DCMAKE_TOOLCHAIN_FILE=../cmake/CMakeSetCompiler.cmake -DCMAKE_BUILD_TYPE=Debug ..
 
 build:
 	cd $(BUILD_FOLDER) && ninja
