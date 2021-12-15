@@ -129,9 +129,11 @@ target_compile_options(${EXECUTABLE} PRIVATE
     $<$<COMPILE_LANGUAGE:CXX>:-fno-use-cxa-atexit>
 )
 
+set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/linker/STM32L412KBUX_FLASH.ld")
+
 target_link_options(${EXECUTABLE} PRIVATE
     -mcpu=cortex-m4 
-    -T${CMAKE_SOURCE_DIR}/linker/STM32L412KBUX_FLASH.ld
+    -T${LINKER_SCRIPT}
     --specs=nosys.specs 
     --specs=nano.specs 
     -Wl,-Map=${PROJECT_NAME}.map,--cref
@@ -162,8 +164,10 @@ add_custom_command(TARGET ${EXECUTABLE}
     COMMAND arm-none-eabi-objcopy -O binary ${EXECUTABLE} ${PROJECT_NAME}.bin
 )
 
-set_target_properties(${EXECUTABLE} PROPERTIES ADDITIONAL_CLEAN_FILES
-        "${PROJECT_NAME}.bin;${PROJECT_NAME}.hex;${PROJECT_NAME}.map")
+set_target_properties(${EXECUTABLE} PROPERTIES
+    LINK_DEPENDS ${LINKER_SCRIPT} 
+    ADDITIONAL_CLEAN_FILES "${PROJECT_NAME}.bin;${PROJECT_NAME}.hex;${PROJECT_NAME}.map"
+)
 
 DEBUG_GDB_TARGET("${PROJECT_NAME}.hex")
 ADD_FLASH_TARGET("${PROJECT_NAME}.elf")
