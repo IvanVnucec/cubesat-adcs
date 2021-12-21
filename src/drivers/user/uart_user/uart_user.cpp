@@ -144,49 +144,4 @@ static void private_assert_hal(bool condition)
     private_this->private_assert(condition);
 }
 
-extern "C" void HAL_UART_TxCpltCallback(UART_HandleTypeDef *handle)
-{
-    using namespace UART_User;
 
-    if (handle->Instance == hal_uart_handle_ptr->Instance) {
-        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-
-        BaseType_t rtos_status =
-            xSemaphoreGiveFromISR(uartTxSemaphore, &xHigherPriorityTaskWoken);
-        private_assert_hal(rtos_status == pdPASS);
-
-        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-    }
-}
-
-extern "C" void HAL_UART_RxCpltCallback(UART_HandleTypeDef *handle)
-{
-    using namespace UART_User;
-
-    if (handle->Instance == hal_uart_handle_ptr->Instance) {
-        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-
-        BaseType_t rtos_status =
-            xSemaphoreGiveFromISR(uartRxSemaphore, &xHigherPriorityTaskWoken);
-        private_assert_hal(rtos_status == pdPASS);
-
-        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-    }
-}
-
-extern "C" void HAL_UART_AbortReceiveCpltCallback(UART_HandleTypeDef *huart)
-{
-    using namespace UART_User;
-
-    // called after HAL_UART_AbortReceive_IT
-}
-
-extern "C" void HAL_UART_ErrorCallback(UART_HandleTypeDef *handle)
-{
-    using namespace UART_User;
-
-    uint32_t error_code = handle->ErrorCode;
-    (void)error_code;
-
-    //private_assert_hal(0);
-}
