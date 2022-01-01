@@ -109,28 +109,24 @@ target_compile_options(${EXECUTABLE} PRIVATE
     -mthumb
     -mfpu=fpv4-sp-d16
     -mfloat-abi=hard
+    -Wall
+    -Werror
+    -ffunction-sections
+    -fdata-sections
+    -fno-exceptions
+    -Wmissing-include-dirs
+    -fstack-usage
+    $<$<CONFIG:Debug>:-O0>
 
     # ASM FLAGS
     $<$<COMPILE_LANGUAGE:ASM>:-x assembler-with-cpp>
 
     # C FLAGS
-    $<$<COMPILE_LANGUAGE:C>:$<$<CONFIG:Debug>:-O0>>
-    $<$<COMPILE_LANGUAGE:C>:-ffunction-sections>
-    $<$<COMPILE_LANGUAGE:C>:-fdata-sections>
-    $<$<COMPILE_LANGUAGE:C>:-Wall>
-    $<$<COMPILE_LANGUAGE:C>:-Wmissing-include-dirs>
-    $<$<COMPILE_LANGUAGE:C>:-fstack-usage>
+    $<$<COMPILE_LANGUAGE:CXX>:>
 
     # CXX FLAGS
-    $<$<COMPILE_LANGUAGE:C>:$<$<CONFIG:Debug>:-O0>>
-    $<$<COMPILE_LANGUAGE:CXX>:-ffunction-sections>
-    $<$<COMPILE_LANGUAGE:CXX>:-fdata-sections>
-    $<$<COMPILE_LANGUAGE:CXX>:-fno-exceptions>
     $<$<COMPILE_LANGUAGE:CXX>:-fno-rtti>
     $<$<COMPILE_LANGUAGE:CXX>:-fno-use-cxa-atexit>
-    $<$<COMPILE_LANGUAGE:CXX>:-Wall>
-    $<$<COMPILE_LANGUAGE:CXX>:-Wmissing-include-dirs>
-    $<$<COMPILE_LANGUAGE:CXX>:-fstack-usage>
 )
 
 target_link_options(${EXECUTABLE} PRIVATE
