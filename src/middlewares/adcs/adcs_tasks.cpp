@@ -27,6 +27,13 @@ extern "C" {
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
+osThreadId_t defaultTaskHandle = NULL;
+const osThreadAttr_t defaultTask_attributes = {
+  .name = "defaultTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+
 osThreadId_t optimalRequestHandle                     = NULL;
 const static osThreadAttr_t optimalRequest_attributes = {
     .name       = "optimalRequestTask",
@@ -56,10 +63,14 @@ const static osThreadAttr_t faultHandling_attributes = {
 };
 
 /* Private function prototypes -----------------------------------------------*/
+void StartDefaultTask(void *argument);
 
 /* Private application code --------------------------------------------------*/
 void initAdcsThreads()
 {
+    // default task
+    defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+
     // inertial measurement unit thread
     inertialMeasUnitHandle = osThreadNew(InertialMeasUnit::inertialMeasUnitThread,
                                          NULL,
@@ -80,6 +91,12 @@ void initAdcsThreads()
     faultHandlingHandle =
         osThreadNew(Fault::faultHandlingThread, NULL, &faultHandling_attributes);
     assert(faultHandlingHandle != NULL);
+}
+
+void StartDefaultTask(void *argument)
+{
+    for (;;) {
+    }
 }
 
 #ifdef __cplusplus
