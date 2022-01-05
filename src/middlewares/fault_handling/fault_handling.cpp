@@ -79,12 +79,13 @@ void faultHandlingThread(void *argument)
 
         if (state == State::NO_FAULT) {
             HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+            vTaskDelay(pdMS_TO_TICKS(100));
+            // TODO: disable running tasks which must be disabled
         } else {
             HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
             Parser::sendString(fault_str + '\n');
+            vTaskDelay(pdMS_TO_TICKS(5000));
         }
-
-        vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
 
