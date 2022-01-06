@@ -116,7 +116,7 @@ target_compile_options(${EXECUTABLE} PRIVATE
     -fno-exceptions
     -Wmissing-include-dirs
     -fstack-usage
-    $<$<CONFIG:Debug>:-O0>
+    $<$<CONFIG:Debug>:-Og>
 
     # ASM FLAGS
     $<$<COMPILE_LANGUAGE:ASM>:-x assembler-with-cpp>
