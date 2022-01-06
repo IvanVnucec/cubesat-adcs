@@ -13,8 +13,15 @@
 #include "optimal_request/get_quat_from_K_terminate.h"
 #include "optimal_request/optimal_request.h"
 #include "optimal_request/optimal_request_init.h"
+#include "adcs/inertial_meas_unit.hpp"
+#include "parser/parser.hpp"
+#include "printf-5.1.0/src/printf.h"
 
 namespace OptimalRequestInterface {
+float ACC_REF[3] = { -0.0518488f, -0.0495620f, -0.9974243f }; // m/s^2
+float MAG_REF[3] = { 0.8514420f, 0.5186020f, 0.0780922f }; // uT
+
+InertialMeasUnit::Data imu_data = { 0 };
 
 OptimalRequest::OptimalRequest()
 {
@@ -23,13 +30,13 @@ OptimalRequest::OptimalRequest()
     m_or_handle.Eta_noise_var = 0.0000010f;
     m_or_handle.dT            = m_iterationPeriodInMiliSec / 1000.0f;    // ms to s
 
-    // TODO [Ivan Vnucec]: Uncomment code below
-    // TODO [Ivan Vnucec]: Get first measuerements
-    //m_or_handle.fill_r(ref_acc[0], ref_mag[0]);
-    //m_or_handle.fill_b(bdy_acc[0], bdy_mag[0]);
-    //m_or_handle.fill_w(bdy_gyr[0]);
+    this->fill_r(ACC_REF, MAG_REF);
 
-    //optimal_request_init(&m_or_handle);
+    InertialMeasUnit::getPublicImuData(&imu_data);
+    this->fill_b(imu_data.acc, imu_data.mag);
+    this->fill_w(imu_data.gyr);
+
+    optimal_request_init(&m_or_handle);
 }
 
 OptimalRequest::~OptimalRequest()
@@ -38,13 +45,13 @@ OptimalRequest::~OptimalRequest()
 
 void OptimalRequest::iterate()
 {
-    // TODO [Ivan Vnucec]: Uncomment code below
-    // TODO [Ivan Vnucec]: Get measuerements
-    //m_or_handle.fill_r(ref_acc[i], ref_mag[i]);
-    //m_or_handle.fill_b(bdy_acc[i], bdy_mag[i]);
-    //m_or_handle.fill_w(bdy_gyr[i]);
+    this->fill_r(ACC_REF, MAG_REF);
 
-    //optimal_request(&m_or_handle);
+    InertialMeasUnit::getPublicImuData(&imu_data);
+    this->fill_b(imu_data.acc, imu_data.mag);
+    this->fill_w(imu_data.gyr);
+
+    optimal_request(&m_or_handle);
 }
 
 void OptimalRequest::getQuaternion(float q[4])
@@ -81,11 +88,27 @@ void OptimalRequest::fill_w(float bdy_gyr[3])
 
 void optimalRequestThread(void *argument)
 {
+    constexpr int Q_DATA_STR_LEN = 50;
+    char q_data_str[Q_DATA_STR_LEN];
+
     OptimalRequest optimal_request;
+    float quat[4];
 
     for (;;) {
-        // TODO: Get data from IMU here
         optimal_request.iterate();
+        optimal_request.getQuaternion(quat);
+
+        int cx = snprintf_(q_data_str,
+                           Q_DATA_STR_LEN,
+                           "q: %f %f %f %f\n",
+                           quat[0],
+                           quat[1],
+                           quat[2],
+                           quat[3]);
+
+        if (cx >= 0 && cx < (int)Q_DATA_STR_LEN)
+            Parser::sendString(q_data_str, cx);
+
 
         vTaskDelay(pdMS_TO_TICKS(optimal_request.m_iterationPeriodInMiliSec));
     }
