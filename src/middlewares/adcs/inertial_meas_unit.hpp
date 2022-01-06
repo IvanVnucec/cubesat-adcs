@@ -15,9 +15,9 @@
 namespace InertialMeasUnit {
 
 struct Data {
-    double acc[3];    // m/s^2
-    double mag[3];    // uT
-    double gyr[3];    // rads
+    float acc[3];    // m/s^2
+    float mag[3];    // uT
+    float gyr[3];    // rads
 };
 
 class InertialMeasUnit : public MPU9250::MPU9250 {
@@ -37,6 +37,8 @@ class InertialMeasUnit : public MPU9250::MPU9250 {
 };
 
 void inertialMeasUnitThread(void *argument);
+void setPublicImuData(const Data* imu_data);
+void getPublicImuData(Data* imu_data);
 
 }    // namespace InertialMeasUnit
 
