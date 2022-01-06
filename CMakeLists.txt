@@ -27,6 +27,7 @@ set(STM32CUBEMX_GENERATED_FILES
     src/core/syscalls.c
     src/core/sysmem.c
     src/core/system_stm32l4xx.c
+
     src/drivers/third_party/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
     src/drivers/third_party/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c.c
     src/drivers/third_party/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c_ex.c
@@ -52,13 +53,23 @@ set(STM32CUBEMX_GENERATED_FILES
     src/drivers/user/i2c_user/i2c_user.cpp
     src/drivers/user/uart_user/uart_user.cpp
     src/drivers/user/pwm_user/pwm_user.cpp
+
     src/middlewares/printf-5.1.0/src/printf.c
     src/middlewares/parser/parser.cpp
     src/middlewares/parser/callbacks.cpp
     src/middlewares/fault_handling/fault_handling.cpp
     src/middlewares/adcs/adcs_tasks.cpp
     src/middlewares/adcs/inertial_meas_unit.cpp
+
+    src/middlewares/optimal_request/get_quat_from_K_data.c
+    src/middlewares/optimal_request/get_quat_from_K_initialize.c
+    src/middlewares/optimal_request/get_quat_from_K_terminate.c
+    src/middlewares/optimal_request/get_quat_from_K.c
+    src/middlewares/optimal_request/optimal_request_init.c
+    src/middlewares/optimal_request/optimal_request.c
+    src/middlewares/optimal_request/vecnorm.c
     src/middlewares/adcs/optimal_request_interface.cpp
+
     src/rtos/FreeRTOS/source/croutine.c
     src/rtos/FreeRTOS/source/event_groups.c
     src/rtos/FreeRTOS/source/list.c

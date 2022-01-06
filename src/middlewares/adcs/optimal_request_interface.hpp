@@ -8,7 +8,9 @@
 #ifndef ADCS_OPTIMAL_REQUEST_INTERFACE_HPP_
 #define ADCS_OPTIMAL_REQUEST_INTERFACE_HPP_
 
+extern "C" {
 #include "optimal_request/get_quat_from_K.h"
+}
 
 namespace OptimalRequestInterface {
 
