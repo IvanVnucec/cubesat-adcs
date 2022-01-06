@@ -81,6 +81,7 @@ include("cmake/clang_format_run.cmake")
 
 target_compile_definitions(${EXECUTABLE} PRIVATE
     $<$<CONFIG:Debug>:DEBUG>
+    $<$<CONFIG:Release>:RELEASE>
     USE_HAL_DRIVER
     STM32L412xx
 )
@@ -117,6 +118,7 @@ target_compile_options(${EXECUTABLE} PRIVATE
     -Wmissing-include-dirs
     -fstack-usage
     $<$<CONFIG:Debug>:-Og>
+    $<$<CONFIG:Release>:-Os>
 
     # ASM FLAGS
     $<$<COMPILE_LANGUAGE:ASM>:-x assembler-with-cpp>
