@@ -36,28 +36,28 @@ const osThreadAttr_t defaultTask_attributes = {
 
 osThreadId_t optimalRequestHandle                     = NULL;
 const static osThreadAttr_t optimalRequest_attributes = {
-    .name       = "optimalRequestTask",
+    .name       = "optimalRequest",
     .stack_size = 128 * 4,
     .priority   = (osPriority_t)osPriorityNormal2,
 };
 
 osThreadId_t inertialMeasUnitHandle                     = NULL;
 const static osThreadAttr_t inertialMeasUnit_attributes = {
-    .name       = "inertialMeasUnitTask",
+    .name       = "inertialMeasUnit",
     .stack_size = 1024 * 4,
     .priority   = (osPriority_t)osPriorityNormal3,
 };
 
 osThreadId_t parserHandle                     = NULL;
 const static osThreadAttr_t parser_attributes = {
-    .name       = "parserTask",
+    .name       = "parser",
     .stack_size = 256 * 4,
     .priority   = (osPriority_t)osPriorityNormal4,
 };
 
 osThreadId_t faultHandlingHandle                     = NULL;
 const static osThreadAttr_t faultHandling_attributes = {
-    .name       = "faultHandlingTask",
+    .name       = "faultHandling",
     .stack_size = 256 * 4,
     .priority   = (osPriority_t)osPriorityNormal5,
 };
@@ -70,6 +70,7 @@ void initAdcsThreads()
 {
     // default task
     defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+    assert(defaultTaskHandle != NULL);
 
     // inertial measurement unit thread
     inertialMeasUnitHandle = osThreadNew(InertialMeasUnit::inertialMeasUnitThread,
