@@ -17,7 +17,7 @@ Make sure you install all required dependencies listed below. After you have all
 - Cppcheck (minimal version 2.6)
 
 ### Install dependencies
-1. (if on ubuntu20.04) install dependencies with `make install_deps`. If on windows or other OS, you must install dependencies by hand.
+1. If on ubuntu21.10 install dependencies with `make install_deps`. If on windows or other OS, you must install dependencies by hand.
 
 ### Building
 1. (if on windows) open mingw console
