@@ -1,4 +1,4 @@
-About: Pinout of our setup. Generated from cubesat-adcs.ioc.
+About: Pinout of our setup (STM32L412KBU6U microcontroller). Generated from cubesat-adcs.ioc.
 
 
 SPI1
