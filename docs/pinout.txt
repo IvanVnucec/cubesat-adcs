@@ -1,4 +1,5 @@
 About: Pinout of our setup (STM32L412KBU6U microcontroller). Generated from cubesat-adcs.ioc.
+Warning: Pins written here are pins as stated on the microcontroller, and NOT as stated on the Nucleo board!
 
 
 SPI1
@@ -30,5 +31,5 @@ High Speed Crystal:
 	- Out: (No out pin, idk why)  
 
 Reaction Wheel Direction Pin (GPIO):
-	- Pin H3
+	- Pin A11
 
