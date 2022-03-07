@@ -6,15 +6,14 @@
 Make sure you install all required dependencies listed below. After you have all requirements then you can go to the building stage and finally to the debugging stage.
 
 ### Dependencies
-- ninja build system (latest version is ok)
-- vscode
-- mingw (if on windows)
-- cmake (minimal version 3.22.0)
-- make
-- GNU Arm Embedded Toolchain (minimal version 10.3-2021.10)
-- clang-format version 12.0.0
-- OpenOCD (minimal version 0.11.0)
-- Cppcheck (minimal version 2.6)
+- ninja build system (latest version is ok) [LINK](https://github.com/ninja-build/ninja/releases)
+- vscode [LINK](https://code.visualstudio.com/download)
+- mingw (if on windows for GNU make) [LINK](https://sourceforge.net/projects/mingw/)
+- cmake (minimal version 3.22.0) [LINK](https://cmake.org/download/)
+- GNU Arm Embedded Toolchain (minimal version 10.3-2021.10) [LINK](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
+- clang-format version 12.0.0 [LINK](https://github.com/llvm/llvm-project/releases/tag/llvmorg-12.0.0)
+- OpenOCD (minimal version 0.11.0) [LINK](https://github.com/xpack-dev-tools/openocd-xpack/releases)
+- Cppcheck (minimal version 2.6)  [LINK](https://cppcheck.sourceforge.io/#download)
 
 ### Install dependencies
 1. If on ubuntu21.10 install dependencies with `make install_deps`. If on windows or other OS, you must install dependencies by hand.
