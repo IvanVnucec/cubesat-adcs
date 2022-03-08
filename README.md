@@ -6,37 +6,35 @@
 Make sure you install all required dependencies listed below. After you have all requirements then you can go to the building stage and finally to the debugging stage.
 
 ### Dependencies
-- ninja build system (latest version is ok) [LINK](https://github.com/ninja-build/ninja/releases)
-- vscode [LINK](https://code.visualstudio.com/download)
-- mingw (if on windows for GNU make) [LINK](https://sourceforge.net/projects/mingw/)
-- cmake (minimal version 3.22.0) [LINK](https://cmake.org/download/)
-- GNU Arm Embedded Toolchain (minimal version 10.3-2021.10) [LINK](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads)
-- clang-format version 12.0.0 [LINK](https://github.com/llvm/llvm-project/releases/tag/llvmorg-12.0.0)
-- OpenOCD (minimal version 0.11.0) [LINK](https://github.com/xpack-dev-tools/openocd-xpack/releases)
-- Cppcheck (minimal version 2.6)  [LINK](https://cppcheck.sourceforge.io/#download)
+- Ninja build system ([v1.10.1](https://github.com/ninja-build/ninja/releases/tag/v1.10.1))
+- CMake ([v3.18.4](https://github.com/Kitware/CMake/releases/tag/v3.18.4))
+- GNU Arm Embedded Toolchain ([v10.3-2021.10](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads))
+- ClangFormat ([v13.0.0-2](https://github.com/llvm/llvm-project/releases/tag/llvmorg-12.0.0))
+- OpenOCD ([v0.11.0-rc2](https://github.com/xpack-dev-tools/openocd-xpack/releases))
+- Cppcheck ([v2.3](https://cppcheck.sourceforge.io/#download))
+- Visual Studio Code ([Link](https://code.visualstudio.com/download))
 
 ### Install dependencies
-1. If on ubuntu21.10 install dependencies with `make install_deps`. If on windows or other OS, you must install dependencies by hand.
+Recommended OS for development is the [Ubuntu 21.10](https://ubuntu.com/download/desktop).<br>
+1. Install all dependencies by running `make install_deps` (requires sudo privileges)
 
 ### Building
-1. (if on windows) open mingw console
-2. position yourself in the project root directory
-3. run cmake setup with `make setup_cmake` (needed only once)
-4. build with `make build` or simply `make`
+1. Position yourself in the project root directory
+2. Run CMake setup with `make setup_cmake` (needed only once)
+3. Build with `make build` or simply `make`
 
 ### Debugging
 #### With vscode
-1. open vscode in project root folder
-2. download "Cortex-Debug" extension
-3. go to "Run and Debug" and run "Cortex Debug" debug configuration
+1. Open vscode in project root folder
+2. Download [Cortex-Debug](https://marketplace.visualstudio.com/items?itemName=marus25.cortex-debug) extension
+3. Go to `Run and Debug` and run `Cortex Debug` debug configuration
 #### With GDB
 1. run `make debug_gdb`
 2. open gdb in another terminal
 3. connect to the running openocd target with `target remote localhost:5000`
 
 ### Flashing
-1. run `make flash` and then 
-2. wait for completion
+1. run `make flash` and wait for completion
 
 ### Code formatting
 1. run `make clang_format`
