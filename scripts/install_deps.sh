@@ -6,7 +6,9 @@ sudo apt-get update
 sudo apt-get install -y ninja-build cmake gcc-arm-none-eabi gcc cppcheck
 
 # install other dependencies
-if [[ ${GITHUB_ACTIONS=} == "false" ]]; then
+if [[ ${GITHUB_ACTIONS=} == "true" ]]; then
+    :
+else
     sudo apt-get install -y gdb-multiarch openocd clang-format
 
     # add link arm-none-eabi-gdb -> gdb-multiarch
