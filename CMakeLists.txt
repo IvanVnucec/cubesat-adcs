@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.18.4)
 
+if(NOT DEFINED CMAKE_EXPORT_COMPILE_COMMANDS)
+	set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+endif()
+
 project(cubesat-adcs)
 
 enable_language(C CXX ASM)
@@ -61,7 +65,7 @@ set(STM32CUBEMX_GENERATED_FILES
     src/middlewares/adcs/adcs_tasks.cpp
     src/middlewares/adcs/inertial_meas_unit.cpp
     src/middlewares/adcs/optimal_request_interface.cpp
-    
+
     src/rtos/FreeRTOS/source/croutine.c
     src/rtos/FreeRTOS/source/event_groups.c
     src/rtos/FreeRTOS/source/list.c
