@@ -3,7 +3,7 @@
 # README
 
 ## Development
-IMPORTANT: Recommended OS for the development is the [Ubuntu 21.10](https://ubuntu.com/download/desktop). If you don't have a machine with the Ubuntu 21.10, the easiest workaround is to install Ubuntu on a Virtual Machine ([Link for a tutorial](https://www.youtube.com/watch?v=0CgNfilnJPY)).
+ <b>IMPORTANT:</b> Recommended OS for the development is the [Ubuntu 21.10](https://ubuntu.com/download/desktop). If you don't have a machine with the Ubuntu 21.10, the easiest workaround is to install Ubuntu on a Virtual Machine ([Link for a tutorial](https://www.youtube.com/watch?v=0CgNfilnJPY)).
 <p>Make sure you install all required dependencies listed below. After you have all the requirements installed, then you can go to the building stage, and finally to the debugging stage.</p>
 
 ### Dependencies
