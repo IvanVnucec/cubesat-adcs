@@ -8,7 +8,7 @@ CPPCHECK_BUILD_FOLDER = build_cppcheck
 all: build
 
 install_deps:
-	sh ./$(SCRIPTS_FOLDER)/install_deps.sh
+	bash ./$(SCRIPTS_FOLDER)/install_deps.sh
 
 setup_cmake: 
 	rm -rf $(BUILD_FOLDER)
