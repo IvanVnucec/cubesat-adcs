@@ -16,18 +16,18 @@ Make sure you install all required dependencies listed below. After you have all
 
 ### Install dependencies
 Recommended OS for development is the [Ubuntu 21.10](https://ubuntu.com/download/desktop).<br>
-1. Install all dependencies by running `make install_deps` (requires sudo privileges)
+1. Clone project 
+2. Position yourself in the project root directory with `cd cubesat-adcs`
+3. Install all dependencies by running `make install_deps` (requires sudo privileges)
 
 ### Building
-1. Position yourself in the project root directory
-2. Run CMake setup with `make setup_cmake` (needed only once)
-3. Build with `make build` or simply `make`
+1. Setup CMake with `make setup_cmake` (needed only once)
+2. Build with `make build` or simply `make`
 
 ### Debugging
 #### With vscode
-1. Open vscode in project root folder
-2. Download [Cortex-Debug](https://marketplace.visualstudio.com/items?itemName=marus25.cortex-debug) extension
-3. Go to `Run and Debug` and run `Cortex Debug` debug configuration
+1. Open vscode in project root folder with `code .`
+2. Go to `Run and Debug` and run `Cortex Debug` debug configuration
 #### With GDB
 1. run `make debug_gdb`
 2. open gdb in another terminal
