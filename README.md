@@ -3,7 +3,8 @@
 # README
 
 ## Development
-Make sure you install all required dependencies listed below. After you have all requirements then you can go to the building stage and finally to the debugging stage.
+IMPORTANT: Recommended OS for the development is the [Ubuntu 21.10](https://ubuntu.com/download/desktop). If you don't have a machine with the Ubuntu 21.10, the easiest workaround is to install Ubuntu on a Virtual Machine ([Link for a tutorial](https://www.youtube.com/watch?v=0CgNfilnJPY)).
+<p>Make sure you install all required dependencies listed below. After you have all the requirements installed, then you can go to the building stage, and finally to the debugging stage.</p>
 
 ### Dependencies
 - Ninja build system ([v1.10.1](https://github.com/ninja-build/ninja/releases/tag/v1.10.1))
@@ -13,9 +14,11 @@ Make sure you install all required dependencies listed below. After you have all
 - OpenOCD ([v0.11.0-rc2](https://github.com/xpack-dev-tools/openocd-xpack/releases))
 - Cppcheck ([v2.3](https://cppcheck.sourceforge.io/#download))
 - Visual Studio Code ([Link](https://code.visualstudio.com/download))
+    - Cortex-Debug ([LINK](https://marketplace.visualstudio.com/items?itemName=marus25.cortex-debug))
+    - (optional) C/C++ ([LINK](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools))
 
 ### Install dependencies
-Recommended OS for development is the [Ubuntu 21.10](https://ubuntu.com/download/desktop).<br>
+To install all the dependencies on the Ubuntu 21.10, user can just follow the steps below. Steps below will install all the required tools and VSCode code editor with all the required extensions.
 1. Clone project 
 2. Position yourself in the project root directory with `cd cubesat-adcs`
 3. Install all dependencies by running `make install_deps` (requires sudo privileges)
@@ -39,7 +42,7 @@ Recommended OS for development is the [Ubuntu 21.10](https://ubuntu.com/download
 ### Code formatting
 1. run `make clang_format`
 
-### Code checking
+### Code analysis
 1. run `make cppcheck`
 
 ### Code structure
