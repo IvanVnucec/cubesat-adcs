@@ -1,3 +1,4 @@
+#if 0
 #include "pwm_user.hpp"
 
 #include "core/tim.h"
@@ -87,3 +88,4 @@ void Pwm_User::pwmDriverErrorHandle()
 }
 
 }    // namespace Pwm_User
+#endif

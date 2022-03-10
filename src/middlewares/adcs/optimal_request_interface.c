@@ -1,10 +1,4 @@
-/*
- * optimal_request_interface.cpp
- *
- *  Created on: Oct 18, 2021
- *      Author: ivnucec
- */
-
+#if 0
 #include "optimal_request_interface.hpp"
 
 #include "cmsis_os.h"
@@ -92,3 +86,4 @@ void optimalRequestThread(void *argument)
 }
 
 }    // namespace OptimalRequestInterface
+#endif

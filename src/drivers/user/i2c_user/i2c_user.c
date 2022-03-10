@@ -1,10 +1,4 @@
-/*
- * i2c_user.cpp
- *
- *  Created on: Oct 21, 2021
- *      Author: ivnucec
- */
-
+#if 0
 #include "i2c_user.hpp"
 
 #include "FreeRTOS.h"
@@ -151,3 +145,4 @@ extern "C" void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 {
     private_assert_hal(0);
 }
+#endif

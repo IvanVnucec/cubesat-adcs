@@ -1,10 +1,4 @@
-/*
- * pid_regulator.cpp
- *
- *  Created on: 20. ruj 2021.
- *      Author: ivnucec
- */
-
+#if 0
 #include "pid_regulator.hpp"
 
 #include <cassert>
@@ -59,3 +53,4 @@ void PidRegulator::resetIntegral()
 {
     m_ui1 = 0.0f;
 }
+#endif

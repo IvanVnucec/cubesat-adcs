@@ -1,3 +1,4 @@
+#if 0
 #include "uart_user.hpp"
 
 #include "FreeRTOS.h"
@@ -190,3 +191,4 @@ extern "C" void HAL_UART_ErrorCallback(UART_HandleTypeDef *handle)
 
     //private_assert_hal(0);
 }
+#endif

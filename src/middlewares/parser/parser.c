@@ -1,10 +1,4 @@
-/*
- * parser.cpp
- *
- *  Created on: 20. lis 2021.
- *      Author: ivnucec
- */
-
+#if 0
 // TODO [Ivan Vnucec]: Implement this
 
 #include "parser.hpp"
@@ -109,3 +103,4 @@ void sendString(std::string str)
 }
 
 }    // namespace Parser
+#endif

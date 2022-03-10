@@ -1,3 +1,4 @@
+#if 0
 // TODO: Implement code here
 
 /*
@@ -104,3 +105,4 @@ void InertialMeasUnit::imuErrorHandle()
 }
 
 }    // namespace InertialMeasUnit
+#endif

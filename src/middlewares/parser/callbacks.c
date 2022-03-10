@@ -1,3 +1,4 @@
+#if 0
 #include "callbacks.hpp"
 
 #include "parser.hpp"
@@ -37,3 +38,4 @@ void is_pi(std::string arg)
 }
 
 }    // namespace ParserCallback
+#endif

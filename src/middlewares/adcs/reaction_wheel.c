@@ -1,3 +1,4 @@
+#if 0
 // TODO: Port code in this file
 
 #include "reaction_wheel.hpp"
@@ -97,3 +98,4 @@ void ReactionWheel::errorHandle()
 }
 
 }    // namespace ReactionWheel
+#endif

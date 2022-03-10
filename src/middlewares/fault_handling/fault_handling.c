@@ -1,3 +1,4 @@
+#if 0
 #include "fault_handling.hpp"
 
 #include "FreeRTOS.h"
@@ -90,3 +91,4 @@ void faultHandlingThread(void *argument)
 }
 
 }    // namespace Fault
+#endif

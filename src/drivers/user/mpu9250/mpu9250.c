@@ -1,3 +1,4 @@
+#if 0
 /*
 MPU9250.cpp
 Brian R Taylor
@@ -1243,3 +1244,4 @@ static long map(long x, long in_min, long in_max, long out_min, long out_max)
 }
 
 }    // namespace MPU9250
+#endif

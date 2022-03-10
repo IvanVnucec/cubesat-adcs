@@ -1,3 +1,4 @@
+#if 0
 // TODO: Port code in this file
 // TODO: Add namespace and delete REG_AGNLE_ prefix throughout cpp and hpp files
 
@@ -73,3 +74,4 @@ void REG_ANGLE_thread(void *argument)
         // TODO: Add Angle regulation code here
     }
 }
+#endif
