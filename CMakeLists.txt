@@ -4,17 +4,13 @@ if(NOT DEFINED CMAKE_EXPORT_COMPILE_COMMANDS)
 	set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 endif()
 
-project(cubesat-adcs)
+project(cubesat-adcs LANGUAGES C)
 
-enable_language(C CXX ASM)
+enable_language(C ASM)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(STM32CUBEMX_GENERATED_FILES
     src/core/startup_stm32l412kbux.s
@@ -53,18 +49,18 @@ set(STM32CUBEMX_GENERATED_FILES
     src/drivers/third_party/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c
     src/drivers/third_party/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c
     src/drivers/third_party/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c
-    src/drivers/user/mpu9250/mpu9250.cpp
-    src/drivers/user/i2c_user/i2c_user.cpp
-    src/drivers/user/uart_user/uart_user.cpp
-    src/drivers/user/pwm_user/pwm_user.cpp
+    src/drivers/user/mpu9250/mpu9250.c
+    src/drivers/user/i2c_user/i2c_user.c
+    src/drivers/user/uart_user/uart_user.c
+    src/drivers/user/pwm_user/pwm_user.c
 
     src/middlewares/printf-5.1.0/src/printf.c
-    src/middlewares/parser/parser.cpp
-    src/middlewares/parser/callbacks.cpp
-    src/middlewares/fault_handling/fault_handling.cpp
-    src/middlewares/adcs/adcs_tasks.cpp
-    src/middlewares/adcs/inertial_meas_unit.cpp
-    src/middlewares/adcs/optimal_request_interface.cpp
+    src/middlewares/parser/parser.c
+    src/middlewares/parser/callbacks.c
+    src/middlewares/fault_handling/fault_handling.c
+    src/middlewares/adcs/adcs_tasks.c
+    src/middlewares/adcs/inertial_meas_unit.c
+    src/middlewares/adcs/optimal_request_interface.c
 
     src/rtos/FreeRTOS/source/croutine.c
     src/rtos/FreeRTOS/source/event_groups.c
@@ -123,15 +119,8 @@ target_compile_options(${EXECUTABLE} PRIVATE
     $<$<CONFIG:Debug>:-Og>
     $<$<CONFIG:Release>:-Os>
 
-    # ASM FLAGS
-    $<$<COMPILE_LANGUAGE:ASM>:-x assembler-with-cpp>
-
     # C FLAGS
     $<$<COMPILE_LANGUAGE:CXX>:>
-
-    # CXX FLAGS
-    $<$<COMPILE_LANGUAGE:CXX>:-fno-rtti>
-    $<$<COMPILE_LANGUAGE:CXX>:-fno-use-cxa-atexit>
 )
 
 set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/linker/STM32L412KBUX_FLASH.ld")
