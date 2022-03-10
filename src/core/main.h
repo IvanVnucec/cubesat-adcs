@@ -21,14 +21,14 @@
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H
-#define __MAIN_H
+    #define __MAIN_H
 
-#ifdef __cplusplus
+    #ifdef __cplusplus
 extern "C" {
-#endif
+    #endif
 
-/* Includes ------------------------------------------------------------------*/
-#include "stm32l4xx_hal.h"
+    /* Includes ------------------------------------------------------------------*/
+    #include "stm32l4xx_hal.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -56,24 +56,24 @@ void Error_Handler(void);
 /* USER CODE BEGIN EFP */
 void SignalFaultCondition(void);
 
-/* USER CODE END EFP */
+    /* USER CODE END EFP */
 
-/* Private defines -----------------------------------------------------------*/
-#define SWDIO_Pin GPIO_PIN_13
-#define SWDIO_GPIO_Port GPIOA
-#define SWCLK_Pin GPIO_PIN_14
-#define SWCLK_GPIO_Port GPIOA
-#define LD3_Pin GPIO_PIN_3
-#define LD3_GPIO_Port GPIOB
-#define REACTION_WHEEL_DIR_Pin GPIO_PIN_3
-#define REACTION_WHEEL_DIR_GPIO_Port GPIOH
+    /* Private defines -----------------------------------------------------------*/
+    #define SWDIO_Pin GPIO_PIN_13
+    #define SWDIO_GPIO_Port GPIOA
+    #define SWCLK_Pin GPIO_PIN_14
+    #define SWCLK_GPIO_Port GPIOA
+    #define LD3_Pin GPIO_PIN_3
+    #define LD3_GPIO_Port GPIOB
+    #define REACTION_WHEEL_DIR_Pin GPIO_PIN_3
+    #define REACTION_WHEEL_DIR_GPIO_Port GPIOH
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
 
-#ifdef __cplusplus
+    #ifdef __cplusplus
 }
-#endif
+    #endif
 
 #endif /* __MAIN_H */
 

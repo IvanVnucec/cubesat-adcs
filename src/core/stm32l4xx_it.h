@@ -20,11 +20,11 @@
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32L4xx_IT_H
-#define __STM32L4xx_IT_H
+    #define __STM32L4xx_IT_H
 
-#ifdef __cplusplus
- extern "C" {
-#endif
+    #ifdef __cplusplus
+extern "C" {
+    #endif
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -61,9 +61,9 @@ void I2C3_ER_IRQHandler(void);
 
 /* USER CODE END EFP */
 
-#ifdef __cplusplus
+    #ifdef __cplusplus
 }
-#endif
+    #endif
 
 #endif /* __STM32L4xx_IT_H */
 
