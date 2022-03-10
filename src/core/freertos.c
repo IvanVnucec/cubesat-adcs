@@ -4,7 +4,6 @@
 #include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
-#include "adcs/adcs_tasks.h"
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -15,11 +14,9 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* Private function prototypes -----------------------------------------------*/
-
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 void MX_FREERTOS_Init(void) {
-    initAdcsThreads();
 }
 
 /* Private application code --------------------------------------------------*/

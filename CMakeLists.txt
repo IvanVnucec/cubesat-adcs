@@ -49,18 +49,6 @@ set(STM32CUBEMX_GENERATED_FILES
     src/drivers/third_party/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c
     src/drivers/third_party/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c
     src/drivers/third_party/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c
-    src/drivers/user/mpu9250/mpu9250.c
-    src/drivers/user/i2c_user/i2c_user.c
-    src/drivers/user/uart_user/uart_user.c
-    src/drivers/user/pwm_user/pwm_user.c
-
-    src/middlewares/printf-5.1.0/src/printf.c
-    src/middlewares/parser/parser.c
-    src/middlewares/parser/callbacks.c
-    src/middlewares/fault_handling/fault_handling.c
-    src/middlewares/adcs/adcs_tasks.c
-    src/middlewares/adcs/inertial_meas_unit.c
-    src/middlewares/adcs/optimal_request_interface.c
 
     src/rtos/FreeRTOS/source/croutine.c
     src/rtos/FreeRTOS/source/event_groups.c
@@ -92,8 +80,6 @@ target_include_directories(${EXECUTABLE} PRIVATE
     src/drivers/third_party/STM32L4xx_HAL_Driver/Inc/Legacy
     src/drivers/third_party/CMSIS/Device/ST/STM32L4xx/Include
     src/drivers/third_party/CMSIS/Include
-
-    src/middlewares
 
     src/rtos/FreeRTOS/config
     src/rtos/FreeRTOS/source/include
