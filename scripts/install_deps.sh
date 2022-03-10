@@ -5,10 +5,13 @@ sudo apt-get update
 # install necessary dependencies
 sudo apt-get install -y ninja-build cmake gcc-arm-none-eabi gcc cppcheck clang-format
 
+echo $'\n'
+
 # install other dependencies
 if [[ ${GITHUB_ACTIONS=} == "true" ]]; then
-    :
+    echo "Running in GitHub Actions, no need to install debugging tools."
 else
+    echo "Not running in GitHub Actions, install aditional debugging tools:"
     sudo apt-get install -y gdb-multiarch openocd
 
     # add link arm-none-eabi-gdb -> gdb-multiarch
