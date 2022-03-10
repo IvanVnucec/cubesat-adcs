@@ -23,3 +23,6 @@ jobs:
 
     - name: Static code analysis
       run: make cppcheck
+
+    - name: Check Clang-format
+      run: make check_clang_format

@@ -3,13 +3,13 @@
 sudo apt-get update
 
 # install necessary dependencies
-sudo apt-get install -y ninja-build cmake gcc-arm-none-eabi gcc cppcheck
+sudo apt-get install -y ninja-build cmake gcc-arm-none-eabi gcc cppcheck clang-format
 
 # install other dependencies
 if [[ ${GITHUB_ACTIONS=} == "true" ]]; then
     :
 else
-    sudo apt-get install -y gdb-multiarch openocd clang-format
+    sudo apt-get install -y gdb-multiarch openocd
 
     # add link arm-none-eabi-gdb -> gdb-multiarch
     ln -s /usr/bin/gdb-multiarch /usr/bin/arm-none-eabi-gdb

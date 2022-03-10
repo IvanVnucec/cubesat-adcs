@@ -82,10 +82,6 @@ set(EXECUTABLE ${PROJECT_NAME}.elf)
 
 add_executable(${EXECUTABLE} ${STM32CUBEMX_GENERATED_FILES})
 
-include("cmake/STM32_flash.cmake")
-include("cmake/STM32_debug_gdb.cmake")
-include("cmake/clang_format_run.cmake")
-
 target_compile_definitions(${EXECUTABLE} PRIVATE
     $<$<CONFIG:Debug>:DEBUG>
     $<$<CONFIG:Release>:RELEASE>
@@ -178,6 +174,12 @@ set_target_properties(${EXECUTABLE} PROPERTIES
     ADDITIONAL_CLEAN_FILES "${PROJECT_NAME}.bin;${PROJECT_NAME}.hex;${PROJECT_NAME}.map"
 )
 
+include("cmake/STM32_flash.cmake")
+include("cmake/STM32_debug_gdb.cmake")
+include("cmake/clang_format_run.cmake")
+include("cmake/check_clang_format.cmake")
+
 DEBUG_GDB_TARGET("${PROJECT_NAME}.hex")
 ADD_FLASH_TARGET("${PROJECT_NAME}.elf")
 ADD_CLANG_FORMAT_TARGET()
+ADD_CHECK_CLANG_FORMAT_TARGET()
