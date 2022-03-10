@@ -33,7 +33,7 @@ class I2C_User {
                       uint8_t *data,
                       uint16_t data_len);
     void i2cDriverErrorHandle();
-  
+
   public:
     void private_assert(bool condition);
 };

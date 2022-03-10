@@ -22,7 +22,7 @@ class OptimalRequest {
 
   public:
     static constexpr unsigned m_iterationPeriodInMiliSec = 1000u;
-    
+
     OptimalRequest();
     ~OptimalRequest();
     void iterate();

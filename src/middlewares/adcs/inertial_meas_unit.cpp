@@ -10,8 +10,8 @@
 #include "inertial_meas_unit.hpp"
 
 #include "cmsis_os.h"
-#include "fault_handling/fault_handling.hpp"
 #include "drivers/user/mpu9250/mpu9250.hpp"
+#include "fault_handling/fault_handling.hpp"
 #include "parser/parser.hpp"
 #include "printf-5.1.0/src/printf.h"
 

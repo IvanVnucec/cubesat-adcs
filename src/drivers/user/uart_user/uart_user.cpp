@@ -2,14 +2,14 @@
 
 #include "FreeRTOS.h"
 #include "cmsis_os.h"
+#include "core/usart.h"
 #include "fault_handling/fault_handling.hpp"
 #include "queue.h"
 #include "semphr.h"
-#include "core/usart.h"
 
+#include <cassert>
 #include <cstdint>
 #include <sys/_stdint.h>
-#include <cassert>
 
 namespace UART_User {
 

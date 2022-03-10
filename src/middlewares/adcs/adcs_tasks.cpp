@@ -14,6 +14,7 @@
 #include "optimal_request_interface.hpp"
 #include "parser/parser.hpp"
 #include "task.h"
+
 #include <cassert>
 
 #ifdef __cplusplus
@@ -27,11 +28,11 @@ extern "C" {
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-osThreadId_t defaultTaskHandle = NULL;
+osThreadId_t defaultTaskHandle              = NULL;
 const osThreadAttr_t defaultTask_attributes = {
-  .name = "defaultTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
+    .name       = "defaultTask",
+    .stack_size = 128 * 4,
+    .priority   = (osPriority_t)osPriorityNormal,
 };
 
 osThreadId_t optimalRequestHandle                     = NULL;
