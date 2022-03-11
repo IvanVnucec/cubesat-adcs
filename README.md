@@ -4,9 +4,11 @@
 
 ## Development
  <b>IMPORTANT:</b> Recommended OS for the development is the [Ubuntu 21.10](https://ubuntu.com/download/desktop). If you don't have a machine with the Ubuntu 21.10, the easiest workaround is to install Ubuntu on a Virtual Machine ([Link for a tutorial](https://www.youtube.com/watch?v=0CgNfilnJPY)).
-<p>Make sure you install all required dependencies listed below. After you have all the requirements installed, then you can go to the building stage, and finally to the debugging stage.</p>
+<p>Make sure you install all required dependencies listed below with written versions (or higher). After you have all the requirements installed, then you can go to the building stage, and finally to the debugging stage.</p>
 
 ### Dependencies
+- GNU Make (v4.3)
+- git (v2.32.0)
 - Ninja build system ([v1.10.1](https://github.com/ninja-build/ninja/releases/tag/v1.10.1))
 - CMake ([v3.18.4](https://github.com/Kitware/CMake/releases/tag/v3.18.4))
 - GNU Arm Embedded Toolchain ([v10.3-2021.10](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads))
@@ -15,7 +17,7 @@
 - Cppcheck ([v2.3](https://cppcheck.sourceforge.io/#download))
 - Visual Studio Code ([Link](https://code.visualstudio.com/download))
     - Cortex-Debug ([LINK](https://marketplace.visualstudio.com/items?itemName=marus25.cortex-debug))
-    - (optional) C/C++ ([LINK](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools))
+    - C/C++ ([LINK](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools))
 
 ### Install dependencies
 To install all the dependencies on the Ubuntu 21.10, user can just follow the steps below. Steps below will install all the required tools and VSCode code editor with all the required extensions.
