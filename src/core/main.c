@@ -136,6 +136,8 @@ void Error_Handler(void)
 void StartDefaultTask(void *argument)
 {
     for (;;) {
+        HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
 
