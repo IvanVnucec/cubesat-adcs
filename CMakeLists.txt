@@ -81,7 +81,7 @@ target_include_directories(${EXECUTABLE} PRIVATE
     src/drivers/third_party/CMSIS/Device/ST/STM32L4xx/Include
     src/drivers/third_party/CMSIS/Include
 
-    src/rtos/FreeRTOS/config
+    src/rtos/config
     src/rtos/FreeRTOS/source/include
     src/rtos/FreeRTOS/source/CMSIS_RTOS_V2
     src/rtos/FreeRTOS/source/portable/GCC/ARM_CM4F
