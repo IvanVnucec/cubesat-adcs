@@ -20,6 +20,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "tim.h"
 
+#include "stm32l4xx_hal.h"
+#include "utils/error/error.h"
+
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -48,13 +51,13 @@ void MX_TIM1_Init(void)
     htim1.Init.RepetitionCounter = 0;
     htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
     if (HAL_TIM_PWM_Init(&htim1) != HAL_OK) {
-        Error_Handler();
+        ERROR_signalFaultConditionAndWaitIndefinitely();
     }
     sMasterConfig.MasterOutputTrigger  = TIM_TRGO_RESET;
     sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
     sMasterConfig.MasterSlaveMode      = TIM_MASTERSLAVEMODE_DISABLE;
     if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK) {
-        Error_Handler();
+        ERROR_signalFaultConditionAndWaitIndefinitely();
     }
     sConfigOC.OCMode       = TIM_OCMODE_PWM1;
     sConfigOC.Pulse        = 0;
@@ -64,7 +67,7 @@ void MX_TIM1_Init(void)
     sConfigOC.OCIdleState  = TIM_OCIDLESTATE_RESET;
     sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
     if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK) {
-        Error_Handler();
+        ERROR_signalFaultConditionAndWaitIndefinitely();
     }
     sBreakDeadTimeConfig.OffStateRunMode  = TIM_OSSR_DISABLE;
     sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
@@ -78,7 +81,7 @@ void MX_TIM1_Init(void)
     sBreakDeadTimeConfig.Break2Filter     = 0;
     sBreakDeadTimeConfig.AutomaticOutput  = TIM_AUTOMATICOUTPUT_DISABLE;
     if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK) {
-        Error_Handler();
+        ERROR_signalFaultConditionAndWaitIndefinitely();
     }
     /* USER CODE BEGIN TIM1_Init 2 */
 

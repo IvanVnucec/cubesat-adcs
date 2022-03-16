@@ -28,6 +28,7 @@ set(STM32CUBEMX_GENERATED_FILES
     src/drivers/spi/spi.c
     src/drivers/gpio/gpio.c
     src/drivers/i2c/i2c.c
+    src/drivers/clock/clock.c
 
     src/drivers/hal/Src/stm32l4xx_hal.c
     src/drivers/hal/Src/stm32l4xx_hal_i2c.c
@@ -61,6 +62,8 @@ set(STM32CUBEMX_GENERATED_FILES
     src/rtos/FreeRTOS/source/CMSIS_RTOS_V2/cmsis_os2.c
     src/rtos/FreeRTOS/source/portable/MemMang/heap_4.c
     src/rtos/FreeRTOS/source/portable/GCC/ARM_CM4F/port.c
+
+    src/utils/error/error.c
 )
 
 set(EXECUTABLE ${PROJECT_NAME}.elf)

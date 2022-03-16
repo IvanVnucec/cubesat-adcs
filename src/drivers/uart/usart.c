@@ -20,6 +20,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
 
+#include "utils/error/error.h"
+
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -48,7 +50,7 @@ void MX_USART1_UART_Init(void)
     huart1.Init.OneBitSampling         = UART_ONE_BIT_SAMPLE_DISABLE;
     huart1.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
     if (HAL_UART_Init(&huart1) != HAL_OK) {
-        Error_Handler();
+        ERROR_signalFaultConditionAndWaitIndefinitely();
     }
     /* USER CODE BEGIN USART1_Init 2 */
 
@@ -68,7 +70,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
         PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1;
         PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_SYSCLK;
         if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK) {
-            Error_Handler();
+            ERROR_signalFaultConditionAndWaitIndefinitely();
         }
 
         /* USART1 clock enable */

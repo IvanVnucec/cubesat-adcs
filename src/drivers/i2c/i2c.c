@@ -20,6 +20,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "i2c.h"
 
+#include "stm32l4xx_hal.h"
+#include "utils/error/error.h"
+
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -46,17 +49,17 @@ void MX_I2C3_Init(void)
     hi2c3.Init.GeneralCallMode  = I2C_GENERALCALL_DISABLE;
     hi2c3.Init.NoStretchMode    = I2C_NOSTRETCH_DISABLE;
     if (HAL_I2C_Init(&hi2c3) != HAL_OK) {
-        Error_Handler();
+        ERROR_signalFaultConditionAndWaitIndefinitely();
     }
     /** Configure Analogue filter
   */
     if (HAL_I2CEx_ConfigAnalogFilter(&hi2c3, I2C_ANALOGFILTER_ENABLE) != HAL_OK) {
-        Error_Handler();
+        ERROR_signalFaultConditionAndWaitIndefinitely();
     }
     /** Configure Digital filter
   */
     if (HAL_I2CEx_ConfigDigitalFilter(&hi2c3, 0) != HAL_OK) {
-        Error_Handler();
+        ERROR_signalFaultConditionAndWaitIndefinitely();
     }
     /* USER CODE BEGIN I2C3_Init 2 */
 
@@ -76,7 +79,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
         PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_I2C3;
         PeriphClkInit.I2c3ClockSelection   = RCC_I2C3CLKSOURCE_PCLK1;
         if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK) {
-            Error_Handler();
+            ERROR_signalFaultConditionAndWaitIndefinitely();
         }
 
         __HAL_RCC_GPIOA_CLK_ENABLE();

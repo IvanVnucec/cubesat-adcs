@@ -20,6 +20,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "spi.h"
 
+#include "utils/error/error.h"
+
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -51,7 +53,7 @@ void MX_SPI1_Init(void)
     hspi1.Init.CRCLength         = SPI_CRC_LENGTH_DATASIZE;
     hspi1.Init.NSSPMode          = SPI_NSS_PULSE_ENABLE;
     if (HAL_SPI_Init(&hspi1) != HAL_OK) {
-        Error_Handler();
+        ERROR_signalFaultConditionAndWaitIndefinitely();
     }
     /* USER CODE BEGIN SPI1_Init 2 */
 
