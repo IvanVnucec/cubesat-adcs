@@ -18,14 +18,14 @@
   */
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __TIM_H__
-#define __TIM_H__
+    #define __TIM_H__
 
-#ifdef __cplusplus
+    #ifdef __cplusplus
 extern "C" {
-#endif
+    #endif
 
-/* Includes ------------------------------------------------------------------*/
-#include "core/main.h"
+    /* Includes ------------------------------------------------------------------*/
+    #include "core/main.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -45,9 +45,9 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* USER CODE END Prototypes */
 
-#ifdef __cplusplus
+    #ifdef __cplusplus
 }
-#endif
+    #endif
 
 #endif /* __TIM_H__ */
 

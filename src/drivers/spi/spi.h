@@ -18,14 +18,14 @@
   */
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __SPI_H__
-#define __SPI_H__
+    #define __SPI_H__
 
-#ifdef __cplusplus
+    #ifdef __cplusplus
 extern "C" {
-#endif
+    #endif
 
-/* Includes ------------------------------------------------------------------*/
-#include "core/main.h"
+    /* Includes ------------------------------------------------------------------*/
+    #include "core/main.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -43,9 +43,9 @@ void MX_SPI1_Init(void);
 
 /* USER CODE END Prototypes */
 
-#ifdef __cplusplus
+    #ifdef __cplusplus
 }
-#endif
+    #endif
 
 #endif /* __SPI_H__ */
 
