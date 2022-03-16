@@ -1,5 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "bsp/bsp_config.h"
 #include "drivers/drivers.h"
 #include "cmsis_os.h"
 
@@ -90,7 +91,7 @@ void SystemClock_Config(void)
 
 void SignalFaultCondition(void)
 {
-    HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(BSP_CONFIG_LD3_GPIO_Port, BSP_CONFIG_LD3_Pin, GPIO_PIN_SET);
 }
 
 
@@ -108,7 +109,7 @@ void Error_Handler(void)
 void StartDefaultTask(void *argument)
 {
     for (;;) {
-        HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+        HAL_GPIO_TogglePin(BSP_CONFIG_LD3_GPIO_Port, BSP_CONFIG_LD3_Pin);
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
