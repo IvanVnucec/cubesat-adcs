@@ -145,6 +145,21 @@ void HAL_TIM_PWM_MspDeInit(TIM_HandleTypeDef *tim_pwmHandle)
     }
 }
 
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM16 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM16) {
+        HAL_IncTick();
+    }
+}
+
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */
