@@ -4,7 +4,7 @@
 #include "drivers/i2c/i2c.h"
 #include "drivers/spi/spi.h"
 #include "drivers/tim/tim.h"
-#include "usart.h"
+#include "drivers/uart/usart.h"
 #include "drivers/gpio/gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
