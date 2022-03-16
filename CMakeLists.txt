@@ -28,27 +28,27 @@ set(STM32CUBEMX_GENERATED_FILES
     src/core/sysmem.c
     src/core/system_stm32l4xx.c
 
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_i2c_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_rcc_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_flash_ramfunc.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_gpio.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_dma_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_pwr_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_cortex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_exti.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_spi_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_tim_ex.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart.c
-    src/drivers/STM32L4xx_HAL_Driver/Src/stm32l4xx_hal_uart_ex.c
+    src/drivers/hal/Src/stm32l4xx_hal.c
+    src/drivers/hal/Src/stm32l4xx_hal_i2c.c
+    src/drivers/hal/Src/stm32l4xx_hal_i2c_ex.c
+    src/drivers/hal/Src/stm32l4xx_hal_rcc.c
+    src/drivers/hal/Src/stm32l4xx_hal_rcc_ex.c
+    src/drivers/hal/Src/stm32l4xx_hal_flash.c
+    src/drivers/hal/Src/stm32l4xx_hal_flash_ex.c
+    src/drivers/hal/Src/stm32l4xx_hal_flash_ramfunc.c
+    src/drivers/hal/Src/stm32l4xx_hal_gpio.c
+    src/drivers/hal/Src/stm32l4xx_hal_dma.c
+    src/drivers/hal/Src/stm32l4xx_hal_dma_ex.c
+    src/drivers/hal/Src/stm32l4xx_hal_pwr.c
+    src/drivers/hal/Src/stm32l4xx_hal_pwr_ex.c
+    src/drivers/hal/Src/stm32l4xx_hal_cortex.c
+    src/drivers/hal/Src/stm32l4xx_hal_exti.c
+    src/drivers/hal/Src/stm32l4xx_hal_spi.c
+    src/drivers/hal/Src/stm32l4xx_hal_spi_ex.c
+    src/drivers/hal/Src/stm32l4xx_hal_tim.c
+    src/drivers/hal/Src/stm32l4xx_hal_tim_ex.c
+    src/drivers/hal/Src/stm32l4xx_hal_uart.c
+    src/drivers/hal/Src/stm32l4xx_hal_uart_ex.c
 
     src/rtos/FreeRTOS/source/croutine.c
     src/rtos/FreeRTOS/source/event_groups.c
@@ -76,10 +76,10 @@ target_compile_definitions(${EXECUTABLE} PRIVATE
 target_include_directories(${EXECUTABLE} PRIVATE
     src
     
-    src/drivers/STM32L4xx_HAL_Driver/Inc
-    src/drivers/STM32L4xx_HAL_Driver/Inc/Legacy
-    src/drivers/CMSIS/Device/ST/STM32L4xx/Include
-    src/drivers/CMSIS/Include
+    src/drivers/hal/Inc
+    src/drivers/hal/Inc/Legacy
+    src/drivers/cmsis/Device/ST/STM32L4xx/Include
+    src/drivers/cmsis/Include
 
     src/rtos/config
     src/rtos/FreeRTOS/source/include
