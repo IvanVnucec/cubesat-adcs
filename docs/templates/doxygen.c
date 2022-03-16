@@ -31,16 +31,15 @@
  */
 
 #ifndef _BOX_PROTOTYPES_DOXYGEN_H
-#  define _BOX_PROTOTYPES_DOXYGEN_H
+#define _BOX_PROTOTYPES_DOXYGEN_H
 
-#  include <systemheader1.h>
-#  include <systemheader2.h>
+#include "local_header1.h"
+#include "local_header2.h"
 
-#  include <box/header1.h>
-#  include <box/header2.h>
-
-#  include "local_header1.h"
-#  include "local_header2.h"
+#include <box/header1.h>
+#include <box/header2.h>
+#include <systemheader1.h>
+#include <systemheader2.h>
 
 /**
  * @brief Use brief, otherwise the index won't have a brief explanation.
@@ -48,9 +47,9 @@
  * Detailed explanation.
  */
 typedef enum BoxEnum_enum {
-  BOXENUM_FIRST,  /**< Some documentation for first. */
-  BOXENUM_SECOND, /**< Some documentation for second. */
-  BOXENUM_ETC     /**< Etc. */
+    BOXENUM_FIRST,  /**< Some documentation for first. */
+    BOXENUM_SECOND, /**< Some documentation for second. */
+    BOXENUM_ETC     /**< Etc. */
 } BoxEnum;
 
 /**
@@ -59,9 +58,9 @@ typedef enum BoxEnum_enum {
  * Detailed explanation.
  */
 typedef struct BoxStruct_struct {
-  int a;    /**< Some documentation for the member BoxStruct#a. */
-  int b;    /**< Some documentation for the member BoxStruct#b. */
-  double c; /**< Etc. */
+    int a;    /**< Some documentation for the member BoxStruct#a. */
+    int b;    /**< Some documentation for the member BoxStruct#b. */
+    double c; /**< Etc. */
 } BoxStruct;
 
 /**
@@ -97,8 +96,8 @@ typedef struct BoxStruct_struct {
  * @note Something to note.
  * @warning Warning.
  */
-BOXEXPORT BoxStruct *
-Box_The_Function_Name(BoxParamType1 param1, BoxParamType2 param2 /*, ...*/);
+BOXEXPORT BoxStruct *Box_The_Function_Name(BoxParamType1 param1,
+                                           BoxParamType2 param2 /*, ...*/);
 
 /**
  * @brief A simple stub function to show how links do work.
@@ -111,8 +110,7 @@ Box_The_Function_Name(BoxParamType1 param1, BoxParamType2 param2 /*, ...*/);
  * Alternatively, you can use #Box_The_Function_Name.
  * @return @c NULL is always returned.
  */
-BOXEXPORT void *
-Box_The_Second_Function(void);
+BOXEXPORT void *Box_The_Second_Function(void);
 
 /**
  * Brief can be omitted. If you configure Doxygen with
@@ -121,7 +119,6 @@ Box_The_Second_Function(void);
  * @verbatim @brief Brief can be omitted. @endverbatim
  * was used instead.
  */
-BOXEXPORT void
-Box_The_Last_One(void);
+BOXEXPORT void Box_The_Last_One(void);
 
 #endif /* _BOX_PROTOTYPES_DOXYGEN_H */
