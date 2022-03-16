@@ -109,7 +109,7 @@ target_compile_options(${EXECUTABLE} PRIVATE
     $<$<COMPILE_LANGUAGE:CXX>:>
 )
 
-set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/linker/STM32L412KBUX_FLASH.ld")
+set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/src/linker/STM32L412KBUX_FLASH.ld")
 
 target_link_options(${EXECUTABLE} PRIVATE
     -mcpu=cortex-m4 
