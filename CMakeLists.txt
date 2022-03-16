@@ -63,6 +63,9 @@ set(STM32CUBEMX_GENERATED_FILES
     src/rtos/FreeRTOS/source/portable/MemMang/heap_4.c
     src/rtos/FreeRTOS/source/portable/GCC/ARM_CM4F/port.c
 
+    src/middlewares/middlewares.c
+    src/middlewares/alive/alive.c
+
     src/utils/error/error.c
 )
 

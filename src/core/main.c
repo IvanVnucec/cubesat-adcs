@@ -3,6 +3,7 @@
 #include "bsp/bsp_config.h"
 #include "drivers/drivers.h"
 #include "drivers/clock/clock.h"
+#include "middlewares/middlewares.h"
 #include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -10,15 +11,7 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-osThreadId_t defaultTaskHandle              = NULL;
-const osThreadAttr_t defaultTask_attributes = {
-    .name       = "defaultTask",
-    .stack_size = 128 * 4,
-    .priority   = (osPriority_t)osPriorityNormal,
-};
-
 /* Private function prototypes -----------------------------------------------*/
-void StartDefaultTask(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 int main(void)
@@ -35,8 +28,7 @@ int main(void)
     /* Init scheduler */
     osKernelInitialize(); /* Call init function for freertos objects (in freertos.c) */
 
-    defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
-    assert(defaultTaskHandle != NULL);
+    MIDDLEWARES_initThreads();
 
     /* Start scheduler */
     osKernelStart();
