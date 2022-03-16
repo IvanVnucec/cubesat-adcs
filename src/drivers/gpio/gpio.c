@@ -21,6 +21,7 @@
 #include "gpio.h"
 
 #include "bsp/bsp_config.h"
+#include "bsp/bsp_led_config.h"
 #include "stm32l4xx_hal.h"
 
 /* USER CODE BEGIN 0 */
@@ -52,7 +53,9 @@ void MX_GPIO_Init(void)
     __HAL_RCC_GPIOH_CLK_ENABLE();
 
     /*Configure GPIO pin Output Level */
-    HAL_GPIO_WritePin(BSP_CONFIG_LD3_GPIO_Port, BSP_CONFIG_LD3_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(BSP_LED_CONFIG_LED_INDEX_0_GPIO_Port,
+                      BSP_LED_CONFIG_LED_INDEX_0_Pin,
+                      GPIO_PIN_RESET);
 
     /*Configure GPIO pin Output Level */
     HAL_GPIO_WritePin(BSP_CONFIG_REACTION_WHEEL_DIR_GPIO_Port,
@@ -60,11 +63,11 @@ void MX_GPIO_Init(void)
                       GPIO_PIN_RESET);
 
     /*Configure GPIO pin : PtPin */
-    GPIO_InitStruct.Pin   = BSP_CONFIG_LD3_Pin;
+    GPIO_InitStruct.Pin   = BSP_LED_CONFIG_LED_INDEX_0_Pin;
     GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull  = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(BSP_CONFIG_LD3_GPIO_Port, &GPIO_InitStruct);
+    HAL_GPIO_Init(BSP_LED_CONFIG_LED_INDEX_0_GPIO_Port, &GPIO_InitStruct);
 
     /*Configure GPIO pin : PtPin */
     GPIO_InitStruct.Pin   = BSP_CONFIG_REACTION_WHEEL_DIR_Pin;

@@ -52,6 +52,9 @@ set(STM32CUBEMX_GENERATED_FILES
     src/drivers/hal/Src/stm32l4xx_hal_uart.c
     src/drivers/hal/Src/stm32l4xx_hal_uart_ex.c
 
+    src/bsp/bsp.c
+    src/bsp/bsp_led.c
+    
     src/rtos/FreeRTOS/source/croutine.c
     src/rtos/FreeRTOS/source/event_groups.c
     src/rtos/FreeRTOS/source/list.c

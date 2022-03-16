@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file           : bsp_config.h
-  * @brief          : Header for Board Support Package (BSP).
-  *                   This file contains the common defines for BSP.
+  * @file           : bsp.h
+  * @brief          : Header for bsp.c file.
+  *                   This file contains the common defines for the BSP layer.
   ******************************************************************************
   * @attention
   *
@@ -10,8 +10,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __BSP_CONFIG_H
-#define __BSP_CONFIG_H
+#ifndef __BSP_H
+#define __BSP_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,24 +19,16 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 /* Private includes ----------------------------------------------------------*/
-#include "stm32l4xx_hal.h"
-
 /* Private defines -----------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
-
 /* Exported macro ------------------------------------------------------------*/
-#define BSP_CONFIG_SWDIO_Pin GPIO_PIN_13
-#define BSP_CONFIG_SWDIO_GPIO_Port GPIOA
-#define BSP_CONFIG_SWCLK_Pin GPIO_PIN_14
-#define BSP_CONFIG_SWCLK_GPIO_Port GPIOA
-#define BSP_CONFIG_REACTION_WHEEL_DIR_Pin GPIO_PIN_3
-#define BSP_CONFIG_REACTION_WHEEL_DIR_GPIO_Port GPIOH
-
 /* Exported functions prototypes ---------------------------------------------*/
+void BSP_init(void);
+void BSP_deinit(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __BSP_CONFIG_H */
+#endif /* __BSP_H */

@@ -1,6 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
+#include "stm32l4xx_hal.h"
 #include "main.h"
-#include "bsp/bsp_config.h"
+#include "bsp/bsp.h"
 #include "drivers/drivers.h"
 #include "drivers/clock/clock.h"
 #include "middlewares/middlewares.h"
@@ -24,6 +25,7 @@ int main(void)
     CLOCK_systemClockInit();
 
     DRIVERS_init();
+    BSP_init();
 
     /* Init scheduler */
     osKernelInitialize(); /* Call init function for freertos objects (in freertos.c) */
@@ -36,14 +38,5 @@ int main(void)
     /* We should never get here as control is now taken by the scheduler */
     /* Infinite loop */
     while (1) {
-    }
-}
-
-
-void StartDefaultTask(void *argument)
-{
-    for (;;) {
-        HAL_GPIO_TogglePin(BSP_CONFIG_LD3_GPIO_Port, BSP_CONFIG_LD3_Pin);
-        vTaskDelay(pdMS_TO_TICKS(100));
     }
 }

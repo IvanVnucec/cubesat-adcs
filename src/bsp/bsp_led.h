@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file           : bsp_config.h
-  * @brief          : Header for Board Support Package (BSP).
-  *                   This file contains the common defines for BSP.
+  * @file           : bsp_led.h
+  * @brief          : Header for bsp_led.c file.
+  *                   This file contains the common defines for LED on board.
   ******************************************************************************
   * @attention
   *
@@ -10,8 +10,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __BSP_CONFIG_H
-#define __BSP_CONFIG_H
+#ifndef __BSP_LED_H
+#define __BSP_LED_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,24 +19,23 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 /* Private includes ----------------------------------------------------------*/
-#include "stm32l4xx_hal.h"
-
 /* Private defines -----------------------------------------------------------*/
+
 /* Exported types ------------------------------------------------------------*/
+typedef enum { BSP_LED_INDEX_0, BSP_LED_INDEX_LENGTH } BSP_LED_Index;
+
+typedef enum { BSP_LED_STATE_ON, BSP_LED_STATE_OFF, BSP_LED_STATE_LENGTH } BSP_LED_State;
+
 /* Exported constants --------------------------------------------------------*/
-
 /* Exported macro ------------------------------------------------------------*/
-#define BSP_CONFIG_SWDIO_Pin GPIO_PIN_13
-#define BSP_CONFIG_SWDIO_GPIO_Port GPIOA
-#define BSP_CONFIG_SWCLK_Pin GPIO_PIN_14
-#define BSP_CONFIG_SWCLK_GPIO_Port GPIOA
-#define BSP_CONFIG_REACTION_WHEEL_DIR_Pin GPIO_PIN_3
-#define BSP_CONFIG_REACTION_WHEEL_DIR_GPIO_Port GPIOH
-
 /* Exported functions prototypes ---------------------------------------------*/
+void BSP_LED_init(void);
+void BSP_LED_deinit(void);
+void BSP_LED_setState(BSP_LED_Index index, BSP_LED_State state);
+void BSP_LED_toggle(BSP_LED_Index index);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __BSP_CONFIG_H */
+#endif /* __BSP_LED_H */

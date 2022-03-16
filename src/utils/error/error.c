@@ -12,7 +12,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "error.h"
 
-#include "bsp/bsp_config.h"
+#include "bsp/bsp_led.h"
 #include "cmsis_os.h"
 #include "stm32l4xx_hal.h"
 
@@ -25,7 +25,7 @@
 
 void ERROR_signalFaultCondition(void)
 {
-    HAL_GPIO_WritePin(BSP_CONFIG_LD3_GPIO_Port, BSP_CONFIG_LD3_Pin, GPIO_PIN_SET);
+    BSP_LED_setState(BSP_LED_INDEX_0, BSP_LED_STATE_ON);
 }
 
 /**
@@ -46,8 +46,6 @@ https://www.freertos.org/Stacks-and-stack-overflow-checking.html
 #ifdef DEBUG
 void vApplicationStackOverflowHook(TaskHandle_t xTask, signed char *pcTaskName)
 {
-    __disable_irq();
-    while (1) {
-    }
+    ERROR_signalFaultConditionAndWaitIndefinitely();
 }
 #endif /* DEBUG */

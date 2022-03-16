@@ -1,9 +1,8 @@
 /**
   ******************************************************************************
-  * @file           : alive.c
+  * @file           : bsp.c
   * @brief          : Source file.
-  *                   This file contains the common code of the application
-  *                   which signals that everything is executing.
+  *                   This file contains the common code for the BSP layer.
   ******************************************************************************
   * @attention
   *
@@ -11,11 +10,9 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "alive.h"
+#include "bsp.h"
 
-#include "FreeRTOS.h"
-#include "bsp/bsp_led.h"
-#include "task.h"
+#include "bsp_led.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -24,10 +21,13 @@
 /* Private function prototypes -----------------------------------------------*/
 
 /* Private user code ---------------------------------------------------------*/
-void ALIVE_thread(void *argument)
+
+void BSP_init(void)
 {
-    for (;;) {
-        BSP_LED_toggle(BSP_LED_INDEX_0);
-        vTaskDelay(pdMS_TO_TICKS(100));
-    }
+    BSP_LED_init();
+}
+
+void BSP_deinit(void)
+{
+    BSP_LED_deinit();
 }
