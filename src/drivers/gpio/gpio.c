@@ -21,7 +21,7 @@
 #include "gpio.h"
 
 #include "bsp/bsp_config.h"
-#include "bsp/bsp_led_config.h"
+#include "bsp/led/bsp_led_config.h"
 #include "stm32l4xx_hal.h"
 
 /* USER CODE BEGIN 0 */

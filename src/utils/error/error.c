@@ -12,7 +12,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "error.h"
 
-#include "bsp/bsp_led.h"
+#include "bsp/led/bsp_led.h"
 #include "cmsis_os.h"
 #include "stm32l4xx_hal.h"
 
