@@ -17,7 +17,6 @@ set(STM32CUBEMX_GENERATED_FILES
     src/core/main.c
     src/core/gpio.c
     src/core/freertos.c
-    src/core/i2c.c
     src/core/spi.c
     src/core/tim.c
     src/core/usart.c
@@ -27,6 +26,8 @@ set(STM32CUBEMX_GENERATED_FILES
     src/core/syscalls.c
     src/core/sysmem.c
     src/core/system_stm32l4xx.c
+
+    src/drivers/i2c/i2c.c
 
     src/drivers/hal/Src/stm32l4xx_hal.c
     src/drivers/hal/Src/stm32l4xx_hal_i2c.c
