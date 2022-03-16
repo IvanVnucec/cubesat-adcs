@@ -15,7 +15,6 @@ set(CMAKE_C_EXTENSIONS OFF)
 set(STM32CUBEMX_GENERATED_FILES
     src/core/startup_stm32l412kbux.s
     src/core/main.c
-    src/core/gpio.c
     src/core/freertos.c
     src/core/spi.c
     src/core/tim.c
@@ -27,6 +26,7 @@ set(STM32CUBEMX_GENERATED_FILES
     src/core/sysmem.c
     src/core/system_stm32l4xx.c
 
+    src/drivers/gpio/gpio.c
     src/drivers/i2c/i2c.c
 
     src/drivers/hal/Src/stm32l4xx_hal.c

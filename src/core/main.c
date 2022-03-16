@@ -5,7 +5,7 @@
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
-#include "gpio.h"
+#include "drivers/gpio/gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
