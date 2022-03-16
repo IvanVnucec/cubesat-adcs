@@ -2,7 +2,7 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "drivers/i2c/i2c.h"
-#include "spi.h"
+#include "drivers/spi/spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "drivers/gpio/gpio.h"
