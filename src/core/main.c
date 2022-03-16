@@ -21,7 +21,6 @@ const osThreadAttr_t defaultTask_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-void MX_FREERTOS_Init(void);
 void StartDefaultTask(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
@@ -43,7 +42,6 @@ int main(void)
 
   /* Init scheduler */
   osKernelInitialize();  /* Call init function for freertos objects (in freertos.c) */
-  MX_FREERTOS_Init();
 
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
   assert(defaultTaskHandle != NULL);
@@ -140,6 +138,21 @@ void StartDefaultTask(void *argument)
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
+
+
+/* Stack overflow hook
+https://www.freertos.org/Stacks-and-stack-overflow-checking.html
+*/
+#ifdef DEBUG
+void vApplicationStackOverflowHook( TaskHandle_t xTask, signed char *pcTaskName )
+{
+  __disable_irq();
+  while(1)
+  {
+  }
+}
+#endif /* DEBUG */
+
 
 #ifdef  USE_FULL_ASSERT
 /**
