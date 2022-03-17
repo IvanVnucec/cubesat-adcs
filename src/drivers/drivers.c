@@ -12,7 +12,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "drivers.h"
 
-#include "drivers/gpio/gpio.h"
 #include "drivers/i2c/i2c.h"
 #include "drivers/spi/spi.h"
 #include "drivers/tim/tim.h"
@@ -31,7 +30,6 @@
  */
 void DRIVERS_init(void)
 {
-    MX_GPIO_Init();
     MX_SPI1_Init();
     MX_TIM1_Init();
     MX_USART1_UART_Init();

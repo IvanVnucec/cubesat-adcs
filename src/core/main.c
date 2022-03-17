@@ -1,6 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx_hal.h"
 #include "main.h"
+#include "mcu/mcu.h"
 #include "bsp/bsp.h"
 #include "drivers/drivers.h"
 #include "drivers/clock/clock.h"
@@ -24,6 +25,7 @@ int main(void)
     /* Configure the system clock */
     CLOCK_systemClockInit();
 
+    MCU_init();
     DRIVERS_init();
     BSP_init();
 

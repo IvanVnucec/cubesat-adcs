@@ -22,11 +22,13 @@ set(STM32CUBEMX_GENERATED_FILES
     src/core/sysmem.c
     src/core/system_stm32l4xx.c
 
+    src/mcu/mcu.c
+    src/mcu/gpio/mcu_gpio.c
+
     src/drivers/drivers.c
     src/drivers/uart/usart.c
     src/drivers/tim/tim.c
     src/drivers/spi/spi.c
-    src/drivers/gpio/gpio.c
     src/drivers/i2c/i2c.c
     src/drivers/clock/clock.c
 
