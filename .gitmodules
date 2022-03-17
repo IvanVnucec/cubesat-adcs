@@ -1,3 +1,6 @@
 [submodule "src/libs/printf"]
 	path = src/libs/printf
 	url = https://github.com/eyalroz/printf.git
+[submodule "src/libs/optimal_request"]
+	path = src/libs/optimal_request
+	url = https://github.com/IvanVnucec/Optimal-REQUEST

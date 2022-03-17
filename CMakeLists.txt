@@ -72,6 +72,13 @@ set(STM32CUBEMX_GENERATED_FILES
     src/middlewares/alive/alive.c
 
     src/libs/printf/src/printf/printf.c
+    src/libs/optimal_request/src/opt_req/get_quat_from_K_data.c
+    src/libs/optimal_request/src/opt_req/get_quat_from_K_initialize.c
+    src/libs/optimal_request/src/opt_req/get_quat_from_K_terminate.c
+    src/libs/optimal_request/src/opt_req/get_quat_from_K.c
+    src/libs/optimal_request/src/opt_req/optimal_request_init.c
+    src/libs/optimal_request/src/opt_req/optimal_request.c
+    src/libs/optimal_request/src/opt_req/vecnorm.c
 
     src/utils/error/error.c
 )
@@ -101,6 +108,7 @@ target_include_directories(${EXECUTABLE} PRIVATE
     src/rtos/FreeRTOS/source/portable/GCC/ARM_CM4F
 
     src/libs/printf/src
+    src/libs/optimal_request/src
 )
 
 target_compile_options(${EXECUTABLE} PRIVATE
