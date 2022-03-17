@@ -24,8 +24,9 @@ To install all the dependencies on the Ubuntu 21.10, user can just follow the st
 3. Install all dependencies by running `make install_deps` (requires sudo privileges)
 
 ### Building
-1. Setup CMake with `make setup_cmake` (needed only once)
-2. Build with `make build` or simply `make`
+1. Clone git submodules with `git submodule update --init --recursive`
+2. Setup CMake with `make setup_cmake` (needed only once)
+3. Build with `make build` or simply `make`
 
 ### Debugging
 #### With vscode

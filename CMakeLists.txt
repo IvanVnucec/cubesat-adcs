@@ -71,6 +71,8 @@ set(STM32CUBEMX_GENERATED_FILES
     src/middlewares/middlewares.c
     src/middlewares/alive/alive.c
 
+    src/libs/printf/src/printf/printf.c
+
     src/utils/error/error.c
 )
 
@@ -97,6 +99,8 @@ target_include_directories(${EXECUTABLE} PRIVATE
     src/rtos/FreeRTOS/source/include
     src/rtos/FreeRTOS/source/CMSIS_RTOS_V2
     src/rtos/FreeRTOS/source/portable/GCC/ARM_CM4F
+
+    src/libs/printf/src
 )
 
 target_compile_options(${EXECUTABLE} PRIVATE
