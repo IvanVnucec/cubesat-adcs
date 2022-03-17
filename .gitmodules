@@ -4,3 +4,6 @@
 [submodule "src/libs/optimal_request"]
 	path = src/libs/optimal_request
 	url = https://github.com/IvanVnucec/Optimal-REQUEST
+[submodule "src/libs/mpu9250"]
+	path = src/libs/mpu9250
+	url = https://github.com/IvanVnucec/MPU9250

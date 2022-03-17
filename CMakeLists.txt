@@ -79,6 +79,7 @@ set(STM32CUBEMX_GENERATED_FILES
     src/libs/optimal_request/src/opt_req/optimal_request_init.c
     src/libs/optimal_request/src/opt_req/optimal_request.c
     src/libs/optimal_request/src/opt_req/vecnorm.c
+    src/libs/mpu9250/src/mpu9250/mpu9250.c
 
     src/utils/error/error.c
 )
@@ -109,6 +110,7 @@ target_include_directories(${EXECUTABLE} PRIVATE
 
     src/libs/printf/src
     src/libs/optimal_request/src
+    src/libs/mpu9250/src
 )
 
 target_compile_options(${EXECUTABLE} PRIVATE
