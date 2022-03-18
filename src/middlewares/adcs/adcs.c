@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * @file           : mpu.c
+  * @file           : adcs.c
   * @brief          : Source file.
   *                   This file contains the common code of the application
-  *                   which gets the data from the imu.
+  *                   which is determing and controling sattelite attitude.
   ******************************************************************************
   * @attention
   *
@@ -11,7 +11,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "mpu.h"
+#include "adcs.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -23,9 +23,9 @@
 /* Private function prototypes -----------------------------------------------*/
 
 /* Private user code ---------------------------------------------------------*/
-void MPU_thread(void *argument)
+void ADCS_thread(void *argument)
 {
     for (;;) {
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }

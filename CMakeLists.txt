@@ -70,7 +70,7 @@ set(STM32CUBEMX_GENERATED_FILES
 
     src/middlewares/middlewares.c
     src/middlewares/alive/alive.c
-    src/middlewares/mpu/mpu.c
+    src/middlewares/adcs/adcs.c
     src/middlewares/communication/comm.c
 
     src/libs/printf/src/printf/printf.c

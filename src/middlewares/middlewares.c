@@ -14,7 +14,7 @@
 
 #include "cmsis_os.h"
 #include "middlewares/alive/alive.h"
-#include "middlewares/mpu/mpu.h"
+#include "middlewares/adcs/adcs.h"
 #include "middlewares/communication/comm.h"
 #include "utils/error/error.h"
 
@@ -31,9 +31,9 @@ static const osThreadAttr_t aliveThreadAttributes = {
     .priority   = (osPriority_t)osPriorityLow,
 };
 
-static osThreadId_t mpuThreadHandle             = NULL;
-static const osThreadAttr_t mpuThreadAttributes = {
-    .name       = "mpuThread",
+static osThreadId_t adcsThreadHandle             = NULL;
+static const osThreadAttr_t adcsThreadAttributes = {
+    .name       = "adcsThread",
     .stack_size = 128 * 4,
     .priority   = (osPriority_t)osPriorityRealtime,
 };
@@ -56,8 +56,8 @@ void MIDDLEWARES_initThreads(void)
         ERROR_signalFaultConditionAndWaitIndefinitely();
     }
 
-    mpuThreadHandle = osThreadNew(MPU_thread, NULL, &mpuThreadAttributes);
-    if (mpuThreadHandle == NULL) {
+    adcsThreadHandle = osThreadNew(ADCS_thread, NULL, &adcsThreadAttributes);
+    if (adcsThreadHandle == NULL) {
         ERROR_signalFaultConditionAndWaitIndefinitely();
     }
 

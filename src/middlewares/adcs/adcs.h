@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * @file           : mpu.h
-  * @brief          : Header for mpu.c file.
+  * @file           : adcs.h
+  * @brief          : Header for adcs.c file.
   *                   This file contains the common defines of the application
-  *                   which gets the data from the imu.
+  *                   which is determing and controling sattelite attitude.
   ******************************************************************************
   * @attention
   *
@@ -11,8 +11,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __MPU_H
-#define __MPU_H
+#ifndef __ADCS_H
+#define __ADCS_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -25,10 +25,10 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions prototypes ---------------------------------------------*/
-void MPU_thread(void *argument);
+void ADCS_thread(void *argument);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __MPU_H */
+#endif /* __ADCS_H */
