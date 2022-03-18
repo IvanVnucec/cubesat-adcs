@@ -13,8 +13,8 @@
 #include "middlewares.h"
 
 #include "cmsis_os.h"
-#include "middlewares/alive/alive.h"
 #include "middlewares/adcs/adcs.h"
+#include "middlewares/alive/alive.h"
 #include "middlewares/communication/comm.h"
 #include "utils/error/error.h"
 
