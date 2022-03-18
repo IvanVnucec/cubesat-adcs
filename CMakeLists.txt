@@ -71,6 +71,7 @@ set(STM32CUBEMX_GENERATED_FILES
     src/middlewares/middlewares.c
     src/middlewares/alive/alive.c
     src/middlewares/mpu/mpu.c
+    src/middlewares/communication/comm.c
 
     src/libs/printf/src/printf/printf.c
     src/libs/optimal_request/src/opt_req/get_quat_from_K_data.c
