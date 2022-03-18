@@ -14,6 +14,7 @@
 
 #include "cmsis_os.h"
 #include "middlewares/alive/alive.h"
+#include "middlewares/mpu/mpu.h"
 #include "utils/error/error.h"
 
 /* Private typedef -----------------------------------------------------------*/
@@ -29,6 +30,13 @@ static const osThreadAttr_t aliveThreadAttributes = {
     .priority   = (osPriority_t)osPriorityLow,
 };
 
+static osThreadId_t mpuThreadHandle             = NULL;
+static const osThreadAttr_t mpuThreadAttributes = {
+    .name       = "mpuThread",
+    .stack_size = 128 * 4,
+    .priority   = (osPriority_t)osPriorityRealtime,
+};
+
 /* Private function prototypes -----------------------------------------------*/
 
 /* Private user code ---------------------------------------------------------*/
@@ -37,6 +45,11 @@ void MIDDLEWARES_initThreads(void)
 {
     aliveThreadHandle = osThreadNew(ALIVE_thread, NULL, &aliveThreadAttributes);
     if (aliveThreadHandle == NULL) {
+        ERROR_signalFaultConditionAndWaitIndefinitely();
+    }
+
+    mpuThreadHandle = osThreadNew(MPU_thread, NULL, &mpuThreadAttributes);
+    if (mpuThreadHandle == NULL) {
         ERROR_signalFaultConditionAndWaitIndefinitely();
     }
 }

@@ -6,6 +6,7 @@
 #include "drivers/drivers.h"
 #include "drivers/clock/clock.h"
 #include "middlewares/middlewares.h"
+#include "utils/error/error.h"
 #include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -38,6 +39,9 @@ int main(void)
     osKernelStart();
 
     /* We should never get here as control is now taken by the scheduler */
+    
+    ERROR_signalFaultConditionAndWaitIndefinitely();
+    
     /* Infinite loop */
     while (1) {
     }
