@@ -23,6 +23,12 @@
 /* Private function prototypes -----------------------------------------------*/
 /* Private user code ---------------------------------------------------------*/
 
+void ERROR_assert(int condition)
+{
+    if (!condition)
+        ERROR_signalFaultConditionAndWaitIndefinitely();
+}
+
 void ERROR_signalFaultCondition(void)
 {
     BSP_LED_setState(BSP_LED_INDEX_0, BSP_LED_STATE_ON);

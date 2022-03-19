@@ -26,6 +26,7 @@ extern "C" {
 /* Exported macro ------------------------------------------------------------*/
 
 /* Exported functions prototypes ---------------------------------------------*/
+void ERROR_assert(int condition);
 void ERROR_signalFaultCondition(void);
 void ERROR_signalFaultConditionAndWaitIndefinitely(void);
 
