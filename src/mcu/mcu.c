@@ -13,6 +13,7 @@
 #include "mcu.h"
 
 #include "mcu/gpio/mcu_gpio.h"
+#include "mcu/uart/mcu_uart.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -24,4 +25,5 @@
 void MCU_init(void)
 {
     MCU_GPIO_init();
+    MCU_UART_init();
 }

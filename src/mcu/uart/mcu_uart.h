@@ -1,16 +1,15 @@
 /**
   ******************************************************************************
-  * @file    usart.h
+  * @file    mcu_uart.h
   * @brief   This file contains all the function prototypes for
-  *          the usart.c file
+  *          the mcu_uart.c file
   ******************************************************************************
-  * @attention
   *
   ******************************************************************************
   */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __USART_H__
-#define __USART_H__
+#ifndef __MCU_UART_H__
+#define __MCU_UART_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,10 +20,10 @@ extern "C" {
 
 extern UART_HandleTypeDef huart1;
 
-void MX_USART1_UART_Init(void);
+void MCU_UART_init(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __USART_H__ */
+#endif /* __MCU_UART_H__ */
