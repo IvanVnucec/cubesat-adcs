@@ -21,7 +21,16 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
+
 /* Exported constants --------------------------------------------------------*/
+#define MIDDLEWARES_ALIVE_THREAD_STACK_SIZE (128 * 4)
+#define MIDDLEWARES_ADCS_THREAD_STACK_SIZE (128 * 6)
+#define MIDDLEWARES_COMM_THREAD_STACK_SIZE (128 * 4)
+
+#define MIDDLEWARES_THREAD_STACK_SIZES                                        \
+    (MIDDLEWARES_ALIVE_THREAD_STACK_SIZE + MIDDLEWARES_ADCS_THREAD_STACK_SIZE \
+     + MIDDLEWARES_COMM_THREAD_STACK_SIZE)
+
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions prototypes ---------------------------------------------*/
 void MIDDLEWARES_initThreads(void);

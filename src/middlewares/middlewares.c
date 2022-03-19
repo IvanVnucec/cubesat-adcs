@@ -27,21 +27,21 @@
 static osThreadId_t aliveThreadHandle             = NULL;
 static const osThreadAttr_t aliveThreadAttributes = {
     .name       = "aliveThread",
-    .stack_size = 128 * 4,
+    .stack_size = MIDDLEWARES_ALIVE_THREAD_STACK_SIZE,
     .priority   = (osPriority_t)osPriorityLow,
 };
 
 static osThreadId_t adcsThreadHandle             = NULL;
 static const osThreadAttr_t adcsThreadAttributes = {
     .name       = "adcsThread",
-    .stack_size = 128 * 4,
+    .stack_size = MIDDLEWARES_ADCS_THREAD_STACK_SIZE,
     .priority   = (osPriority_t)osPriorityRealtime,
 };
 
 static osThreadId_t commThreadHandle             = NULL;
 static const osThreadAttr_t commThreadAttributes = {
     .name       = "commThread",
-    .stack_size = 128 * 4,
+    .stack_size = MIDDLEWARES_COMM_THREAD_STACK_SIZE,
     .priority   = (osPriority_t)osPriorityLow1,
 };
 
