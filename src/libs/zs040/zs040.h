@@ -29,8 +29,8 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 void ZS040_init(void);
-void ZS040_receiveBlocking(uint8_t *data, unsigned *len);
-void ZS040_sendBlocking(const uint8_t *data, const unsigned len);
+void ZS040_receive(uint8_t *data, unsigned *len);
+void ZS040_send(const uint8_t *data, const unsigned len);
 
 #ifdef __cplusplus
 }
