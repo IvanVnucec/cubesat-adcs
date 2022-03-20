@@ -25,11 +25,11 @@ set(STM32CUBEMX_GENERATED_FILES
     src/mcu/mcu.c
     src/mcu/gpio/mcu_gpio.c
     src/mcu/uart/mcu_uart.c
+    src/mcu/i2c/mcu_i2c.c
 
     src/drivers/drivers.c
     src/drivers/tim/tim.c
     src/drivers/spi/spi.c
-    src/drivers/i2c/i2c.c
     src/drivers/clock/clock.c
 
     src/drivers/hal/Src/stm32l4xx_hal.c
