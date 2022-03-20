@@ -21,6 +21,7 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 
 /* Private includes ----------------------------------------------------------*/
+#include "libs/mpu9250/src/mpu9250/mpu9250.h"
 #include "libs/optimal_request/src/opt_req/get_quat_from_K.h"
 
 /* Private defines -----------------------------------------------------------*/
@@ -35,6 +36,7 @@ typedef struct {
 
 typedef struct {
     struct0_T optReqHandle;
+    MPU9250_Handle_s mpu9250Handle;
 } ADCS_Handle_T;
 
 /* Exported constants --------------------------------------------------------*/
