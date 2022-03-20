@@ -34,6 +34,8 @@ typedef struct {
 } ADCS_Handle_T;
 
 /* Exported constants --------------------------------------------------------*/
+#define ADCS_THREAD_PERIOD_IN_MILISECONDS (10U)
+
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions prototypes ---------------------------------------------*/
 void ADCS_thread(void *argument);

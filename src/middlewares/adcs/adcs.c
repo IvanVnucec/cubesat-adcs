@@ -60,7 +60,7 @@ void ADCS_thread(void *argument)
         // TODO: calculate delta
         ADCS_controlAttitude(quat, time_delta);
 
-        ADCS_delayMs(10);
+        ADCS_delayMs(ADCS_THREAD_PERIOD_IN_MILISECONDS);
     }
 }
 
