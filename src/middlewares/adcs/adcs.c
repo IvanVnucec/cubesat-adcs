@@ -14,13 +14,11 @@
 #include "adcs.h"
 
 #include "FreeRTOS.h"
-#include "libs/mpu9250/src/mpu9250/mpu9250.h"
+#include "adcs_imu.h"
+#include "libs/optimal_request/src/opt_req/get_quat_from_K.h"
 #include "libs/optimal_request/src/opt_req/optimal_request.h"
 #include "libs/optimal_request/src/opt_req/optimal_request_init.h"
-#include "mcu/i2c/mcu_i2c.h"
-#include "stm32l4xx_hal.h"
 #include "task.h"
-#include "utils/error/error.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -34,7 +32,6 @@ static ADCS_Handle_T ADCS_handle;
 
 /* Private function prototypes -----------------------------------------------*/
 static void ADCS_init(void);
-static void ADCS_getImuData(ADCS_ImuData_T *imu_data);
 static void ADCS_determineAttitude(ADCS_Quaternion_T quat,
                                    const ADCS_ImuData_T *imu_data);
 static void ADCS_controlAttitude(const ADCS_Quaternion_T quat, const float time_delta);
@@ -46,10 +43,6 @@ static void ADCS_optReqFillBMatrice(struct0_T *optReqHandle,
                                     const float bdy_acc[3],
                                     const float bdy_mag[3]);
 static void ADCS_optReqFillWMatrice(struct0_T *optReqHandle, const float bdy_gyr[3]);
-static void ADCS_initMPU9250(MPU9250_Handle_s *mpu9250Handle);
-static int ADCS_writeToMpu9250(uint8_t subAddress, uint8_t data);
-static int ADCS_readFromMpu9250(uint8_t subAddress, uint8_t count, uint8_t *dest);
-static void ADCS_delayMs(unsigned ms);
 
 /* Private user code ---------------------------------------------------------*/
 void ADCS_thread(void *argument)
@@ -61,7 +54,7 @@ void ADCS_thread(void *argument)
     ADCS_init();
 
     for (;;) {
-        ADCS_getImuData(&imu_data);
+        ADCS_IMU_getData(&imu_data);
         ADCS_determineAttitude(quat, &imu_data);
 
         // TODO: calculate delta
@@ -73,25 +66,8 @@ void ADCS_thread(void *argument)
 
 static void ADCS_init(void)
 {
-    ADCS_initMPU9250(&ADCS_handle.mpu9250Handle);
+    ADCS_IMU_init(&ADCS_handle);
     ADCS_initOptReq(&ADCS_handle.optReqHandle);
-}
-
-static void ADCS_getImuData(ADCS_ImuData_T *imu_data)
-{
-    ERROR_assert(MPU9250_readSensor(&ADCS_handle.mpu9250Handle) == 1);
-
-    imu_data->acc[0] = MPU9250_getAccelX_mss(&ADCS_handle.mpu9250Handle);
-    imu_data->acc[1] = MPU9250_getAccelY_mss(&ADCS_handle.mpu9250Handle);
-    imu_data->acc[2] = MPU9250_getAccelZ_mss(&ADCS_handle.mpu9250Handle);
-
-    imu_data->mag[0] = MPU9250_getMagX_uT(&ADCS_handle.mpu9250Handle);
-    imu_data->mag[1] = MPU9250_getMagY_uT(&ADCS_handle.mpu9250Handle);
-    imu_data->mag[2] = MPU9250_getMagZ_uT(&ADCS_handle.mpu9250Handle);
-
-    imu_data->gyr[0] = MPU9250_getGyroX_rads(&ADCS_handle.mpu9250Handle);
-    imu_data->gyr[1] = MPU9250_getGyroY_rads(&ADCS_handle.mpu9250Handle);
-    imu_data->gyr[2] = MPU9250_getGyroZ_rads(&ADCS_handle.mpu9250Handle);
 }
 
 static void ADCS_determineAttitude(ADCS_Quaternion_T quat, const ADCS_ImuData_T *imu_data)
@@ -108,62 +84,7 @@ static void ADCS_controlAttitude(const ADCS_Quaternion_T quat, const float time_
 {
 }
 
-static void ADCS_initMPU9250(MPU9250_Handle_s *mpu9250Handle)
-{
-    int retval = MPU9250_begin(&ADCS_writeToMpu9250,
-                               &ADCS_readFromMpu9250,
-                               &ADCS_delayMs,
-                               mpu9250Handle);
-
-    ERROR_assert(retval == 1);
-}
-
-static int ADCS_writeToMpu9250(uint8_t subAddress, uint8_t data)
-{
-    HAL_StatusTypeDef retval;
-
-    /*
-	 DevAddress Target device address: The device 7 bits address value
-	 in datasheet must be shifted to the left before calling the interface
-	 */
-    retval = HAL_I2C_Mem_Write(&hi2c3,
-                               MPU9250_I2C_ADDRESS << 1,
-                               subAddress,
-                               I2C_MEMADD_SIZE_8BIT,
-                               &data,
-                               1,
-                               10);
-    if (retval != HAL_OK) {
-        return -1;    // failure
-    }
-
-    return 1;    // success
-}
-
-static int ADCS_readFromMpu9250(uint8_t subAddress, uint8_t count, uint8_t *dest)
-{
-    HAL_StatusTypeDef retval;
-
-    /*
-	 DevAddress Target device address: The device 7 bits address value
-	 in datasheet must be shifted to the left before calling the interface
-	 */
-    retval = HAL_I2C_Mem_Read(&hi2c3,
-                              MPU9250_I2C_ADDRESS << 1,
-                              subAddress,
-                              I2C_MEMADD_SIZE_8BIT,
-                              dest,
-                              count,
-                              10);
-
-    if (retval != HAL_OK) {
-        return -1;    // failure
-    }
-
-    return 1;    // success
-}
-
-static void ADCS_delayMs(unsigned ms)
+void ADCS_delayMs(unsigned ms)
 {
     vTaskDelay(pdMS_TO_TICKS(ms));
 }
@@ -185,7 +106,7 @@ static void ADCS_initOptReq(struct0_T *optReqHandle)
     optReqHandle->Eta_noise_var = 0.0000010f;
     optReqHandle->dT            = 10.0f;
 
-    ADCS_getImuData(&imu_data);
+    ADCS_IMU_getData(&imu_data);
     ADCS_optReqFillBMatrice(optReqHandle, imu_data.acc, imu_data.mag);
     ADCS_optReqFillWMatrice(optReqHandle, imu_data.gyr);
 

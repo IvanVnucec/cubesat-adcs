@@ -29,12 +29,6 @@ extern "C" {
 typedef float ADCS_Quaternion_T[4];
 
 typedef struct {
-    float acc[3];
-    float mag[3];
-    float gyr[3];
-} ADCS_ImuData_T;
-
-typedef struct {
     struct0_T optReqHandle;
     MPU9250_Handle_s mpu9250Handle;
 } ADCS_Handle_T;
@@ -43,6 +37,7 @@ typedef struct {
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions prototypes ---------------------------------------------*/
 void ADCS_thread(void *argument);
+void ADCS_delayMs(unsigned ms);
 
 #ifdef __cplusplus
 }
