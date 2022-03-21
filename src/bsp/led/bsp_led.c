@@ -28,8 +28,8 @@ static const uint16_t BSP_LED_Index_To_GPIO_Pin[BSP_LED_INDEX_LENGTH] = {
 };
 
 static const GPIO_PinState BSP_LED_Index_To_GPIO_PinState[BSP_LED_STATE_LENGTH] = {
-    GPIO_PIN_RESET,
     GPIO_PIN_SET,
+    GPIO_PIN_RESET,
 };
 
 /* Private function prototypes -----------------------------------------------*/
