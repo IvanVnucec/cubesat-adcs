@@ -115,7 +115,7 @@ target_include_directories(${EXECUTABLE} PRIVATE
 
     src/libs/printf/src
     src/libs/optimal_request/src
-    src/libs/mpu9250/src
+    src/libs/mpu9250/include
 )
 
 target_compile_options(${EXECUTABLE} PRIVATE

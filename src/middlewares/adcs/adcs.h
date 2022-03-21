@@ -21,7 +21,7 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 
 /* Private includes ----------------------------------------------------------*/
-#include "libs/mpu9250/src/mpu9250/mpu9250.h"
+#include "mpu9250/mpu9250.h"
 #include "libs/optimal_request/src/opt_req/get_quat_from_K.h"
 
 /* Private defines -----------------------------------------------------------*/

@@ -14,7 +14,7 @@
 #include "adcs_imu.h"
 
 #include "adcs.h"
-#include "libs/mpu9250/src/mpu9250/mpu9250.h"
+#include "mpu9250/mpu9250.h"
 #include "mcu/i2c/mcu_i2c.h"
 #include "stm32l4xx_hal.h"
 #include "utils/error/error.h"
