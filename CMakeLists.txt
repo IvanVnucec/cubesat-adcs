@@ -113,6 +113,7 @@ target_include_directories(${EXECUTABLE} PRIVATE
     src/rtos/FreeRTOS/source/CMSIS_RTOS_V2
     src/rtos/FreeRTOS/source/portable/GCC/ARM_CM4F
 
+    src/libs/zs040/include
     src/libs/printf/src
     src/libs/optimal_request/src
     src/libs/mpu9250/include

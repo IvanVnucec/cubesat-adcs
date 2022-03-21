@@ -15,7 +15,7 @@
 
 #include "FreeRTOS.h"
 #include "bsp/led/bsp_led.h"
-#include "libs/zs040/zs040.h"
+#include "zs040/zs040.h"
 #include "task.h"
 
 /* Private typedef -----------------------------------------------------------*/

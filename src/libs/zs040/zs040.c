@@ -12,7 +12,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include <stdint.h>
-#include "zs040.h"
+#include "zs040/zs040.h"
 #include "stm32l4xx_hal.h"
 #include "mcu/uart/mcu_uart.h"
 #include "utils/error/error.h"
