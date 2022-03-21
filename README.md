@@ -14,8 +14,8 @@
 - OpenOCD ([v0.11.0-rc2](https://github.com/xpack-dev-tools/openocd-xpack/releases))
 - Cppcheck ([v2.3](https://cppcheck.sourceforge.io/#download))
 - Visual Studio Code ([Link](https://code.visualstudio.com/download))
-    - Cortex-Debug ([LINK](https://marketplace.visualstudio.com/items?itemName=marus25.cortex-debug))
-    - (optional) C/C++ ([LINK](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools))
+    - Cortex-Debug ([Link](https://marketplace.visualstudio.com/items?itemName=marus25.cortex-debug))
+    - (optional) C/C++ ([Link](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools))
 
 ### Install dependencies
 To install all the dependencies on the Ubuntu 21.10, user can just follow the steps below. Steps below will install all the required tools and VSCode code editor with all the required extensions.
