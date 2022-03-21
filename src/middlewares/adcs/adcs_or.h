@@ -20,7 +20,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "adcs_imu.h"
-#include "libs/optimal_request/src/opt_req/optimal_request.h"
+#include "opt_req/optimal_request.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/

@@ -22,7 +22,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 #include "mpu9250/mpu9250.h"
-#include "libs/optimal_request/src/opt_req/get_quat_from_K.h"
+#include "opt_req/get_quat_from_K.h"
 
 /* Private defines -----------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/

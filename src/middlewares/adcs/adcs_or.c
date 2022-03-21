@@ -15,9 +15,9 @@
 
 #include "adcs.h"
 #include "adcs_imu.h"
-#include "libs/optimal_request/src/opt_req/get_quat_from_K.h"
-#include "libs/optimal_request/src/opt_req/optimal_request.h"
-#include "libs/optimal_request/src/opt_req/optimal_request_init.h"
+#include "opt_req/get_quat_from_K.h"
+#include "opt_req/optimal_request.h"
+#include "opt_req/optimal_request_init.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
