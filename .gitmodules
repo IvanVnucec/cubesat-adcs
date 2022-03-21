@@ -7,3 +7,6 @@
 [submodule "src/libs/mpu9250"]
 	path = src/libs/mpu9250
 	url = https://github.com/IvanVnucec/MPU9250
+[submodule "src/libs/zs040"]
+	path = src/libs/zs040
+	url = https://github.com/IvanVnucec/zs040
