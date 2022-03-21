@@ -16,34 +16,28 @@
 #include "FreeRTOS.h"
 #include "bsp/led/bsp_led.h"
 #include "task.h"
-#include "zs040/zs040.h"
+#include "middlewares/communication/comm.h"
+#include "utils/error/error.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define I_AM_ALIVE_STR ((const uint8_t *)"alive\n")
-#define I_AM_ALIVE_STR_LEN (6u)
+#define I_AM_ALIVE_STR ("alive\n")
 
 /* Private macro -------------------------------------------------------------*/
+
 /* Private variables ---------------------------------------------------------*/
+static const COMM_Message ALIVE_alive_msg = { I_AM_ALIVE_STR, 0 };
+
 /* Private function prototypes -----------------------------------------------*/
 
 /* Private user code ---------------------------------------------------------*/
 void ALIVE_thread(void *argument)
 {
-    int i = 0;
-
-    ZS040_init();
-
+    static COMM_Status status;
     for (;;) {
         BSP_LED_toggle(BSP_LED_INDEX_0);
-
-        i++;
-        // send alive string every 10th time
-        if (i >= 10) {
-            ZS040_send(I_AM_ALIVE_STR, I_AM_ALIVE_STR_LEN);
-            i = 0;
-        }
-
+        COMM_sendMessage(&ALIVE_alive_msg, &status);
+        ERROR_assert(status == COMM_STATUS_OK);
         vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
