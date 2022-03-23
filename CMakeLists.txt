@@ -134,7 +134,7 @@ target_compile_options(${EXECUTABLE} PRIVATE
     -fno-exceptions
     -Wmissing-include-dirs
     -fstack-usage
-    $<$<CONFIG:Debug>:-Og>
+    $<$<CONFIG:Debug>:-O0>
     $<$<CONFIG:Release>:-Os>
 
     # C FLAGS
