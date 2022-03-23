@@ -16,11 +16,12 @@
 #include "cmsis_os2.h"
 #include "utils/error/error.h"
 #include "zs040/zs040.h"
+#include "FreeRTOS.h"
 
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
-#define MSGQUEUE_OBJECTS 16
+#define MSGQUEUE_OBJECTS 5
 
 /* Private macro -------------------------------------------------------------*/
 
@@ -52,13 +53,22 @@ void COMM_thread(void *argument)
 
 void COMM_sendMessage(const COMM_Message *const msg, COMM_Status *status)
 {
-    *status = COMM_STATUS_ERROR;
+    COMM_Status comm_status = COMM_STATUS_ERROR;
+    osStatus_t os_status;
 
-    osStatus_t os_status = osMessageQueuePut(COMM_msgQueueId, &msg, 0U, 0U);
+    if (msg != NULL && COMM_msgQueueId != NULL) {
+        do {
+            os_status = osMessageQueuePut(COMM_msgQueueId, &msg, 0U, portMAX_DELAY);
+        } while(os_status == osErrorTimeout);
+        
+        if (os_status == osOK) {
+            comm_status = COMM_STATUS_OK;
+        }
+    }
     
-    if (os_status == osOK) {
-        status = COMM_STATUS_OK;
-    } 
+    if (status != NULL) {
+        *status = comm_status; 
+    }
 }
 
 static void COMM_init(COMM_Status *status)
@@ -75,12 +85,15 @@ static void COMM_init(COMM_Status *status)
 
 static void COMM_getMessage(COMM_Message *msg, COMM_Status *status)
 {
+    osStatus_t os_status;
     *status = COMM_STATUS_ERROR;
 
-    osStatus_t os_status = osMessageQueueGet(COMM_msgQueueId, msg, NULL, 0U);   // wait for message
-    
+    do {
+        os_status = osMessageQueueGet(COMM_msgQueueId, msg, NULL, portMAX_DELAY);
+    } while (os_status == osErrorTimeout);
+
     if (os_status == osOK) {
-        status = COMM_STATUS_OK;
+        *status = COMM_STATUS_OK;
     } 
 }
 
