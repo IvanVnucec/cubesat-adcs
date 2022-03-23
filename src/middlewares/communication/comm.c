@@ -16,7 +16,6 @@
 #include "cmsis_os2.h"
 #include "utils/error/error.h"
 #include "zs040/zs040.h"
-#include "FreeRTOS.h"
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -30,7 +29,8 @@ static osMessageQueueId_t COMM_msgQueueId = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
 static void COMM_init(COMM_Status *status);
-static void COMM_sendMessageOverBluetooth(const COMM_Message * const msg, COMM_Status *status);
+static void COMM_sendMessageOverBluetooth(const COMM_Message *const msg,
+                                          COMM_Status *status);
 static void COMM_getMessage(COMM_Message *msg, COMM_Status *status);
 
 /* Private user code ---------------------------------------------------------*/
@@ -58,16 +58,16 @@ void COMM_sendMessage(const COMM_Message *const msg, COMM_Status *status)
 
     if (msg != NULL && COMM_msgQueueId != NULL) {
         do {
-            os_status = osMessageQueuePut(COMM_msgQueueId, &msg, 0U, portMAX_DELAY);
-        } while(os_status == osErrorTimeout);
-        
+            os_status = osMessageQueuePut(COMM_msgQueueId, msg, 0U, osWaitForever);
+        } while (os_status == osErrorTimeout);
+
         if (os_status == osOK) {
             comm_status = COMM_STATUS_OK;
         }
     }
-    
+
     if (status != NULL) {
-        *status = comm_status; 
+        *status = comm_status;
     }
 }
 
@@ -89,19 +89,27 @@ static void COMM_getMessage(COMM_Message *msg, COMM_Status *status)
     *status = COMM_STATUS_ERROR;
 
     do {
-        os_status = osMessageQueueGet(COMM_msgQueueId, msg, NULL, portMAX_DELAY);
+        os_status = osMessageQueueGet(COMM_msgQueueId, msg, NULL, osWaitForever);
     } while (os_status == osErrorTimeout);
 
     if (os_status == osOK) {
         *status = COMM_STATUS_OK;
-    } 
+    }
 }
 
-static void COMM_sendMessageOverBluetooth(const COMM_Message * const msg, COMM_Status *status)
+static void COMM_sendMessageOverBluetooth(const COMM_Message *const msg,
+                                          COMM_Status *status)
 {
-    *status = COMM_STATUS_ERROR;
-    
-    ZS040_send(msg->Buf, COMM_MESSAGE_MAX_BUFF_LEN);
+    COMM_Status priv_status = COMM_STATUS_ERROR;
 
-    *status = COMM_STATUS_OK;
+    if (msg != NULL) {
+        if (msg->buffer != NULL && msg->msg_len < COMM_MESSAGE_MAX_BUFF_LEN) {
+            ZS040_send(msg->buffer, msg->msg_len);
+            priv_status = COMM_STATUS_OK;
+        }
+    }
+
+    if (status != NULL) {
+        *status = priv_status;
+    }
 }

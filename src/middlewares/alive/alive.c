@@ -15,18 +15,19 @@
 
 #include "FreeRTOS.h"
 #include "bsp/led/bsp_led.h"
-#include "task.h"
 #include "middlewares/communication/comm.h"
+#include "task.h"
 #include "utils/error/error.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 #define I_AM_ALIVE_STR ("alive\n")
+#define I_AM_ALIVE_STR_LEN (6)
 
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-static const COMM_Message ALIVE_alive_msg = { I_AM_ALIVE_STR, 0 };
+static const COMM_Message ALIVE_alive_msg = {I_AM_ALIVE_STR, I_AM_ALIVE_STR_LEN};
 
 /* Private function prototypes -----------------------------------------------*/
 
