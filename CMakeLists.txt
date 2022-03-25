@@ -121,7 +121,7 @@ target_include_directories(${EXECUTABLE} PRIVATE
 
 target_compile_options(${EXECUTABLE} PRIVATE
     # COMMON FLAGS
-    -mcpu=cortex-m4
+    -march=armv7e-m
     -g3
     -specs=nano.specs
     -mthumb
@@ -144,7 +144,7 @@ target_compile_options(${EXECUTABLE} PRIVATE
 set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/src/linker/STM32L412KBUX_FLASH.ld")
 
 target_link_options(${EXECUTABLE} PRIVATE
-    -mcpu=cortex-m4 
+    -march=armv7e-m 
     -T${LINKER_SCRIPT}
     --specs=nosys.specs 
     --specs=nano.specs 
