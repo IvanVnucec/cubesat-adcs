@@ -20,7 +20,7 @@
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
-#define MSGQUEUE_OBJECTS 16
+#define MSGQUEUE_OBJECTS 5
 
 /* Private macro -------------------------------------------------------------*/
 
@@ -29,7 +29,8 @@ static osMessageQueueId_t COMM_msgQueueId = NULL;
 
 /* Private function prototypes -----------------------------------------------*/
 static void COMM_init(COMM_Status *status);
-static void COMM_sendMessageOverBluetooth(const COMM_Message * const msg, COMM_Status *status);
+static void COMM_sendMessageOverBluetooth(const COMM_Message *const msg,
+                                          COMM_Status *status);
 static void COMM_getMessage(COMM_Message *msg, COMM_Status *status);
 
 /* Private user code ---------------------------------------------------------*/
@@ -52,13 +53,22 @@ void COMM_thread(void *argument)
 
 void COMM_sendMessage(const COMM_Message *const msg, COMM_Status *status)
 {
-    *status = COMM_STATUS_ERROR;
+    COMM_Status comm_status = COMM_STATUS_ERROR;
+    osStatus_t os_status;
 
-    osStatus_t os_status = osMessageQueuePut(COMM_msgQueueId, &msg, 0U, 0U);
-    
-    if (os_status == osOK) {
-        status = COMM_STATUS_OK;
-    } 
+    if (msg != NULL && COMM_msgQueueId != NULL) {
+        do {
+            os_status = osMessageQueuePut(COMM_msgQueueId, msg, 0U, osWaitForever);
+        } while (os_status == osErrorTimeout);
+
+        if (os_status == osOK) {
+            comm_status = COMM_STATUS_OK;
+        }
+    }
+
+    if (status != NULL) {
+        *status = comm_status;
+    }
 }
 
 static void COMM_init(COMM_Status *status)
@@ -75,20 +85,31 @@ static void COMM_init(COMM_Status *status)
 
 static void COMM_getMessage(COMM_Message *msg, COMM_Status *status)
 {
+    osStatus_t os_status;
     *status = COMM_STATUS_ERROR;
 
-    osStatus_t os_status = osMessageQueueGet(COMM_msgQueueId, msg, NULL, 0U);   // wait for message
-    
+    do {
+        os_status = osMessageQueueGet(COMM_msgQueueId, msg, NULL, osWaitForever);
+    } while (os_status == osErrorTimeout);
+
     if (os_status == osOK) {
-        status = COMM_STATUS_OK;
-    } 
+        *status = COMM_STATUS_OK;
+    }
 }
 
-static void COMM_sendMessageOverBluetooth(const COMM_Message * const msg, COMM_Status *status)
+static void COMM_sendMessageOverBluetooth(const COMM_Message *const msg,
+                                          COMM_Status *status)
 {
-    *status = COMM_STATUS_ERROR;
-    
-    ZS040_send(msg->Buf, COMM_MESSAGE_MAX_BUFF_LEN);
+    COMM_Status priv_status = COMM_STATUS_ERROR;
 
-    *status = COMM_STATUS_OK;
+    if (msg != NULL) {
+        if (msg->buffer != NULL && msg->msg_len < COMM_MESSAGE_MAX_BUFF_LEN) {
+            ZS040_send(msg->buffer, msg->msg_len);
+            priv_status = COMM_STATUS_OK;
+        }
+    }
+
+    if (status != NULL) {
+        *status = priv_status;
+    }
 }

@@ -20,9 +20,9 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 /* Private includes ----------------------------------------------------------*/
-#include <stdint.h>
 #include "cmsis_os2.h"
 
+#include <stdint.h>
 
 /* Private defines -----------------------------------------------------------*/
 
@@ -30,16 +30,15 @@ extern "C" {
 #define COMM_MESSAGE_MAX_BUFF_LEN (32U)
 
 /* Exported types ------------------------------------------------------------*/
-typedef struct {                                // object data type
-  uint8_t Buf[COMM_MESSAGE_MAX_BUFF_LEN];
-  uint8_t Idx;
+typedef struct {
+    uint8_t buffer[COMM_MESSAGE_MAX_BUFF_LEN];
+    int msg_len;
 } COMM_Message;
 
 typedef enum {
     COMM_STATUS_OK,
     COMM_STATUS_ERROR,
 } COMM_Status;
-
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions prototypes ---------------------------------------------*/

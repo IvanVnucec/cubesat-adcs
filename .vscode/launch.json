@@ -16,7 +16,6 @@
                 "interface/stlink.cfg",
                 "target/stm32l4x.cfg"
             ],
-            "runToEntryPoint": "main",
             "svdFile": "${workspaceRoot}/docs/stm32l412.svd",
             "preLaunchTask": "build",
         }
