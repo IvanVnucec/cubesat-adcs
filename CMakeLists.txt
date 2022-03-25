@@ -13,8 +13,9 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
 set(STM32CUBEMX_GENERATED_FILES
+    src/main.c
+
     src/core/startup_stm32l412kbux.s
-    src/core/main.c
     src/core/stm32l4xx_it.c
     src/core/stm32l4xx_hal_msp.c
     src/core/stm32l4xx_hal_timebase_tim.c
