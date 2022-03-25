@@ -4,6 +4,11 @@ if(NOT DEFINED CMAKE_EXPORT_COMPILE_COMMANDS)
 	set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 endif()
 
+if (NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "None")
+    set (CMAKE_BUILD_TYPE "Debug")
+    message (STATUS "CMAKE_BUILD_TYPE is not set, set to default = ${CMAKE_BUILD_TYPE}")
+endif ()
+
 project(cubesat-adcs LANGUAGES C)
 
 enable_language(C ASM)
