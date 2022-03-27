@@ -103,7 +103,7 @@ static void COMM_sendMessageOverBluetooth(const COMM_Message *const msg,
     COMM_Status priv_status = COMM_STATUS_ERROR;
 
     if (msg != NULL) {
-        if (msg->buffer != NULL && msg->msg_len < COMM_MESSAGE_MAX_BUFF_LEN) {
+        if (msg->buffer != NULL && msg->msg_len <= COMM_MESSAGE_MAX_BUFF_LEN) {
             ZS040_send(msg->buffer, msg->msg_len);
             priv_status = COMM_STATUS_OK;
         }
