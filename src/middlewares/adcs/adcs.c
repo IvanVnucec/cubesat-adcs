@@ -16,7 +16,10 @@
 #include "FreeRTOS.h"
 #include "adcs_imu.h"
 #include "adcs_or.h"
+#include "middlewares/communication/comm.h"
+#include "printf/printf.h"
 #include "task.h"
+#include "utils/error/error.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -29,6 +32,7 @@ static void ADCS_init(void);
 static void ADCS_determineAttitude(ADCS_Quaternion_T quat,
                                    const ADCS_ImuData_T *imu_data);
 static void ADCS_controlAttitude(const ADCS_Quaternion_T quat, const float time_delta);
+static void ADCS_sendQuaternion(const ADCS_Quaternion_T quat);
 
 /* Private user code ---------------------------------------------------------*/
 void ADCS_thread(void *argument)
@@ -46,6 +50,7 @@ void ADCS_thread(void *argument)
         // TODO: calculate delta
         ADCS_controlAttitude(quat, time_delta);
 
+        ADCS_sendQuaternion(quat);
         ADCS_delayMs(ADCS_THREAD_PERIOD_IN_MILISECONDS);
     }
 }
@@ -69,4 +74,24 @@ static void ADCS_controlAttitude(const ADCS_Quaternion_T quat, const float time_
 void ADCS_delayMs(unsigned ms)
 {
     vTaskDelay(pdMS_TO_TICKS(ms));
+}
+
+static void ADCS_sendQuaternion(const ADCS_Quaternion_T quat)
+{
+    COMM_Status status = COMM_STATUS_ERROR;
+    COMM_Message message;
+
+    int cx = snprintf_((char *)message.buffer,
+                       COMM_MESSAGE_MAX_BUFF_LEN,
+                       "%.4f %.4f %.4f %.4f\n",
+                       quat[0],
+                       quat[1],
+                       quat[2],
+                       quat[3]);
+
+    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
+
+    message.msg_len = cx;
+
+    COMM_sendMessage(&message, &status);
 }
