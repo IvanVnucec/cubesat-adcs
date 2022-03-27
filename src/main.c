@@ -1,13 +1,14 @@
 /* Includes ------------------------------------------------------------------*/
-#include "stm32l4xx_hal.h"
 #include "main.h"
-#include "mcu/mcu.h"
+
 #include "bsp/bsp.h"
-#include "drivers/drivers.h"
-#include "drivers/clock/clock.h"
-#include "middlewares/middlewares.h"
-#include "utils/error/error.h"
 #include "cmsis_os.h"
+#include "drivers/clock/clock.h"
+#include "drivers/drivers.h"
+#include "mcu/mcu.h"
+#include "middlewares/middlewares.h"
+#include "stm32l4xx_hal.h"
+#include "utils/error/error.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
@@ -39,9 +40,9 @@ int main(void)
     osKernelStart();
 
     /* We should never get here as control is now taken by the scheduler */
-    
+
     ERROR_signalFaultConditionAndWaitIndefinitely();
-    
+
     /* Infinite loop */
     while (1) {
     }
