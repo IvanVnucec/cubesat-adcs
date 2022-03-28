@@ -3,7 +3,7 @@
 sudo apt-get update
 
 # install necessary dependencies
-sudo apt-get install -y ninja-build cmake gcc-arm-none-eabi gcc cppcheck clang-format
+sudo apt-get install -y make git ninja-build cmake gcc-arm-none-eabi gcc cppcheck clang-format
 
 echo $'\n'
 
