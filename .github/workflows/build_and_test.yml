@@ -12,7 +12,7 @@ jobs:
         submodules: 'recursive'
 
     - name: Install dependencies
-      run: sudo make install_deps 
+      run: make install_deps 
 
     - name: Configure CMake
       run: make setup_cmake
