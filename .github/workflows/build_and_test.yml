@@ -28,3 +28,10 @@ jobs:
 
     - name: Check Clang-format
       run: make check_clang_format
+    
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: build_artifacts
+        path: |
+          build/cubesat-adcs.*
