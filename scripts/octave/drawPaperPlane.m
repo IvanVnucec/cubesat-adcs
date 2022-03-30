@@ -1,4 +1,4 @@
-function drawPlane(qib=[1 0 0 0])
+function drawPaperPlane(qib=[1 0 0 0])
 
     % Tocke zrakoplova u koordinatnom sustavu tijela
     P1 = [-1,  1, 0]';
