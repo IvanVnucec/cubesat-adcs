@@ -11,8 +11,8 @@ echo $'\n'
 if [[ ${GITHUB_ACTIONS=} == "true" ]]; then
     echo "Running in GitHub Actions, no need to install debugging tools."
 else
-    echo "Not running in GitHub Actions, install aditional debugging tools:"
-    sudo apt-get install -y gdb-multiarch openocd
+    echo "Not running in GitHub Actions, install aditional debugging tools and others:"
+    sudo apt-get install -y gdb-multiarch openocd octave liboctave-dev
 
     # add link arm-none-eabi-gdb -> gdb-multiarch
     ln -s /usr/bin/gdb-multiarch /usr/bin/arm-none-eabi-gdb
