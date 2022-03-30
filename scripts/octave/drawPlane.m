@@ -4,9 +4,13 @@ function drawPlane(qib=[1 0 0 0])
     P1 = [-1,  1, 0]';
     P2 = [-1, -1, 0]';
     P3 = [ 2,  0, 0]';
+    
+    P4 = [-1,  0.25,    0]';
+    P5 = [-1, -0.25,    0]';
+    P6 = [-1,     0, -0.4]';
 
     % Skaliranje i spremanje tocaka tijela u stupce matrice Pb
-    Pb = 1*[P1, P2, P3];
+    Pb = 0.5*[P1, P2, P3, P4, P5, P6];
 
     % ---------------------------------------------------------------------
     % Trazenje tocaka u inercijalnom koordinatnom sustavu
@@ -26,8 +30,8 @@ function drawPlane(qib=[1 0 0 0])
     clf;
     
     % Crtanje koordinatnih osi inercijalnog sustava
-    plot3(100*[-1,1],[0,0],[0,0],'Color','red','Linewidth',0.75);
     hold on;
+    plot3(100*[-1,1],[0,0],[0,0],'Color','red','Linewidth',0.75);
     plot3([0,0],100*[-1,1],[0,0],'Color','green','Linewidth',0.75);
     plot3([0,0],[0,0],100*[-1,1],'Color','blue','Linewidth',0.75);
     plot3([0,0],[0,0],100*[-1,1],'Color','blue','Linewidth',0.75);
@@ -41,10 +45,19 @@ function drawPlane(qib=[1 0 0 0])
     P1i = Pi(:,1);
     P2i = Pi(:,2);
     P3i = Pi(:,3);
+    P4i = Pi(:,4);
+    P5i = Pi(:,5);
+    P6i = Pi(:,6);
     
-    plot3([P1i(1) P2i(1)], [P1i(2) P2i(2)], [P1i(3) P2i(3)], '-', 'color', 'black');
+    plot3([P1i(1) P4i(1)], [P1i(2) P4i(2)], [P1i(3) P4i(3)], '-', 'color', 'black');
     plot3([P2i(1) P3i(1)], [P2i(2) P3i(2)], [P2i(3) P3i(3)], '-', 'color', 'black');
     plot3([P1i(1) P3i(1)], [P1i(2) P3i(2)], [P1i(3) P3i(3)], '-', 'color', 'black');
+    plot3([P5i(1) P2i(1)], [P5i(2) P2i(2)], [P5i(3) P2i(3)], '-', 'color', 'black');
+    plot3([P4i(1) P3i(1)], [P4i(2) P3i(2)], [P4i(3) P3i(3)], '-', 'color', 'black');
+    plot3([P5i(1) P3i(1)], [P5i(2) P3i(2)], [P5i(3) P3i(3)], '-', 'color', 'black');
+    plot3([P4i(1) P6i(1)], [P4i(2) P6i(2)], [P4i(3) P6i(3)], '-', 'color', 'black');
+    plot3([P5i(1) P6i(1)], [P5i(2) P6i(2)], [P5i(3) P6i(3)], '-', 'color', 'black');
+    plot3([P6i(1) P3i(1)], [P6i(2) P3i(2)], [P6i(3) P3i(3)], '-', 'color', 'black');
     
     axis equal;
     grid on;
@@ -52,15 +65,10 @@ function drawPlane(qib=[1 0 0 0])
     ylim(2*[-1,1]);
     zlim(2*[-1,1]);
     
-    xlabel('$x$','Interpreter','latex');
-    ylabel('$y$','Interpreter','latex');
-    zlabel('$z$','Interpreter','latex');
-    
-    set(gca,'TickLabelInterpreter','latex','FontSize',12);
-    xticklabels(gca, strrep(xticklabels(gca),'-','$-$'));
-    yticklabels(gca, strrep(yticklabels(gca),'-','$-$'));
-    zticklabels(gca, strrep(zticklabels(gca),'-','$-$'));
+    xlabel('x');
+    ylabel('y');
+    zlabel('z');
 
-    %view(3);
+    view(3);
 end
 
