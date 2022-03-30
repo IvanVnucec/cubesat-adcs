@@ -49,15 +49,15 @@ function drawPlane(qib=[1 0 0 0])
     P5i = Pi(:,5);
     P6i = Pi(:,6);
     
-    plot3([P1i(1) P4i(1)], [P1i(2) P4i(2)], [P1i(3) P4i(3)], '-', 'color', 'black');
-    plot3([P2i(1) P3i(1)], [P2i(2) P3i(2)], [P2i(3) P3i(3)], '-', 'color', 'black');
-    plot3([P1i(1) P3i(1)], [P1i(2) P3i(2)], [P1i(3) P3i(3)], '-', 'color', 'black');
-    plot3([P5i(1) P2i(1)], [P5i(2) P2i(2)], [P5i(3) P2i(3)], '-', 'color', 'black');
-    plot3([P4i(1) P3i(1)], [P4i(2) P3i(2)], [P4i(3) P3i(3)], '-', 'color', 'black');
-    plot3([P5i(1) P3i(1)], [P5i(2) P3i(2)], [P5i(3) P3i(3)], '-', 'color', 'black');
-    plot3([P4i(1) P6i(1)], [P4i(2) P6i(2)], [P4i(3) P6i(3)], '-', 'color', 'black');
-    plot3([P5i(1) P6i(1)], [P5i(2) P6i(2)], [P5i(3) P6i(3)], '-', 'color', 'black');
-    plot3([P6i(1) P3i(1)], [P6i(2) P3i(2)], [P6i(3) P3i(3)], '-', 'color', 'black');
+    line3d(P1i, P4i, '-', 'color', 'black');
+    line3d(P2i, P3i, '-', 'color', 'black');
+    line3d(P1i, P3i, '-', 'color', 'black');
+    line3d(P5i, P2i, '-', 'color', 'black');
+    line3d(P4i, P3i, '-', 'color', 'black');
+    line3d(P5i, P3i, '-', 'color', 'black');
+    line3d(P4i, P6i, '-', 'color', 'black');
+    line3d(P5i, P6i, '-', 'color', 'black');
+    line3d(P6i, P3i, '-', 'color', 'black');
     
     axis equal;
     grid on;
