@@ -27,7 +27,7 @@ function drawPaperPlane(qib=[1 0 0 0])
     Pi = Rbi*Pb;
     
     % Brisanje prikaza na slici
-    clf;
+    %clf;
     
     % Crtanje koordinatnih osi inercijalnog sustava
     hold on;
