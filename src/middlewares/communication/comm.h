@@ -27,7 +27,7 @@ extern "C" {
 /* Private defines -----------------------------------------------------------*/
 
 /* Exported constants --------------------------------------------------------*/
-#define COMM_MESSAGE_MAX_BUFF_LEN (32U)
+#define COMM_MESSAGE_MAX_BUFF_LEN (40U)
 
 /* Exported types ------------------------------------------------------------*/
 typedef struct {

@@ -24,7 +24,7 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 #define MIDDLEWARES_ALIVE_THREAD_STACK_SIZE (128 * 4)
-#define MIDDLEWARES_ADCS_THREAD_STACK_SIZE (128 * 7)
+#define MIDDLEWARES_ADCS_THREAD_STACK_SIZE (128 * 8)
 #define MIDDLEWARES_COMM_THREAD_STACK_SIZE (128 * 4)
 
 #define MIDDLEWARES_THREAD_STACK_SIZES                                        \

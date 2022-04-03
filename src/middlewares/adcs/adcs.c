@@ -83,7 +83,7 @@ static void ADCS_sendQuaternion(const ADCS_Quaternion_T quat)
 
     int cx = snprintf_((char *)message.buffer,
                        COMM_MESSAGE_MAX_BUFF_LEN,
-                       "%.4f %.4f %.4f %.4f\n",
+                       "[%.4f %.4f %.4f %.4f]\n",
                        quat[0],
                        quat[1],
                        quat[2],
