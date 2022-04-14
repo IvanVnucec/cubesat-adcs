@@ -34,7 +34,7 @@ typedef struct {
 } ADCS_Handle_T;
 
 /* Exported constants --------------------------------------------------------*/
-#define ADCS_THREAD_PERIOD_IN_MILISECONDS (10U)
+#define ADCS_THREAD_PERIOD_IN_MILISECONDS (100U)
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions prototypes ---------------------------------------------*/
