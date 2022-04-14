@@ -19,13 +19,15 @@
 #include "opt_req/optimal_request.h"
 #include "opt_req/optimal_request_init.h"
 
+#include <math.h>
+
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define ADCS_OPTREQ_MU_NOISE_VARIANCE (0.0008117f)     // no unit
-#define ADCS_OPTREQ_ETA_NOISE_VARIANCE (0.0000010f)    // no unit
-#define ADCS_OPTREQ_ACC_REF \
-    ((float[3]){-0.0518488f, -0.0495620f, -0.9974243f})                         // m/s^2
-#define ADCS_OPTREQ_MAG_REF ((float[3]){0.8514420f, 0.5186020f, 0.0780922f})    // uT
+#define ADCS_OPTREQ_MU_NOISE_VARIANCE (0.0008117f)             // no unit (normalized)
+#define ADCS_OPTREQ_ETA_NOISE_VARIANCE (0.0000010f)            // no unit (normalized)
+#define ADCS_OPTREQ_ACC_REF ((float[3]){0.0f, 0.0f, -1.0f})    // no unit (normalized)
+#define ADCS_OPTREQ_MAG_REF \
+    ((float[3]){0.459787381f, 0.037211461f, 0.887248859f})    // no unit (normalized)
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -58,7 +60,19 @@ void ADCS_OR_init(struct0_T *optReqHandle)
 
 void ADCS_OR_processImuData(struct0_T *optReqHandle, const ADCS_ImuData_T *imu_data)
 {
-    ADCS_OR_fillBMatrice(optReqHandle, imu_data->acc, imu_data->mag);
+    // normalize acc and mag measurements
+    float acc[3]        = {imu_data->acc[0], imu_data->acc[1], imu_data->acc[2]};
+    float mag[3]        = {imu_data->mag[0], imu_data->mag[1], imu_data->mag[2]};
+    const float acc_len = sqrtf(acc[0] * acc[0] + acc[1] * acc[1] + acc[2] * acc[2]);
+    const float mag_len = sqrtf(mag[0] * mag[0] + mag[1] * mag[1] + mag[2] * mag[2]);
+    acc[0] /= acc_len;
+    acc[1] /= acc_len;
+    acc[2] /= acc_len;
+    mag[0] /= mag_len;
+    mag[1] /= mag_len;
+    mag[2] /= mag_len;
+
+    ADCS_OR_fillBMatrice(optReqHandle, acc, mag);
     ADCS_OR_fillWMatrice(optReqHandle, imu_data->gyr);
 
     optimal_request(optReqHandle);
