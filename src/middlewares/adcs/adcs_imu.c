@@ -24,8 +24,17 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 static MPU9250_Handle_s *ADCS_IMU_mpu9250Handle = NULL;
+// clang-format off
+const static float A[3][3] = {  // TODO: fill magnetometer calibration matrice
+    {1.0f, 0.0f, 0.0f}, 
+    {0.0f, 1.0f, 0.0f}, 
+    {0.0f, 0.0f, 1.0f}
+};
+const static float b[3] = {0.0f, 0.0f, 0.0f}; // TODO: fill magnetometer calibration vector
+// clang-format on
 
 /* Private function prototypes -----------------------------------------------*/
+static void ADCS_IMU_calibrateMagnetometerMeasurements(float mag[3]);
 static int ADCS_IMU_writeToMpu9250(uint8_t subAddress, uint8_t data);
 static int ADCS_IMU_readFromMpu9250(uint8_t subAddress, uint8_t count, uint8_t *dest);
 
@@ -57,6 +66,23 @@ void ADCS_IMU_getData(ADCS_ImuData_T *imu_data)
     imu_data->gyr[0] = MPU9250_getGyroX_rads(ADCS_IMU_mpu9250Handle);
     imu_data->gyr[1] = MPU9250_getGyroY_rads(ADCS_IMU_mpu9250Handle);
     imu_data->gyr[2] = MPU9250_getGyroZ_rads(ADCS_IMU_mpu9250Handle);
+
+    ADCS_IMU_calibrateMagnetometerMeasurements(imu_data->mag);
+}
+
+static void ADCS_IMU_calibrateMagnetometerMeasurements(float mag[3])
+{
+    float c[3];
+
+    // c = mag - b
+    c[0] = mag[0] - b[0];
+    c[1] = mag[1] - b[1];
+    c[2] = mag[2] - b[2];
+
+    // mag = mag * A
+    mag[0] = c[0] * A[0][0] + c[1] * A[1][0] + c[2] * A[2][0];
+    mag[1] = c[0] * A[0][1] + c[1] * A[1][1] + c[2] * A[2][1];
+    mag[2] = c[0] * A[0][2] + c[1] * A[1][2] + c[2] * A[2][2];
 }
 
 static int ADCS_IMU_writeToMpu9250(uint8_t subAddress, uint8_t data)
