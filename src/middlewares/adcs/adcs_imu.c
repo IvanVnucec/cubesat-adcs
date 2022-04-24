@@ -79,7 +79,7 @@ static void ADCS_IMU_calibrateMagnetometerMeasurements(float mag[3])
     c[1] = mag[1] - b[1];
     c[2] = mag[2] - b[2];
 
-    // mag = mag * A
+    // mag = c * A
     mag[0] = c[0] * A[0][0] + c[1] * A[1][0] + c[2] * A[2][0];
     mag[1] = c[0] * A[0][1] + c[1] * A[1][1] + c[2] * A[2][1];
     mag[2] = c[0] * A[0][2] + c[1] * A[1][2] + c[2] * A[2][2];
