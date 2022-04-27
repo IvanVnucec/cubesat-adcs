@@ -31,7 +31,7 @@ static osMessageQueueId_t COMM_msgQueueId = NULL;
 static void COMM_init(COMM_Status *status);
 static void COMM_sendMessageOverBluetooth(const COMM_Message *const msg,
                                           COMM_Status *status);
-static void COMM_getMessage(COMM_Message *msg, COMM_Status *status);
+static void COMM_getMessageFromThreadsBlocking(COMM_Message *msg, COMM_Status *status);
 
 /* Private user code ---------------------------------------------------------*/
 void COMM_thread(void *argument)
@@ -43,7 +43,7 @@ void COMM_thread(void *argument)
     ERROR_assert(status == COMM_STATUS_OK);
 
     for (;;) {
-        COMM_getMessage(&msg, &status);
+        COMM_getMessageFromThreadsBlocking(&msg, &status);
         ERROR_assert(status == COMM_STATUS_OK);
 
         COMM_sendMessageOverBluetooth(&msg, &status);
@@ -83,7 +83,7 @@ static void COMM_init(COMM_Status *status)
     ZS040_init();
 }
 
-static void COMM_getMessage(COMM_Message *msg, COMM_Status *status)
+static void COMM_getMessageFromThreadsBlocking(COMM_Message *msg, COMM_Status *status)
 {
     osStatus_t os_status;
     *status = COMM_STATUS_ERROR;
