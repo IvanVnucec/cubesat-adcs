@@ -23,13 +23,25 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 
 /* Exported constants --------------------------------------------------------*/
+
+// thread stack sizes are being used by local variables
+// thread heap sizes are being used by RTOS (mutexes, semaphores etc.)
 #define MIDDLEWARES_ALIVE_THREAD_STACK_SIZE (128 * 4)
+#define MIDDLEWARES_ALIVE_THREAD_HEAP_SIZE (0)
+
 #define MIDDLEWARES_ADCS_THREAD_STACK_SIZE (128 * 8)
+#define MIDDLEWARES_ADCS_THREAD_HEAP_SIZE (0)
+
 #define MIDDLEWARES_COMM_THREAD_STACK_SIZE (128 * 4)
+#define MIDDLEWARES_COMM_THREAD_HEAP_SIZE (128 * 8)
 
 #define MIDDLEWARES_THREAD_STACK_SIZES                                        \
     (MIDDLEWARES_ALIVE_THREAD_STACK_SIZE + MIDDLEWARES_ADCS_THREAD_STACK_SIZE \
      + MIDDLEWARES_COMM_THREAD_STACK_SIZE)
+
+#define MIDDLEWARES_THREAD_HEAP_SIZE                                        \
+    (MIDDLEWARES_ALIVE_THREAD_HEAP_SIZE + MIDDLEWARES_ADCS_THREAD_HEAP_SIZE \
+     + MIDDLEWARES_COMM_THREAD_HEAP_SIZE)
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions prototypes ---------------------------------------------*/
