@@ -32,6 +32,8 @@ static void COMM_init(COMM_Status *status);
 static void COMM_sendMessageOverBluetooth(const COMM_Message *const msg,
                                           COMM_Status *status);
 static void COMM_getMessageFromThreadsBlocking(COMM_Message *msg, COMM_Status *status);
+static void COMM_getMessageFromBluetoothNonBlocking(COMM_Message *msg,
+                                                    COMM_Status *status);
 
 /* Private user code ---------------------------------------------------------*/
 void COMM_thread(void *argument)
@@ -48,6 +50,13 @@ void COMM_thread(void *argument)
 
         COMM_sendMessageOverBluetooth(&msg, &status);
         ERROR_assert(status == COMM_STATUS_OK);
+
+        COMM_getMessageFromBluetoothNonBlocking(&msg, &status);
+        if (status == COMM_STATUS_AVAILABLE_MESSAGE) {
+            // echo message back
+            COMM_sendMessageOverBluetooth(&msg, &status);
+            ERROR_assert(status == COMM_STATUS_OK);
+        }
     }
 }
 
@@ -106,6 +115,23 @@ static void COMM_sendMessageOverBluetooth(const COMM_Message *const msg,
         if (msg->buffer != NULL && msg->msg_len <= COMM_MESSAGE_MAX_BUFF_LEN) {
             ZS040_send(msg->buffer, msg->msg_len);
             priv_status = COMM_STATUS_OK;
+        }
+    }
+
+    if (status != NULL) {
+        *status = priv_status;
+    }
+}
+
+static void COMM_getMessageFromBluetoothNonBlocking(COMM_Message *msg,
+                                                    COMM_Status *status)
+{
+    COMM_Status priv_status = COMM_STATUS_ERROR;
+
+    if (msg != NULL) {
+        if (msg->buffer != NULL) {
+            // TODO: add receive code here
+            priv_status = COMM_STATUS_NO_AVAILABLE_MESSAGE;
         }
     }
 

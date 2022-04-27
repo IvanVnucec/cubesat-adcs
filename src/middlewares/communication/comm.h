@@ -38,6 +38,8 @@ typedef struct {
 typedef enum {
     COMM_STATUS_OK,
     COMM_STATUS_ERROR,
+    COMM_STATUS_NO_AVAILABLE_MESSAGE,
+    COMM_STATUS_AVAILABLE_MESSAGE,
 } COMM_Status;
 
 /* Exported macro ------------------------------------------------------------*/
