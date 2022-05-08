@@ -20,8 +20,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 /* Private includes ----------------------------------------------------------*/
-#include "cmsis_os2.h"
-
 #include <stdint.h>
 
 /* Private defines -----------------------------------------------------------*/
@@ -38,9 +36,15 @@ typedef struct {
 typedef enum {
     COMM_STATUS_OK,
     COMM_STATUS_ERROR,
-    COMM_STATUS_NO_AVAILABLE_MESSAGE,
-    COMM_STATUS_AVAILABLE_MESSAGE,
+    COMM_STATUS_NO_CALLBACK_FUNCTION,
 } COMM_Status;
+
+typedef void (*COMM_CallbackFunctionPtr)(void);
+
+typedef struct {
+    const char name[COMM_MESSAGE_MAX_BUFF_LEN];
+    const COMM_CallbackFunctionPtr fun_ptr;
+} COMM_CallbackFunction;
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions prototypes ---------------------------------------------*/
