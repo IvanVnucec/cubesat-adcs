@@ -23,26 +23,25 @@
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
-
 static osThreadId_t aliveThreadHandle             = NULL;
 static const osThreadAttr_t aliveThreadAttributes = {
     .name       = "aliveThread",
     .stack_size = MIDDLEWARES_ALIVE_THREAD_STACK_SIZE,
-    .priority   = (osPriority_t)osPriorityRealtime,
+    .priority   = MIDDLEWARES_ALIVE_THREAD_PRIORITY,
 };
 
 static osThreadId_t adcsThreadHandle             = NULL;
 static const osThreadAttr_t adcsThreadAttributes = {
     .name       = "adcsThread",
     .stack_size = MIDDLEWARES_ADCS_THREAD_STACK_SIZE,
-    .priority   = (osPriority_t)osPriorityLow,
+    .priority   = MIDDLEWARES_ADCS_THREAD_PRIORITY,
 };
 
 static osThreadId_t commThreadHandle             = NULL;
 static const osThreadAttr_t commThreadAttributes = {
     .name       = "commThread",
     .stack_size = MIDDLEWARES_COMM_THREAD_STACK_SIZE,
-    .priority   = (osPriority_t)osPriorityRealtime1,
+    .priority   = MIDDLEWARES_COMM_THREAD_PRIORITY,
 };
 
 /* Private function prototypes -----------------------------------------------*/
@@ -56,13 +55,13 @@ void MIDDLEWARES_initThreads(void)
         ERROR_signalFaultConditionAndWaitIndefinitely();
     }
 
-    adcsThreadHandle = osThreadNew(ADCS_thread, NULL, &adcsThreadAttributes);
-    if (adcsThreadHandle == NULL) {
+    commThreadHandle = osThreadNew(COMM_thread, NULL, &commThreadAttributes);
+    if (commThreadHandle == NULL) {
         ERROR_signalFaultConditionAndWaitIndefinitely();
     }
 
-    commThreadHandle = osThreadNew(COMM_thread, NULL, &commThreadAttributes);
-    if (commThreadHandle == NULL) {
+    adcsThreadHandle = osThreadNew(ADCS_thread, NULL, &adcsThreadAttributes);
+    if (adcsThreadHandle == NULL) {
         ERROR_signalFaultConditionAndWaitIndefinitely();
     }
 }

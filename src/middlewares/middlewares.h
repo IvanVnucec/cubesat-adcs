@@ -26,14 +26,18 @@ extern "C" {
 
 // thread stack sizes are being used by local variables
 // thread heap sizes are being used by RTOS (mutexes, semaphores etc.)
+// Warning: osPriorityHigh7 for example has higher priority than osPriorityHigh6
 #define MIDDLEWARES_ALIVE_THREAD_STACK_SIZE (128 * 4)
 #define MIDDLEWARES_ALIVE_THREAD_HEAP_SIZE (0)
+#define MIDDLEWARES_ALIVE_THREAD_PRIORITY (osPriorityRealtime7)
 
 #define MIDDLEWARES_ADCS_THREAD_STACK_SIZE (128 * 8)
 #define MIDDLEWARES_ADCS_THREAD_HEAP_SIZE (0)
+#define MIDDLEWARES_ADCS_THREAD_PRIORITY (osPriorityHigh7)
 
 #define MIDDLEWARES_COMM_THREAD_STACK_SIZE (128 * 4)
-#define MIDDLEWARES_COMM_THREAD_HEAP_SIZE (128 * 10)
+#define MIDDLEWARES_COMM_THREAD_HEAP_SIZE (128 * 14)
+#define MIDDLEWARES_COMM_THREAD_PRIORITY (osPriorityHigh6)
 
 #define MIDDLEWARES_THREAD_STACK_SIZES                                        \
     (MIDDLEWARES_ALIVE_THREAD_STACK_SIZE + MIDDLEWARES_ADCS_THREAD_STACK_SIZE \
