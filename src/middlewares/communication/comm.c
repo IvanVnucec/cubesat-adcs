@@ -177,6 +177,7 @@ static void
     }
 }
 
+// TODO: use zs040 lib
 static void COMM_sendMessageOverBluetooth(const COMM_Message *const msg,
                                           COMM_Status *status)
 {
@@ -228,6 +229,7 @@ __attribute__((unused)) static void COMM_UART_stopReceiving(COMM_Status *status)
     }
 }
 
+// TODO: move UART code from comm to uart (bsp or mcu)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *handle)
 {
     if (handle->Instance == huart1.Instance) {
