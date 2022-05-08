@@ -14,6 +14,8 @@
 #include "comm.h"
 
 #include "cmsis_os2.h"
+#include "mcu/uart/mcu_uart.h"
+#include "stm32l4xx_hal.h"
 #include "utils/error/error.h"
 #include "zs040/zs040.h"
 
@@ -34,6 +36,13 @@ static void COMM_sendMessageOverBluetooth(const COMM_Message *const msg,
 static void COMM_getMessageFromThreadsBlocking(COMM_Message *msg, COMM_Status *status);
 static void COMM_getMessageFromBluetoothNonBlocking(COMM_Message *msg,
                                                     COMM_Status *status);
+void COMM_ZS040_uart_send_function(const uint8_t *const data,
+                                   const unsigned len,
+                                   ZS040_Status *status);
+void COMM_ZS040_uart_receive_function(uint8_t *data,
+                                      const unsigned len,
+                                      unsigned timeout_ms,
+                                      ZS040_Status *status);
 
 /* Private user code ---------------------------------------------------------*/
 void COMM_thread(void *argument)
@@ -82,14 +91,26 @@ void COMM_sendMessage(const COMM_Message *const msg, COMM_Status *status)
 
 static void COMM_init(COMM_Status *status)
 {
-    *status = COMM_STATUS_ERROR;
+    COMM_Status local_status  = COMM_STATUS_OK;
+    ZS040_Status zs040_status = ZS040_STATUS_FAILURE;
 
-    COMM_msgQueueId = osMessageQueueNew(MSGQUEUE_OBJECTS, sizeof(COMM_Message), NULL);
-    if (COMM_msgQueueId != NULL) {
-        *status = COMM_STATUS_OK;
+    ZS040_init(COMM_ZS040_uart_send_function,
+               COMM_ZS040_uart_receive_function,
+               &zs040_status);
+    if (zs040_status == ZS040_STATUS_FAILURE) {
+        local_status = COMM_STATUS_ERROR;
     }
 
-    ZS040_init();
+    if (local_status == COMM_STATUS_OK) {
+        COMM_msgQueueId = osMessageQueueNew(MSGQUEUE_OBJECTS, sizeof(COMM_Message), NULL);
+        if (COMM_msgQueueId == NULL) {
+            local_status = COMM_STATUS_ERROR;
+        }
+    }
+
+    if (status != NULL) {
+        *status = local_status;
+    }
 }
 
 static void COMM_getMessageFromThreadsBlocking(COMM_Message *msg, COMM_Status *status)
@@ -109,12 +130,14 @@ static void COMM_getMessageFromThreadsBlocking(COMM_Message *msg, COMM_Status *s
 static void COMM_sendMessageOverBluetooth(const COMM_Message *const msg,
                                           COMM_Status *status)
 {
-    COMM_Status priv_status = COMM_STATUS_ERROR;
+    COMM_Status priv_status   = COMM_STATUS_ERROR;
+    ZS040_Status zs040_status = ZS040_STATUS_FAILURE;
 
     if (msg != NULL) {
         if (msg->buffer != NULL && msg->msg_len <= COMM_MESSAGE_MAX_BUFF_LEN) {
-            ZS040_send(msg->buffer, msg->msg_len);
-            priv_status = COMM_STATUS_OK;
+            ZS040_send(msg->buffer, msg->msg_len, &zs040_status);
+            if (zs040_status == ZS040_STATUS_SUCCESS)
+                priv_status = COMM_STATUS_OK;
         }
     }
 
@@ -138,4 +161,33 @@ static void COMM_getMessageFromBluetoothNonBlocking(COMM_Message *msg,
     if (status != NULL) {
         *status = priv_status;
     }
+}
+
+void COMM_ZS040_uart_send_function(const uint8_t *const data,
+                                   const unsigned len,
+                                   ZS040_Status *status)
+{
+    ZS040_Status local_status              = ZS040_STATUS_SUCCESS;
+    static const int ZS040_SEND_TIMEOUT_MS = 100;    // ms
+
+    HAL_StatusTypeDef hal_status =
+        HAL_UART_Transmit(&huart1, (uint8_t *)data, len, ZS040_SEND_TIMEOUT_MS);
+
+    if (hal_status != HAL_OK) {
+        local_status = ZS040_STATUS_FAILURE;
+    }
+
+    if (status != NULL) {
+        *status = local_status;
+    }
+}
+
+void COMM_ZS040_uart_receive_function(uint8_t *data,
+                                      const unsigned len,
+                                      unsigned timeout_ms,
+                                      ZS040_Status *status)
+{
+    // TODO
+
+    *status = ZS040_STATUS_SUCCESS;
 }

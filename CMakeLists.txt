@@ -90,7 +90,7 @@ set(STM32CUBEMX_GENERATED_FILES
     src/libs/optimal_request/src/opt_req/optimal_request.c
     src/libs/optimal_request/src/opt_req/vecnorm.c
     src/libs/mpu9250/src/mpu9250/mpu9250.c
-    src/libs/zs040/src/zs040/zs040.c
+    src/libs/zs040/src/zs040.c
 
     src/utils/error/error.c
 )
