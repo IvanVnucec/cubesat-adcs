@@ -57,8 +57,14 @@ void ADCS_thread(void *argument)
 
 static void ADCS_init(void)
 {
+    ADCS_RW_Status rw_status = ADCS_RW_STATUS_ERROR;
+
     ADCS_IMU_init(&ADCS_handle);
     ADCS_OR_init(&ADCS_handle.optReqHandle);
+    ADCS_RW_init(&ADCS_handle.reactionWheelHandle, &rw_status);
+
+    // TODO: enable me once implemented
+    //ERROR_assert(rw_status == ADCS_RW_STATUS_OK);
 }
 
 static void ADCS_determineAttitude(ADCS_Quaternion_T quat, const ADCS_ImuData_T *imu_data)

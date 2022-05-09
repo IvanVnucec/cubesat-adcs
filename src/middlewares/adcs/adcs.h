@@ -21,6 +21,7 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 
 /* Private includes ----------------------------------------------------------*/
+#include "adcs_rw.h"
 #include "mpu9250/mpu9250.h"
 #include "opt_req/get_quat_from_K.h"
 
@@ -31,6 +32,7 @@ typedef float ADCS_Quaternion_T[4];
 typedef struct {
     struct0_T optReqHandle;
     MPU9250_Handle_s mpu9250Handle;
+    ADCS_RW_Handle reactionWheelHandle;
 } ADCS_Handle_T;
 
 /* Exported constants --------------------------------------------------------*/
