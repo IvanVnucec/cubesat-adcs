@@ -1,37 +1,40 @@
 # Pinout
+
 ## About 
 Pinout of our setup (STM32L412KBU6U microcontroller and/or NUCLEO-L412KB board).
 ```
-Warning: Pins written here are pins as stated on the microcontroller, and NOT as stated on the Nucleo board!
+Warning: Pins written not in the paranteses are are pins as stated on the microcontroller, and pins written in the paranteses are pins as stated on the Nucleo board itself. 
+
+For example, on page 31/37, figure 8 in `docs/um-nucleo-board.pdf` document, PA9 is pin on the microcontroller and at the same time pin D1 on the Nucleo board (Arduino).
 ```
 
 ## UART1
-- TX: PA9
-- RX: PA10
+- TX: PA9  (D1)
+- RX: PA10 (D0)
 
 ## LED
-- PB3
+- PB3 (D13)
 - TODO: add rest of the leds
 	
 ## I2C3
-- SCL: PA7
-- SDA: PB4
+- SCL: PA7 (A6)
+- SDA: PB4 (D12)
 
 ## PWM
-- TIM1_CH1: PA8
+- TIM1_CH1: PA8 (D9)
 
 ## Reaction Wheel Direction
-- PA11
+- PA11 (D10)
 
 ## Encoder
 - TODO: add encoder pinout
 
 ## Debug Serial Wire
+- NOTE: These pins are reserved on the microcontroller, and they are not routed on the Nucleo board (Arduino) pins.
 - CLK: PA14
 - DIO: PA13
-- These pins are reserved on the Nucleo board by itself
 
 ## High Speed Crystal
+- NOTE: These pins are reserved on the microcontroller, and they are not routed on the Nucleo board (Arduino) pins.
 - IN: PA0
-- OUT: (No out pin, idk why)
-- These pins are reserved on the Nucleo board by itself
+- OUT: (no out pin, idk why)
