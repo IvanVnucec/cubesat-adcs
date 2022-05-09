@@ -52,6 +52,17 @@ void MCU_GPIO_init(void)
                       BSP_CONFIG_REACTION_WHEEL_DIR_Pin,
                       GPIO_PIN_RESET);
 
+    /* Encoder pins */
+    /*Configure GPIO pin Input Level */
+    HAL_GPIO_WritePin(BSP_CONFIG_ENCODER_CHA_GPIO_Port,
+                      BSP_CONFIG_ENCODER_CHA_Pin,
+                      GPIO_PIN_RESET);
+
+    /*Configure GPIO pin Input Level */
+    HAL_GPIO_WritePin(BSP_CONFIG_ENCODER_CHB_GPIO_Port,
+                      BSP_CONFIG_ENCODER_CHB_Pin,
+                      GPIO_PIN_RESET);
+
     /*Configure GPIO pin : PtPin */
     /* Init LEDs */
     GPIO_InitStruct.Pin   = BSP_LED_CONFIG_LED_INDEX_0_Pin;
@@ -78,4 +89,15 @@ void MCU_GPIO_init(void)
     GPIO_InitStruct.Pull  = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_MEDIUM;
     HAL_GPIO_Init(BSP_CONFIG_REACTION_WHEEL_DIR_GPIO_Port, &GPIO_InitStruct);
+
+    /* Encoder pins */
+    GPIO_InitStruct.Pin  = BSP_CONFIG_ENCODER_CHA_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(BSP_CONFIG_ENCODER_CHA_GPIO_Port, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin  = BSP_CONFIG_ENCODER_CHB_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(BSP_CONFIG_ENCODER_CHB_GPIO_Port, &GPIO_InitStruct);
 }

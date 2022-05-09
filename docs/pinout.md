@@ -28,7 +28,8 @@ For example, on Page 31/37, Figure 8 in [docs/um-nucleo-board.pdf](https://githu
 - PB3 (D13)
 
 ### Encoder
-- TODO: add encoder pinout
+- CH_A: PB5  (D11)
+- CH_B: PA11 (D10)
 
 ### Debug Serial Wire
 - NOTE: These pins are reserved on the microcontroller, and they are not routed on the Nucleo board (Arduino) pins.
