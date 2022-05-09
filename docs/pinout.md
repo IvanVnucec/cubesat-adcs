@@ -6,30 +6,30 @@ Warning: Pins written here are pins as stated on the microcontroller, and NOT as
 ```
 
 ## UART1
-- Rx: Pin A10
-- Tx: Pin A9
+- RX: PA10
+- TX: PA9
 
 ## LED
-- Pin B3
+- PB3
 - TODO: add rest of the leds
 	
 ## I2C3
-- SDA: Pin B4
-- SCL: Pin A7
+- SDA: PB4
+- SCL: PA7
 
-## TIM1_CH1 PWM
-- Pin A8
+## PWM
+- TIM1_CH1: PA8
 
 ## Debug Serial Wire
-- CLK: Pin A14
-- DIO: Pin A13
+- CLK: PA14
+- DIO: PA13
 
 ## High Speed Crystal
-- In: Pin A0
-- Out: (No out pin, idk why)
+- IN: PA0
+- OUT: (No out pin, idk why)
 
-## Reaction Wheel Direction Pin (GPIO)
-- Pin A11
+## Reaction Wheel Direction
+- PA11
 
 ## Encoder
 - TODO: add encoder pinout
