@@ -11,6 +11,7 @@ Warning: Pins written here are pins as stated on the microcontroller, and NOT as
 
 ## LED
 - Pin B3
+- TODO: add rest of the leds
 	
 ## I2C3
 - SDA: Pin B4
@@ -29,3 +30,6 @@ Warning: Pins written here are pins as stated on the microcontroller, and NOT as
 
 ## Reaction Wheel Direction Pin (GPIO)
 - Pin A11
+
+## Encoder
+- TODO: add encoder pinout
