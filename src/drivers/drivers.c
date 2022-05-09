@@ -12,7 +12,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "drivers.h"
 
-#include "drivers/spi/spi.h"
 #include "drivers/tim/tim.h"
 
 /* Private typedef -----------------------------------------------------------*/
@@ -28,7 +27,6 @@
  */
 void DRIVERS_init(void)
 {
-    MX_SPI1_Init();
     MX_TIM1_Init();
 }
 

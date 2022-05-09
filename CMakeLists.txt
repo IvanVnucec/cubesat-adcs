@@ -35,7 +35,6 @@ set(STM32CUBEMX_GENERATED_FILES
 
     src/drivers/drivers.c
     src/drivers/tim/tim.c
-    src/drivers/spi/spi.c
     src/drivers/clock/clock.c
 
     src/drivers/hal/Src/stm32l4xx_hal.c
