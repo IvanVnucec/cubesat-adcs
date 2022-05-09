@@ -28,10 +28,12 @@ extern "C" {
 /* Exported macro ------------------------------------------------------------*/
 #define BSP_CONFIG_SWDIO_Pin GPIO_PIN_13
 #define BSP_CONFIG_SWDIO_GPIO_Port GPIOA
+
 #define BSP_CONFIG_SWCLK_Pin GPIO_PIN_14
 #define BSP_CONFIG_SWCLK_GPIO_Port GPIOA
-#define BSP_CONFIG_REACTION_WHEEL_DIR_Pin GPIO_PIN_11
-#define BSP_CONFIG_REACTION_WHEEL_DIR_GPIO_Port GPIOA
+
+#define BSP_CONFIG_REACTION_WHEEL_DIR_Pin GPIO_PIN_3
+#define BSP_CONFIG_REACTION_WHEEL_DIR_GPIO_Port GPIOB
 
 /* Exported functions prototypes ---------------------------------------------*/
 

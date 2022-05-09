@@ -25,7 +25,7 @@ For example, on Page 31/37, Figure 8 in [docs/um-nucleo-board.pdf](https://githu
 - TIM1_CH1: PA8 (D9)
 
 ### Reaction Wheel Direction
-- PA11 (D10)
+- PB3 (D13)
 
 ### Encoder
 - TODO: add encoder pinout
