@@ -1,6 +1,6 @@
 # Pinout
 ## About 
-Pinout of our setup (STM32L412KBU6U microcontroller). Generated from cubesat-adcs.ioc.  
+Pinout of our setup (STM32L412KBU6U microcontroller and/or NUCLEO-L412KB board).
 ```
 Warning: Pins written here are pins as stated on the microcontroller, and NOT as stated on the Nucleo board!
 ```
