@@ -79,6 +79,7 @@ set(STM32CUBEMX_GENERATED_FILES
     src/middlewares/adcs/adcs_imu.c
     src/middlewares/adcs/adcs_or.c
     src/middlewares/adcs/adcs_rw.c
+    src/middlewares/adcs/adcs_pid.c
     src/middlewares/communication/comm.c
 
     src/libs/printf/src/printf/printf.c
