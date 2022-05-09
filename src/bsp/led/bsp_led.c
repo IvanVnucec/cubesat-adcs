@@ -21,10 +21,14 @@
 /* Private variables ---------------------------------------------------------*/
 static const GPIO_TypeDef *const BSP_LED_Index_To_GPIO_TypeDef[BSP_LED_INDEX_LENGTH] = {
     BSP_LED_CONFIG_LED_INDEX_0_GPIO_Port,
+    BSP_LED_CONFIG_LED_INDEX_1_GPIO_Port,
+    BSP_LED_CONFIG_LED_INDEX_2_GPIO_Port,
 };
 
 static const uint16_t BSP_LED_Index_To_GPIO_Pin[BSP_LED_INDEX_LENGTH] = {
     BSP_LED_CONFIG_LED_INDEX_0_Pin,
+    BSP_LED_CONFIG_LED_INDEX_1_Pin,
+    BSP_LED_CONFIG_LED_INDEX_2_Pin,
 };
 
 static const GPIO_PinState BSP_LED_Index_To_GPIO_PinState[BSP_LED_STATE_LENGTH] = {

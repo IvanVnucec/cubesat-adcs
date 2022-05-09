@@ -30,6 +30,12 @@ extern "C" {
 #define BSP_LED_CONFIG_LED_INDEX_0_GPIO_Port GPIOB
 #define BSP_LED_CONFIG_LED_INDEX_0_Pin GPIO_PIN_3
 
+#define BSP_LED_CONFIG_LED_INDEX_1_GPIO_Port GPIOA
+#define BSP_LED_CONFIG_LED_INDEX_1_Pin GPIO_PIN_1
+
+#define BSP_LED_CONFIG_LED_INDEX_2_GPIO_Port GPIOA
+#define BSP_LED_CONFIG_LED_INDEX_2_Pin GPIO_PIN_3
+
 /* Exported functions prototypes ---------------------------------------------*/
 
 #ifdef __cplusplus

@@ -22,7 +22,12 @@ extern "C" {
 /* Private defines -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
-typedef enum { BSP_LED_INDEX_0, BSP_LED_INDEX_LENGTH } BSP_LED_Index;
+typedef enum {
+    BSP_LED_INDEX_0,
+    BSP_LED_INDEX_1,
+    BSP_LED_INDEX_2,
+    BSP_LED_INDEX_LENGTH
+} BSP_LED_Index;
 
 typedef enum { BSP_LED_STATE_ON, BSP_LED_STATE_OFF, BSP_LED_STATE_LENGTH } BSP_LED_State;
 

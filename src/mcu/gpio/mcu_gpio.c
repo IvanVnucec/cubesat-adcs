@@ -34,8 +34,17 @@ void MCU_GPIO_init(void)
     __HAL_RCC_GPIOH_CLK_ENABLE();
 
     /*Configure GPIO pin Output Level */
+    /* Init LEDs */
     HAL_GPIO_WritePin(BSP_LED_CONFIG_LED_INDEX_0_GPIO_Port,
                       BSP_LED_CONFIG_LED_INDEX_0_Pin,
+                      GPIO_PIN_RESET);
+
+    HAL_GPIO_WritePin(BSP_LED_CONFIG_LED_INDEX_1_GPIO_Port,
+                      BSP_LED_CONFIG_LED_INDEX_1_Pin,
+                      GPIO_PIN_RESET);
+
+    HAL_GPIO_WritePin(BSP_LED_CONFIG_LED_INDEX_2_GPIO_Port,
+                      BSP_LED_CONFIG_LED_INDEX_2_Pin,
                       GPIO_PIN_RESET);
 
     /*Configure GPIO pin Output Level */
@@ -44,11 +53,24 @@ void MCU_GPIO_init(void)
                       GPIO_PIN_RESET);
 
     /*Configure GPIO pin : PtPin */
+    /* Init LEDs */
     GPIO_InitStruct.Pin   = BSP_LED_CONFIG_LED_INDEX_0_Pin;
     GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull  = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(BSP_LED_CONFIG_LED_INDEX_0_GPIO_Port, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin   = BSP_LED_CONFIG_LED_INDEX_1_Pin;
+    GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull  = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(BSP_LED_CONFIG_LED_INDEX_1_GPIO_Port, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin   = BSP_LED_CONFIG_LED_INDEX_2_Pin;
+    GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull  = GPIO_NOPULL;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(BSP_LED_CONFIG_LED_INDEX_2_GPIO_Port, &GPIO_InitStruct);
 
     /*Configure GPIO pin : PtPin */
     GPIO_InitStruct.Pin   = BSP_CONFIG_REACTION_WHEEL_DIR_Pin;
