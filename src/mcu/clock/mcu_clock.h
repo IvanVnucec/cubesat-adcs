@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file           : clock.h
+  * @file           : mcu_clock.h
   * @brief          : Header for clock.c file.
   *                   This file contains the common defines for the MCU clock.
   ******************************************************************************
@@ -10,8 +10,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __CLOCK_H
-#define __CLOCK_H
+#ifndef __MCU_CLOCK_H
+#define __MCU_CLOCK_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,10 +24,10 @@ extern "C" {
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions prototypes ---------------------------------------------*/
-void CLOCK_systemClockInit(void);
+void MCU_CLOCK_init(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __CLOCK_H */
+#endif /* __MCU_CLOCK_H */

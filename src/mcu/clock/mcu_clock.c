@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file           : clock.c
+  * @file           : mcu_clock.c
   * @brief          : Source file.
   *                   This file contains the common code of the MCU clock.
   ******************************************************************************
@@ -10,7 +10,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "clock.h"
+#include "mcu_clock.h"
 
 #include "stm32l4xx_hal.h"
 #include "utils/error/error.h"
@@ -27,7 +27,7 @@
   * @brief System Clock Configuration and Initialization
   * @retval None
   */
-void CLOCK_systemClockInit(void)
+void MCU_CLOCK_init(void)
 {
     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
     RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};

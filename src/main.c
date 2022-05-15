@@ -3,7 +3,6 @@
 
 #include "bsp/bsp.h"
 #include "cmsis_os.h"
-#include "drivers/clock/clock.h"
 #include "drivers/drivers.h"
 #include "mcu/mcu.h"
 #include "middlewares/middlewares.h"
@@ -23,9 +22,6 @@ int main(void)
     /* MCU Configuration--------------------------------------------------------*/
     /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
-
-    /* Configure the system clock */
-    CLOCK_systemClockInit();
 
     MCU_init();
     DRIVERS_init();
