@@ -12,7 +12,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "drivers.h"
 
-#include "drivers/tim/tim.h"
+#include "drivers/user/drv_tim.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -27,7 +27,7 @@
  */
 void DRIVERS_init(void)
 {
-    MX_TIM1_Init();
+    DRV_TIM_init();
 }
 
 /**
@@ -35,4 +35,5 @@ void DRIVERS_init(void)
  */
 void DRIVERS_deinit(void)
 {
+    DRV_TIM_deInit();
 }

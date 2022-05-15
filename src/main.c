@@ -24,8 +24,8 @@ int main(void)
     HAL_Init();
 
     MCU_init();
-    DRIVERS_init();
     BSP_init();
+    DRIVERS_init();
 
     /* Init scheduler */
     osKernelInitialize(); /* Call init function for freertos objects (in freertos.c) */

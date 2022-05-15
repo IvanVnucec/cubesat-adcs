@@ -110,4 +110,11 @@ void HAL_ResumeTick(void)
   __HAL_TIM_ENABLE_IT(&htim16, TIM_IT_UPDATE);
 }
 
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if (htim->Instance == TIM16) {
+        HAL_IncTick();
+    }
+}
+
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
