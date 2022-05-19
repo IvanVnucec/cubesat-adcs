@@ -17,6 +17,7 @@
 #include "adcs_imu.h"
 #include "adcs_or.h"
 #include "adcs_reg.h"
+#include "cmsis_os2.h"
 #include "middlewares/communication/comm.h"
 #include "printf/printf.h"
 #include "task.h"
@@ -48,9 +49,11 @@ void ADCS_thread(void *argument)
     static ADCS_ImuData_T imu_data;
     static ADCS_Quaternion_T q_ref;
     static ADCS_Quaternion_T q_meas;
+    static uint32_t tick;
 
     ADCS_init();
 
+    tick = osKernelGetTickCount();
     for (;;) {
         ADCS_IMU_getData(&imu_data);
         ADCS_determineAttitude(q_meas, &imu_data);
@@ -63,7 +66,9 @@ void ADCS_thread(void *argument)
         ADCS_controlAttitude(q_ref, q_meas, imu_data.gyr);
 
         //ADCS_sendQuaternion(q_meas);
-        ADCS_delayMs(ADCS_THREAD_PERIOD_IN_MILISECONDS);
+
+        tick += ADCS_THREAD_PERIOD_IN_MILISECONDS;    // overflow is safe
+        osDelayUntil(tick);
     }
 }
 
