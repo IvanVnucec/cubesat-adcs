@@ -15,6 +15,7 @@
 
 #include "bsp/bsp_config.h"
 #include "drivers/user/drv_tim.h"
+#include "utils/lerp/lerp.h"
 
 #include <stddef.h>
 
@@ -166,13 +167,11 @@ static void
     ADCS_RW_convertRwDutyCycleToPwmDutyCycle(DRV_TIM_PwmDutyCycle *drv_duty_cycle,
                                              const ADCS_RW_DutyCycle rw_duty_cycle)
 {
-    // lerp y = y0 + (x - x0) * (y1 - y0) / (x1 - x0);
     const float x0 = ADCS_RW_DUTY_CYCLE_MIN;
     const float x1 = ADCS_RW_DUTY_CYCLE_MAX;
     const float y0 = DRV_TIM_PWM_DUTY_CYCLE_ZERO;
     const float y1 = DRV_TIM_PWM_DUTY_CYCLE_MAX;
     const float x  = rw_duty_cycle;
-    const float y  = y0 + (x - x0) * (y1 - y0) / (x1 - x0);
 
-    *drv_duty_cycle = y;
+    *drv_duty_cycle = lerp(x, x0, x1, y0, y1);
 }

@@ -96,6 +96,7 @@ set(STM32CUBEMX_GENERATED_FILES
     src/libs/zs040/src/zs040.c
 
     src/utils/error/error.c
+    src/utils/lerp/lerp.c
 )
 
 set(EXECUTABLE ${PROJECT_NAME}.elf)

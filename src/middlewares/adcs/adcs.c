@@ -21,6 +21,7 @@
 #include "printf/printf.h"
 #include "task.h"
 #include "utils/error/error.h"
+#include "utils/lerp/lerp.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -187,14 +188,11 @@ static void ADCS_getRwDutyCycleAndDirectionBasedOnTorque(ADCS_RW_DutyCycle *rw_d
     if (torque > max_torque)
         torque = max_torque;
 
-    // TODO: create lerp function in utils because we are using it in multiple files
-    // lerp y = y0 + (x - x0) * (y1 - y0) / (x1 - x0);
     const float x0 = 0.0f;
     const float x1 = max_torque;
     const float y0 = ADCS_RW_DUTY_CYCLE_MIN;
     const float y1 = ADCS_RW_DUTY_CYCLE_MAX;
     const float x  = torque;
-    const float y  = y0 + (x - x0) * (y1 - y0) / (x1 - x0);
 
-    *rw_duty_cycle = y;
+    *rw_duty_cycle = lerp(x, x0, x1, y0, y1);
 }
