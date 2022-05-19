@@ -23,26 +23,26 @@ extern "C" {
 /* Private defines -----------------------------------------------------------*/
 
 /* Exported types ------------------------------------------------------------*/
-typedef enum {
+typedef enum ADCS_RW_DutyCycle {
     ADCS_RW_DUTY_CYCLE_MIN = 0u,
     ADCS_RW_DUTY_CYCLE_MAX = 100u,
 } ADCS_RW_DutyCycle;
 
-typedef enum {
+typedef enum ADCS_RW_Direction {
     ADCS_RW_DIRECTION_CW,
     ADCS_RW_DIRECTION_CCW,
     ADCS_RW_DIRECTION_LEN,
 } ADCS_RW_Direction;
 
-typedef enum {
+typedef enum ADCS_RW_Status {
     ADCS_RW_STATUS_OK,
     ADCS_RW_STATUS_ERROR_DUTY_CYCLE,
     ADCS_RW_STATUS_ERROR_DIRECTION,
     ADCS_RW_STATUS_ERROR
 } ADCS_RW_Status;
 
-typedef struct {
-    unsigned duty_cycle;
+typedef struct ADCS_RW_Handle {
+    ADCS_RW_DutyCycle duty_cycle;
     ADCS_RW_Direction direction;
 } ADCS_RW_Handle;
 

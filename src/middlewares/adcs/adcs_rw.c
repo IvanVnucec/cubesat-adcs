@@ -13,6 +13,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "adcs_rw.h"
 
+#include "bsp/bsp_config.h"
+#include "drivers/user/drv_tim.h"
+
 #include <stddef.h>
 
 /* Private typedef -----------------------------------------------------------*/
@@ -22,6 +25,9 @@
 
 /* Private function prototypes -----------------------------------------------*/
 static void ADCS_RW_initPwm(ADCS_RW_Status *status);
+static void
+    ADCS_RW_convertRwDutyCycleToPwmDutyCycle(DRV_TIM_PwmDutyCycle *drv_duty_cycle,
+                                             const ADCS_RW_DutyCycle rw_duty_cycle);
 
 /* Private user code ---------------------------------------------------------*/
 void ADCS_RW_init(ADCS_RW_Handle *handle, ADCS_RW_Status *status)
@@ -37,6 +43,9 @@ void ADCS_RW_init(ADCS_RW_Handle *handle, ADCS_RW_Status *status)
             ADCS_RW_setPwmDutyCycle(handle, ADCS_RW_DUTY_CYCLE_MIN, &local_status);
             if (local_status == ADCS_RW_STATUS_OK) {
                 ADCS_RW_setDirection(handle, ADCS_RW_DIRECTION_CW, &local_status);
+                if (local_status == ADCS_RW_STATUS_OK) {
+                    local_status = ADCS_RW_STATUS_OK;
+                }
             }
         }
     }
@@ -55,9 +64,13 @@ void ADCS_RW_setPwmDutyCycle(ADCS_RW_Handle *handle,
     if (handle != NULL) {
         if (duty_cycle >= ADCS_RW_DUTY_CYCLE_MIN
             && duty_cycle <= ADCS_RW_DUTY_CYCLE_MAX) {
-            // TODO: set pwm to match duty cycle (from 0 to 100)
-
             handle->duty_cycle = duty_cycle;
+
+            DRV_TIM_PwmDutyCycle drv_duty_cycle;
+            ADCS_RW_convertRwDutyCycleToPwmDutyCycle(&drv_duty_cycle, handle->duty_cycle);
+            DRV_TIM_pwmSetDutyCycle(drv_duty_cycle);
+
+            local_status = ADCS_RW_STATUS_OK;
         } else {
             local_status = ADCS_RW_STATUS_ERROR_DUTY_CYCLE;
         }
@@ -77,12 +90,18 @@ void ADCS_RW_setDirection(ADCS_RW_Handle *handle,
     if (handle != NULL) {
         if (dir < ADCS_RW_DIRECTION_LEN) {
             if (dir == ADCS_RW_DIRECTION_CW) {
-                // TODO: set gpio high or low
+                // TODO: move this into drivers or somewhere
+                HAL_GPIO_WritePin(BSP_CONFIG_REACTION_WHEEL_DIR_GPIO_Port,
+                                  BSP_CONFIG_REACTION_WHEEL_DIR_Pin,
+                                  GPIO_PIN_RESET);
             } else if (dir == ADCS_RW_DIRECTION_CCW) {
-                // TODO: set gpio low or high
+                HAL_GPIO_WritePin(BSP_CONFIG_REACTION_WHEEL_DIR_GPIO_Port,
+                                  BSP_CONFIG_REACTION_WHEEL_DIR_Pin,
+                                  GPIO_PIN_SET);
             }
 
             handle->direction = dir;
+            local_status      = ADCS_RW_STATUS_OK;
         } else {
             local_status = ADCS_RW_STATUS_ERROR_DIRECTION;
         }
@@ -101,7 +120,8 @@ void ADCS_RW_getPwmDutyCycle(ADCS_RW_Handle *handle,
 
     if (handle != NULL) {
         if (duty_cycle != NULL) {
-            *duty_cycle = handle->duty_cycle;
+            *duty_cycle  = handle->duty_cycle;
+            local_status = ADCS_RW_STATUS_OK;
         } else {
             local_status = ADCS_RW_STATUS_ERROR;
         }
@@ -120,7 +140,8 @@ void ADCS_RW_getDirection(ADCS_RW_Handle *handle,
 
     if (handle != NULL) {
         if (dir != NULL) {
-            *dir = handle->direction;
+            *dir         = handle->direction;
+            local_status = ADCS_RW_STATUS_OK;
         } else {
             local_status = ADCS_RW_STATUS_ERROR;
         }
@@ -135,7 +156,23 @@ static void ADCS_RW_initPwm(ADCS_RW_Status *status)
 {
     ADCS_RW_Status local_status = ADCS_RW_STATUS_ERROR;
 
-    // TODO
+    DRV_TIM_pwmStart();
+    local_status = ADCS_RW_STATUS_OK;
 
     *status = local_status;
+}
+
+static void
+    ADCS_RW_convertRwDutyCycleToPwmDutyCycle(DRV_TIM_PwmDutyCycle *drv_duty_cycle,
+                                             const ADCS_RW_DutyCycle rw_duty_cycle)
+{
+    // lerp y = y0 + (x - x0) * (y1 - y0) / (x1 - x0);
+    const float x0 = ADCS_RW_DUTY_CYCLE_MIN;
+    const float x1 = ADCS_RW_DUTY_CYCLE_MAX;
+    const float y0 = DRV_TIM_PWM_DUTY_CYCLE_ZERO;
+    const float y1 = DRV_TIM_PWM_DUTY_CYCLE_MAX;
+    const float x  = rw_duty_cycle;
+    const float y  = y0 + (x - x0) * (y1 - y0) / (x1 - x0);
+
+    *drv_duty_cycle = y;
 }
