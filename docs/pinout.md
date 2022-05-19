@@ -14,7 +14,7 @@ For example, on Page 31/37, Figure 8 in [docs/um-nucleo-board.pdf](https://githu
 
 ### LED
 - DEBUG0: PB3 (D13)
-- DEBUG1: PA1 (A1)
+- DEBUG1: PA4 (A3)
 - DEBUG2: PA3 (A2)
 	
 ### I2C3
@@ -25,7 +25,7 @@ For example, on Page 31/37, Figure 8 in [docs/um-nucleo-board.pdf](https://githu
 - TIM1_CH1: PA8 (D9)
 
 ### Reaction Wheel Direction
-- PB3 (D13)
+- PA1 (A1)
 
 ### Encoder
 - CH_A: PB5  (D11)

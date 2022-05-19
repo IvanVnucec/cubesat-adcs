@@ -33,8 +33,8 @@ extern "C" {
 #define BSP_CONFIG_SWCLK_GPIO_Port GPIOA
 
 /* Reaction wheel direction pin */
-#define BSP_CONFIG_REACTION_WHEEL_DIR_Pin GPIO_PIN_3
-#define BSP_CONFIG_REACTION_WHEEL_DIR_GPIO_Port GPIOB
+#define BSP_CONFIG_REACTION_WHEEL_DIR_Pin GPIO_PIN_1
+#define BSP_CONFIG_REACTION_WHEEL_DIR_GPIO_Port GPIOA
 
 /* Encoder pins */
 #define BSP_CONFIG_ENCODER_CHA_Pin GPIO_PIN_5

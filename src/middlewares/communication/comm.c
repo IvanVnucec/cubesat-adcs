@@ -73,7 +73,7 @@ void COMM_thread(void *argument)
             ERROR_assert(status == COMM_STATUS_OK);
 
             COMM_parse(&msg, &status);
-            ERROR_assert(status == COMM_STATUS_OK);
+            ERROR_assert(status == COMM_STATUS_OK || status == COMM_STATUS_NO_CALLBACK_FUNCTION);
         }
 
         osThreadYield();
