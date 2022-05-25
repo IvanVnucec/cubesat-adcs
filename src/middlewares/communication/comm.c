@@ -18,6 +18,7 @@
 #include "stm32l4xx_hal.h"
 #include "utils/error/error.h"
 
+#include <stdlib.h>
 #include <string.h>
 
 /* Private typedef -----------------------------------------------------------*/
@@ -25,19 +26,9 @@
 /* Private define ------------------------------------------------------------*/
 #define COMM_UART_TX_QUEUE_LEN (10)
 #define COMM_UART_RX_QUEUE_LEN (10)
-#define COMM_CALLBACK_FUNCTIONS_LEN (1)
+#define COMM_CALLBACK_FUNCTIONS_LEN (2)
 
 /* Private macro -------------------------------------------------------------*/
-
-/* Private variables ---------------------------------------------------------*/
-static osMessageQueueId_t COMM_uart_tx_queue = NULL;
-static osMessageQueueId_t COMM_uart_rx_queue = NULL;
-static uint8_t data_received[COMM_MESSAGE_MAX_BUFF_LEN];    // for uart rx
-static int data_received_ptr = 0;                           // for uart rx
-static int COMM_UART_tx_free = 0;                           // for uart tx
-static COMM_CallbackFunction COMM_callback_functions[COMM_CALLBACK_FUNCTIONS_LEN] = {
-    {"stop", osThreadExit},
-};
 
 /* Private function prototypes -----------------------------------------------*/
 static void COMM_init(COMM_Status *status);
@@ -49,6 +40,20 @@ static void COMM_sendMessageOverBluetooth(const COMM_Message *const msg,
                                           COMM_Status *status);
 static void COMM_UART_startReceiving(uint8_t *save_to, COMM_Status *status);
 static void COMM_UART_stopReceiving(COMM_Status *status);
+static void COMM_echo(const char *msg);
+static void COMM_set_sending_enabled(const char *msg);
+
+/* Private variables ---------------------------------------------------------*/
+static osMessageQueueId_t COMM_uart_tx_queue = NULL;
+static osMessageQueueId_t COMM_uart_rx_queue = NULL;
+static uint8_t data_received[COMM_MESSAGE_MAX_BUFF_LEN];    // for uart rx
+static int data_received_ptr = 0;                           // for uart rx
+static int COMM_UART_tx_free = 0;                           // for uart tx
+static COMM_CallbackFunction COMM_callback_functions[COMM_CALLBACK_FUNCTIONS_LEN] = {
+    {"echo", COMM_echo},
+    {"sending_enabled", COMM_set_sending_enabled},
+};
+static int COMM_sending_enabled = 1;
 
 /* Private user code ---------------------------------------------------------*/
 void COMM_thread(void *argument)
@@ -64,7 +69,9 @@ void COMM_thread(void *argument)
             COMM_getMessage(&msg, COMM_uart_tx_queue, &status);
             ERROR_assert(status == COMM_STATUS_OK);
 
-            COMM_sendMessageOverBluetooth(&msg, &status);
+            if (COMM_sending_enabled) {
+                COMM_sendMessageOverBluetooth(&msg, &status);
+            }
             ERROR_assert(status == COMM_STATUS_OK);
         }
 
@@ -73,7 +80,9 @@ void COMM_thread(void *argument)
             ERROR_assert(status == COMM_STATUS_OK);
 
             COMM_parse(&msg, &status);
-            ERROR_assert(status == COMM_STATUS_OK || status == COMM_STATUS_NO_CALLBACK_FUNCTION);
+            ERROR_assert(status == COMM_STATUS_OK
+                         || status == COMM_STATUS_NO_CALLBACK_FUNCTION
+                         || status == COMM_STATUS_PARSING_ERROR);
         }
 
         osThreadYield();
@@ -103,20 +112,41 @@ void COMM_sendMessage(const COMM_Message *const msg, COMM_Status *status)
 static void COMM_parse(const COMM_Message *msg, COMM_Status *status)
 {
     COMM_Status local_status = COMM_STATUS_NO_CALLBACK_FUNCTION;
+    char fun[100];
+    char arg[100];
 
+    const char *ob = strchr((const char *)msg->buffer, '(');
+    if (ob == NULL) {
+        local_status = COMM_STATUS_PARSING_ERROR;
+        goto exit;
+    }
+
+    const char *cb = strchr((const char *)msg->buffer, ')');
+    if (cb == NULL) {
+        local_status = COMM_STATUS_PARSING_ERROR;
+        goto exit;
+    }
+
+    int fun_len = ob - (const char *)msg->buffer;
+    int arg_len = cb - ob - 1;
+
+    strncpy(fun, (const char *)msg->buffer, fun_len);
+    fun[fun_len] = '\0';
+
+    strncpy(arg, ob + 1, arg_len);
+    arg[arg_len] = '\0';
+
+    // call function with argument
     for (int i = 0; i < COMM_CALLBACK_FUNCTIONS_LEN; i++) {
-        if (strncmp((const char *)msg->buffer,
-                    COMM_callback_functions[i].name,
-                    msg->msg_len)
-            == 0) {
+        if (strncmp(fun, COMM_callback_functions[i].name, fun_len) == 0) {
             // call callback function
-            COMM_callback_functions[i].fun_ptr();
-
+            COMM_callback_functions[i].fun_ptr(arg);
             local_status = COMM_STATUS_OK;
             break;
         }
     }
 
+exit:
     if (status != NULL) {
         *status = local_status;
     }
@@ -227,6 +257,26 @@ __attribute__((unused)) static void COMM_UART_stopReceiving(COMM_Status *status)
     if (status != NULL) {
         *status = local_status;
     }
+}
+
+static void COMM_echo(const char *msg)
+{
+    COMM_Message msg_to_send;
+    COMM_Status status;
+
+    int msg_len = strlen(msg);
+    strncpy((char *)msg_to_send.buffer, msg, msg_len);
+    msg_to_send.msg_len = msg_len;
+
+    COMM_sendMessage(&msg_to_send, &status);
+}
+
+static void COMM_set_sending_enabled(const char *msg)
+{
+    if (msg[0] == '1')
+        COMM_sending_enabled = 1;
+    else
+        COMM_sending_enabled = 0;
 }
 
 // TODO: move UART code from comm to uart (bsp or mcu)

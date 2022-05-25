@@ -37,9 +37,10 @@ typedef enum {
     COMM_STATUS_OK,
     COMM_STATUS_ERROR,
     COMM_STATUS_NO_CALLBACK_FUNCTION,
+    COMM_STATUS_PARSING_ERROR
 } COMM_Status;
 
-typedef void (*COMM_CallbackFunctionPtr)(void);
+typedef void (*COMM_CallbackFunctionPtr)(const char *arg);
 
 typedef struct {
     const char name[COMM_MESSAGE_MAX_BUFF_LEN];
