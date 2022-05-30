@@ -43,6 +43,10 @@ extern "C" {
 #define BSP_CONFIG_ENCODER_CHB_Pin GPIO_PIN_11
 #define BSP_CONFIG_ENCODER_CHB_GPIO_Port GPIOA
 
+/* For encoder pins interrupts (both channel A and B) */
+#define BSP_CONFIG_ENCODER_CHB_EXTI_IRQn EXTI15_10_IRQn
+#define BSP_CONFIG_ENCODER_CHA_EXTI_IRQn EXTI9_5_IRQn
+
 /* Exported functions prototypes ---------------------------------------------*/
 
 #ifdef __cplusplus

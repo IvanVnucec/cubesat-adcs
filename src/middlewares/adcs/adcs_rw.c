@@ -18,6 +18,7 @@
 #include "utils/lerp/lerp.h"
 
 #include <stddef.h>
+#include <stdint.h>
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -150,6 +151,17 @@ void ADCS_RW_getDirection(ADCS_RW_Handle *handle,
 
     if (status != NULL) {
         *status = local_status;
+    }
+}
+
+void ADCS_RW_encoderIntCallback(const uint16_t GPIO_Pin)
+{
+    if (GPIO_Pin == BSP_CONFIG_ENCODER_CHA_Pin) {
+        // TODO: add logic for channel A
+    } else if (GPIO_Pin == BSP_CONFIG_ENCODER_CHB_Pin) {
+        // TODO: add logic for channel B
+    } else {
+        // ignore
     }
 }
 

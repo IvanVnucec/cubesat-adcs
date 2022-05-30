@@ -19,6 +19,8 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
+
 /* Private includes ----------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/
 
@@ -63,7 +65,7 @@ void ADCS_RW_getPwmDutyCycle(ADCS_RW_Handle *handle,
 void ADCS_RW_getDirection(ADCS_RW_Handle *handle,
                           ADCS_RW_Direction *dir,
                           ADCS_RW_Status *status);
-
+void ADCS_RW_encoderIntCallback(const uint16_t GPIO_Pin);
 #ifdef __cplusplus
 }
 #endif

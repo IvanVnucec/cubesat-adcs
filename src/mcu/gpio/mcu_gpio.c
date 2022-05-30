@@ -92,12 +92,19 @@ void MCU_GPIO_init(void)
 
     /* Encoder pins */
     GPIO_InitStruct.Pin  = BSP_CONFIG_ENCODER_CHA_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(BSP_CONFIG_ENCODER_CHA_GPIO_Port, &GPIO_InitStruct);
 
     GPIO_InitStruct.Pin  = BSP_CONFIG_ENCODER_CHB_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(BSP_CONFIG_ENCODER_CHB_GPIO_Port, &GPIO_InitStruct);
+
+    /* For encoder pins interrupts (both channel A and B) */
+    HAL_NVIC_SetPriority(BSP_CONFIG_ENCODER_CHA_EXTI_IRQn, 14, 0);
+    HAL_NVIC_EnableIRQ(BSP_CONFIG_ENCODER_CHA_EXTI_IRQn);
+
+    HAL_NVIC_SetPriority(BSP_CONFIG_ENCODER_CHB_EXTI_IRQn, 14, 0);
+    HAL_NVIC_EnableIRQ(BSP_CONFIG_ENCODER_CHB_EXTI_IRQn);
 }
