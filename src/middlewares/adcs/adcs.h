@@ -45,6 +45,7 @@ typedef struct {
 
 /* Exported constants --------------------------------------------------------*/
 #define ADCS_THREAD_PERIOD_IN_MILISECONDS (100U)
+#define ADCS_THREAD_PERIOD_IN_SECONDS (ADCS_THREAD_PERIOD_IN_MILISECONDS / 1000.0f)
 #define ADCS_REG_PQ (20.0f)
 #define ADCS_REG_PW (4.0f)
 

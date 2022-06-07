@@ -49,7 +49,7 @@ void ADCS_OR_init(struct0_T *optReqHandle)
 
     optReqHandle->Mu_noise_var  = ADCS_OPTREQ_MU_NOISE_VARIANCE;
     optReqHandle->Eta_noise_var = ADCS_OPTREQ_ETA_NOISE_VARIANCE;
-    optReqHandle->dT = ADCS_THREAD_PERIOD_IN_MILISECONDS / 1000.0f;    // in seconds
+    optReqHandle->dT            = ADCS_THREAD_PERIOD_IN_SECONDS;
 
     ADCS_IMU_getData(&imu_data);
     ADCS_OR_fillBMatrice(optReqHandle, imu_data.acc, imu_data.mag);
