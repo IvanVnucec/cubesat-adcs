@@ -28,6 +28,12 @@ extern "C" {
 
 /* Private defines -----------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
+typedef enum ADCS_RegulationMode_Enum {
+    ADCS_REGULATION_MODE_ATTITUDE,
+    ADCS_REGULATIOM_MODE_ANGULAR_VELOCITY,
+    ADCS_REGULATION_MODE_NUM
+} ADCS_RegulationMode_E;
+
 typedef float ADCS_Quaternion_T[4];
 
 typedef struct {
@@ -46,6 +52,8 @@ typedef struct {
 /* Exported functions prototypes ---------------------------------------------*/
 void ADCS_thread(void *argument);
 void ADCS_delayMs(unsigned ms);
+ADCS_RegulationMode_E ADCS_getRegulationMode(void);
+void ADCS_setRegulationMode(ADCS_RegulationMode_E reg_mode);
 
 #ifdef __cplusplus
 }

@@ -20,6 +20,7 @@
 #include "cmsis_os2.h"
 #include "middlewares/communication/comm.h"
 #include "printf/printf.h"
+#include "stm32l4xx_hal.h"
 #include "task.h"
 #include "utils/error/error.h"
 #include "utils/lerp/lerp.h"
@@ -29,6 +30,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 static ADCS_Handle_T ADCS_handle;
+static ADCS_RegulationMode_E ADCS_regulation_mode = ADCS_REGULATION_MODE_ATTITUDE;
 
 /* Private function prototypes -----------------------------------------------*/
 static void ADCS_init(void);
@@ -50,22 +52,31 @@ void ADCS_thread(void *argument)
     static ADCS_Quaternion_T q_ref;
     static ADCS_Quaternion_T q_meas;
     static uint32_t tick;
+    static ADCS_RegulationMode_E reg_mode;
 
     ADCS_init();
 
     tick = osKernelGetTickCount();
     for (;;) {
         ADCS_IMU_getData(&imu_data);
-        ADCS_determineAttitude(q_meas, &imu_data);
 
-        // TODO: remove this, for test only
-        q_ref[0] = 1.0f;
-        q_ref[1] = 0.0f;
-        q_ref[2] = 0.0f;
-        q_ref[3] = 0.0f;
-        ADCS_controlAttitude(q_ref, q_meas, imu_data.gyr);
+        reg_mode = ADCS_getRegulationMode();
+        if (reg_mode == ADCS_REGULATION_MODE_ATTITUDE) {
+            ADCS_determineAttitude(q_meas, &imu_data);
 
-        //ADCS_sendQuaternion(q_meas);
+            // TODO: remove this, for test only
+            q_ref[0] = 1.0f;
+            q_ref[1] = 0.0f;
+            q_ref[2] = 0.0f;
+            q_ref[3] = 0.0f;
+            ADCS_controlAttitude(q_ref, q_meas, imu_data.gyr);
+
+            //ADCS_sendQuaternion(q_meas);
+        } else if (reg_mode == ADCS_REGULATIOM_MODE_ANGULAR_VELOCITY) {
+        } else {
+            // throw error
+            ERROR_assert(0);
+        }
 
         tick += ADCS_THREAD_PERIOD_IN_MILISECONDS;    // overflow is safe
         osDelayUntil(tick);
@@ -200,4 +211,27 @@ static void ADCS_getRwDutyCycleAndDirectionBasedOnTorque(ADCS_RW_DutyCycle *rw_d
     const float x  = torque;
 
     *rw_duty_cycle = lerp(x, x0, x1, y0, y1);
+}
+
+ADCS_RegulationMode_E ADCS_getRegulationMode(void)
+{
+    ADCS_RegulationMode_E retval;
+
+    __disable_irq();
+    retval = ADCS_regulation_mode;
+    __enable_irq();
+
+    return retval;
+}
+
+void ADCS_setRegulationMode(ADCS_RegulationMode_E reg_mode)
+{
+    if (reg_mode < ADCS_REGULATION_MODE_NUM) {
+        __disable_irq();
+        ADCS_regulation_mode = reg_mode;
+        __enable_irq();
+    } else {
+        // error
+        ERROR_assert(0);
+    }
 }

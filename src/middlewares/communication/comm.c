@@ -15,6 +15,7 @@
 
 #include "cmsis_os2.h"
 #include "mcu/uart/mcu_uart.h"
+#include "middlewares/adcs/adcs.h"
 #include "stm32l4xx_hal.h"
 #include "utils/error/error.h"
 
@@ -26,7 +27,7 @@
 /* Private define ------------------------------------------------------------*/
 #define COMM_UART_TX_QUEUE_LEN (10)
 #define COMM_UART_RX_QUEUE_LEN (10)
-#define COMM_CALLBACK_FUNCTIONS_LEN (2)
+#define COMM_CALLBACK_FUNCTIONS_LEN (5)
 
 /* Private macro -------------------------------------------------------------*/
 
@@ -41,7 +42,10 @@ static void COMM_sendMessageOverBluetooth(const COMM_Message *const msg,
 static void COMM_UART_startReceiving(uint8_t *save_to, COMM_Status *status);
 static void COMM_UART_stopReceiving(COMM_Status *status);
 static void COMM_echo(const char *msg);
-static void COMM_set_sending_enabled(const char *msg);
+static void COMM_help(const char *msg);
+static void COMM_setSending(const char *msg);
+static void COMM_setRegulationModeAngVel(const char *msg);
+static void COMM_setRegulationModeAttitude(const char *msg);
 
 /* Private variables ---------------------------------------------------------*/
 static osMessageQueueId_t COMM_uart_tx_queue = NULL;
@@ -51,7 +55,10 @@ static int data_received_ptr = 0;                           // for uart rx
 static int COMM_UART_tx_free = 0;                           // for uart tx
 static COMM_CallbackFunction COMM_callback_functions[COMM_CALLBACK_FUNCTIONS_LEN] = {
     {"echo", COMM_echo},
-    {"sending_enabled", COMM_set_sending_enabled},
+    {"help", COMM_help},
+    {"set_sending", COMM_setSending},
+    {"set_reg_angvel", COMM_setRegulationModeAngVel},
+    {"set_reg_attitude", COMM_setRegulationModeAttitude},
 };
 static int COMM_sending_enabled = 1;
 
@@ -271,12 +278,44 @@ static void COMM_echo(const char *msg)
     COMM_sendMessage(&msg_to_send, &status);
 }
 
-static void COMM_set_sending_enabled(const char *msg)
+static void COMM_help(const char *msg)
+{
+    COMM_Message msg_to_send;
+    COMM_Status status;
+    int msg_len;
+
+    for (int i = 0; i < COMM_CALLBACK_FUNCTIONS_LEN; i++) {
+        const char *fun_name = COMM_callback_functions[i].name;
+
+        msg_len = strlen(fun_name);
+        strncpy((char *)msg_to_send.buffer, fun_name, msg_len);
+        // add newline
+        msg_to_send.buffer[msg_len] = '\n';
+        msg_len += 1;
+        msg_to_send.buffer[msg_len] = '\0';
+
+        msg_to_send.msg_len = msg_len;
+
+        COMM_sendMessage(&msg_to_send, &status);
+    }
+}
+
+static void COMM_setSending(const char *msg)
 {
     if (msg[0] == '1')
         COMM_sending_enabled = 1;
     else
         COMM_sending_enabled = 0;
+}
+
+static void COMM_setRegulationModeAngVel(const char *msg)
+{
+    ADCS_setRegulationMode(ADCS_REGULATIOM_MODE_ANGULAR_VELOCITY);
+}
+
+static void COMM_setRegulationModeAttitude(const char *msg)
+{
+    ADCS_setRegulationMode(ADCS_REGULATION_MODE_ATTITUDE);
 }
 
 // TODO: move UART code from comm to uart (bsp or mcu)
