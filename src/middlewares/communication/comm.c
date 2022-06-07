@@ -366,6 +366,4 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *handle)
 {
     uint32_t error_code = handle->ErrorCode;
     (void)error_code;
-
-    ERROR_assert(0);
 }
