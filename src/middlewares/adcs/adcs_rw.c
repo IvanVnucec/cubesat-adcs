@@ -45,9 +45,6 @@ void ADCS_RW_init(ADCS_RW_Handle *handle, ADCS_RW_Status *status)
             ADCS_RW_setPwmDutyCycle(handle, ADCS_RW_DUTY_CYCLE_MIN, &local_status);
             if (local_status == ADCS_RW_STATUS_OK) {
                 ADCS_RW_setDirection(handle, ADCS_RW_DIRECTION_CW, &local_status);
-                if (local_status == ADCS_RW_STATUS_OK) {
-                    local_status = ADCS_RW_STATUS_OK;
-                }
             }
         }
     }
