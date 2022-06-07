@@ -21,6 +21,7 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 
 /* Private includes ----------------------------------------------------------*/
+#include "adcs_pid.h"
 #include "adcs_reg.h"
 #include "adcs_rw.h"
 #include "mpu9250/mpu9250.h"
@@ -41,6 +42,7 @@ typedef struct {
     MPU9250_Handle_s mpu9250Handle;
     ADCS_RW_Handle reactionWheelHandle;
     ADCS_REG_Handle adcsRegHandle;
+    ADCS_PID_Handle pidHandleAngVel;
 } ADCS_Handle_T;
 
 /* Exported constants --------------------------------------------------------*/
