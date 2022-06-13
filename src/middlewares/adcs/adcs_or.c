@@ -25,7 +25,7 @@
 /* Private define ------------------------------------------------------------*/
 #define ADCS_OPTREQ_MU_NOISE_VARIANCE (0.0008117f)             // no unit (normalized)
 #define ADCS_OPTREQ_ETA_NOISE_VARIANCE (0.0000010f)            // no unit (normalized)
-#define ADCS_OPTREQ_ACC_REF ((float[3]){0.0f, 0.0f, +1.0f})    // no unit (normalized)
+#define ADCS_OPTREQ_ACC_REF ((float[3]){0.0f, 0.0f, -1.0f})    // no unit (normalized)
 #define ADCS_OPTREQ_MAG_REF \
     ((float[3]){0.459787381f, 0.037211461f, 0.887248859f})    // no unit (normalized)
 
