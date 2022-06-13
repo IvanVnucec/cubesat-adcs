@@ -18,6 +18,7 @@
             ],
             "svdFile": "${workspaceRoot}/docs/stm32l412.svd",
             "preLaunchTask": "build",
+            "showDevDebugOutput":true
         }
     ]
 }
