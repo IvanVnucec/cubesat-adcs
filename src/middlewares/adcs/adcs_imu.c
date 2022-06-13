@@ -25,12 +25,12 @@
 /* Private variables ---------------------------------------------------------*/
 static MPU9250_Handle_s *ADCS_IMU_mpu9250Handle = NULL;
 // clang-format off
-const static float A[3][3] = {  // TODO: fill magnetometer calibration matrice
+const static float A[3][3] = {
     {1.0f, 0.0f, 0.0f}, 
     {0.0f, 1.0f, 0.0f}, 
     {0.0f, 0.0f, 1.0f}
 };
-const static float b[3] = {0.0f, 0.0f, 0.0f}; // TODO: fill magnetometer calibration vector
+const static float b[3] = {12.6506f, -17.8589f, -56.9918f};
 // clang-format on
 
 /* Private function prototypes -----------------------------------------------*/
