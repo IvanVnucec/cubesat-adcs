@@ -64,6 +64,7 @@ static void ADCS_sendAnglePidOutput(const float pid_out);
 static void ADCS_calculateEulerAngles(float e[3], const ADCS_Quaternion_T q);
 static void ADCS_sendEulerAngles(const float e[3]);
 static void ADCS_sendMagneticField(const float m[3]);
+// TODO: move regulator stuff in its own files
 static void ADCS_getRwDutyCycleAndDirectionBasedOnPidAngVelRegOut(
     ADCS_RW_DutyCycle *rw_duty_cycle,
     ADCS_RW_Direction *rw_direction,
