@@ -17,7 +17,7 @@
 #include "adcs_imu.h"
 #include "adcs_or.h"
 #include "adcs_pid.h"
-#include "adcs_reg.h"
+#include "adcs_reg_quat.h"
 #include "cmsis_os2.h"
 #include "middlewares/communication/comm.h"
 #include "printf/printf.h"
@@ -51,7 +51,7 @@ static void ADCS_controlAttitude(const ADCS_Quaternion_T q_ref,
 static void ADCS_controlAngVel(const float ang_vel_ref, const float ang_vel);
 static void ADCS_sendQuaternion(const ADCS_Quaternion_T quat);
 static void ADCS_sendAngVel(const float w[3]);
-static void ADCS_sendTorque(const ADCS_REG_Torque t);
+static void ADCS_sendTorque(const ADCS_REG_QUAT_Torque t);
 static void ADCS_sendAngVelPidOutput(const float pid_out);
 static void ADCS_calculateEulerAngles(float e[3], const ADCS_Quaternion_T q);
 static void ADCS_sendEulerAngles(const float e[3]);
@@ -126,7 +126,7 @@ static void ADCS_init(void)
     ADCS_RW_init(&ADCS_handle.reactionWheelHandle, &rw_status);
     ERROR_assert(rw_status == ADCS_RW_STATUS_OK);
 
-    ADCS_REG_init(&ADCS_handle.adcsRegHandle, ADCS_REG_PQ, ADCS_REG_PW);
+    ADCS_REG_QUAT_init(&ADCS_handle.adcsRegHandle, ADCS_REG_QUAT_PQ, ADCS_REG_QUAT_PW);
     ADCS_PID_init(&ADCS_handle.pidHandleAngVel, &ADCS_pid_coeffs_angvel, &pid_status);
     ERROR_assert(pid_status == ADCS_PID_STATUS_OK);
 }
@@ -141,10 +141,10 @@ static void ADCS_controlAttitude(const ADCS_Quaternion_T q_ref,
                                  const ADCS_Quaternion_T q_meas,
                                  const float gyr[3])
 {
-    ADCS_REG_Torque torque;
-    ADCS_REG_Quaternion q_ref_reg;
-    ADCS_REG_Quaternion q_meas_reg;
-    ADCS_REG_AngVel ang_vel_reg;
+    ADCS_REG_QUAT_Torque torque;
+    ADCS_REG_QUAT_Quaternion q_ref_reg;
+    ADCS_REG_QUAT_Quaternion q_meas_reg;
+    ADCS_REG_QUAT_AngVel ang_vel_reg;
     ADCS_RW_Status tw_status;
     ADCS_RW_DutyCycle rw_duty_cycle;
     ADCS_RW_Direction rw_direction;
@@ -164,8 +164,8 @@ static void ADCS_controlAttitude(const ADCS_Quaternion_T q_ref,
     ang_vel_reg.wy = gyr[1];
     ang_vel_reg.wz = gyr[2];
 
-    ADCS_REG_iterate(&ADCS_handle.adcsRegHandle, &q_ref_reg, &q_meas_reg, &ang_vel_reg);
-    ADCS_REG_getTorque(&ADCS_handle.adcsRegHandle, &torque);
+    ADCS_REG_QUAT_iterate(&ADCS_handle.adcsRegHandle, &q_ref_reg, &q_meas_reg, &ang_vel_reg);
+    ADCS_REG_QUAT_getTorque(&ADCS_handle.adcsRegHandle, &torque);
 
     // regulate only around z axis
     ADCS_getRwDutyCycleAndDirectionBasedOnTorque(&rw_duty_cycle,
@@ -287,7 +287,7 @@ __attribute__((unused)) static void ADCS_sendAngVel(const float w[3])
     COMM_sendMessage(&message, &status);
 }
 
-__attribute__((unused)) static void ADCS_sendTorque(const ADCS_REG_Torque t)
+__attribute__((unused)) static void ADCS_sendTorque(const ADCS_REG_QUAT_Torque t)
 {
     COMM_Status status = COMM_STATUS_ERROR;
     COMM_Message message;

@@ -22,7 +22,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 #include "adcs_pid.h"
-#include "adcs_reg.h"
+#include "adcs_reg_quat.h"
 #include "adcs_rw.h"
 #include "mpu9250/mpu9250.h"
 #include "opt_req/get_quat_from_K.h"
@@ -41,15 +41,15 @@ typedef struct {
     struct0_T optReqHandle;
     MPU9250_Handle_s mpu9250Handle;
     ADCS_RW_Handle reactionWheelHandle;
-    ADCS_REG_Handle adcsRegHandle;
+    ADCS_REG_QUAT_Handle adcsRegHandle;
     ADCS_PID_Handle pidHandleAngVel;
 } ADCS_Handle_T;
 
 /* Exported constants --------------------------------------------------------*/
 #define ADCS_THREAD_PERIOD_IN_MILISECONDS (100U)
 #define ADCS_THREAD_PERIOD_IN_SECONDS (ADCS_THREAD_PERIOD_IN_MILISECONDS / 1000.0f)
-#define ADCS_REG_PQ (20.0f)
-#define ADCS_REG_PW (4.0f)
+#define ADCS_REG_QUAT_PQ (40.0f)
+#define ADCS_REG_QUAT_PW (4.0f)
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions prototypes ---------------------------------------------*/
