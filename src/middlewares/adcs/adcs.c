@@ -68,6 +68,9 @@ void ADCS_thread(void *argument)
     static uint32_t tick;
     static ADCS_RegulationMode_E reg_mode;
 
+    // give time for sattelite to stabilize
+    ADCS_delayMs(3000);
+
     ADCS_init();
 
     tick = osKernelGetTickCount();
