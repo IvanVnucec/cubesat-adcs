@@ -92,11 +92,11 @@ void ADCS_RW_setDirection(ADCS_RW_Handle *handle,
                 // TODO: move this into drivers or somewhere
                 HAL_GPIO_WritePin(BSP_CONFIG_REACTION_WHEEL_DIR_GPIO_Port,
                                   BSP_CONFIG_REACTION_WHEEL_DIR_Pin,
-                                  GPIO_PIN_RESET);
+                                  GPIO_PIN_SET);
             } else if (dir == ADCS_RW_DIRECTION_CCW) {
                 HAL_GPIO_WritePin(BSP_CONFIG_REACTION_WHEEL_DIR_GPIO_Port,
                                   BSP_CONFIG_REACTION_WHEEL_DIR_Pin,
-                                  GPIO_PIN_SET);
+                                  GPIO_PIN_RESET);
             }
 
             handle->direction = dir;
