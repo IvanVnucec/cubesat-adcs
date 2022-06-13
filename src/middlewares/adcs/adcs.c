@@ -49,6 +49,7 @@ static void ADCS_controlAttitude(const ADCS_Quaternion_T q_ref,
                                  const float gyr[3]);
 static void ADCS_controlAngVel(const float ang_vel_ref, const float ang_vel);
 static void ADCS_sendQuaternion(const ADCS_Quaternion_T quat);
+static void ADCS_sendAngVel(const float w[3]);
 static void ADCS_sendTorque(const ADCS_REG_Torque t);
 static void ADCS_sendAngVelPidOutput(const float pid_out);
 static void ADCS_getRwDutyCycleAndDirectionBasedOnTorque(ADCS_RW_DutyCycle *rw_duty_cycle,
@@ -87,11 +88,12 @@ void ADCS_thread(void *argument)
             q_ref[2] = 0.0f;
             q_ref[3] = 0.0f;
             ADCS_controlAttitude(q_ref, q_meas, imu_data.gyr);
-            //ADCS_sendQuaternion(q_meas);
+            ADCS_sendQuaternion(q_meas);
 
         } else if (reg_mode == ADCS_REGULATIOM_MODE_ANGULAR_VELOCITY) {
             const float ang_vel_ref = 0.0f;
             ADCS_controlAngVel(ang_vel_ref, imu_data.gyr[2]);
+            ADCS_sendAngVel(imu_data.gyr);
 
         } else {
             // throw error
@@ -161,7 +163,7 @@ static void ADCS_controlAttitude(const ADCS_Quaternion_T q_ref,
     ADCS_RW_setDirection(&ADCS_handle.reactionWheelHandle, rw_direction, &tw_status);
     ADCS_RW_setPwmDutyCycle(&ADCS_handle.reactionWheelHandle, rw_duty_cycle, &tw_status);
 
-    ADCS_sendTorque(torque);
+    //ADCS_sendTorque(torque);
 }
 
 static void ADCS_controlAngVel(const float ang_vel_ref, const float ang_vel)
@@ -182,7 +184,7 @@ static void ADCS_controlAngVel(const float ang_vel_ref, const float ang_vel)
     ADCS_RW_setDirection(&ADCS_handle.reactionWheelHandle, rw_direction, &tw_status);
     ADCS_RW_setPwmDutyCycle(&ADCS_handle.reactionWheelHandle, rw_duty_cycle, &tw_status);
 
-    ADCS_sendAngVelPidOutput(reg_out);
+    //ADCS_sendAngVelPidOutput(reg_out);
 }
 
 void ADCS_delayMs(unsigned ms)
@@ -210,7 +212,26 @@ __attribute__((unused)) static void ADCS_sendQuaternion(const ADCS_Quaternion_T 
     COMM_sendMessage(&message, &status);
 }
 
-static void ADCS_sendTorque(const ADCS_REG_Torque t)
+__attribute__((unused)) static void ADCS_sendAngVel(const float w[3])
+{
+    COMM_Status status = COMM_STATUS_ERROR;
+    COMM_Message message;
+
+    int cx = snprintf_((char *)message.buffer,
+                       COMM_MESSAGE_MAX_BUFF_LEN,
+                       "w = [%.4f %.4f %.4f]\n",
+                       w[0],
+                       w[1],
+                       w[2]);
+
+    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
+
+    message.msg_len = cx;
+
+    COMM_sendMessage(&message, &status);
+}
+
+__attribute__((unused)) static void ADCS_sendTorque(const ADCS_REG_Torque t)
 {
     COMM_Status status = COMM_STATUS_ERROR;
     COMM_Message message;
@@ -229,7 +250,7 @@ static void ADCS_sendTorque(const ADCS_REG_Torque t)
     COMM_sendMessage(&message, &status);
 }
 
-static void ADCS_sendAngVelPidOutput(const float pid_out)
+__attribute__((unused)) static void ADCS_sendAngVelPidOutput(const float pid_out)
 {
     COMM_Status status = COMM_STATUS_ERROR;
     COMM_Message message;
