@@ -182,7 +182,7 @@ static void ADCS_controlAngle(const float angle_ref, const float angle)
     ADCS_RW_setDirection(&ADCS_handle.reactionWheelHandle, rw_direction, &tw_status);
     ADCS_RW_setPwmDutyCycle(&ADCS_handle.reactionWheelHandle, rw_duty_cycle, &tw_status);
 
-    //ADCS_sendAngVelPidOutput(reg_out);
+    //ADCS_sendAnglePidOutput(reg_out);
 }
 
 void ADCS_delayMs(unsigned ms)
