@@ -25,6 +25,7 @@
 #include "task.h"
 #include "utils/error/error.h"
 #include "utils/lerp/lerp.h"
+#include <math.h>
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -52,6 +53,9 @@ static void ADCS_sendQuaternion(const ADCS_Quaternion_T quat);
 static void ADCS_sendAngVel(const float w[3]);
 static void ADCS_sendTorque(const ADCS_REG_Torque t);
 static void ADCS_sendAngVelPidOutput(const float pid_out);
+static void ADCS_calculateEulerAngles(float e[3], const ADCS_Quaternion_T q);
+static void ADCS_sendEulerAngles(const float e[3]);
+static void ADCS_sendMagneticField(const float m[3]);
 static void ADCS_getRwDutyCycleAndDirectionBasedOnTorque(ADCS_RW_DutyCycle *rw_duty_cycle,
                                                          ADCS_RW_Direction *rw_direction,
                                                          float torque);
@@ -68,6 +72,7 @@ void ADCS_thread(void *argument)
     static ADCS_Quaternion_T q_meas;
     static uint32_t tick;
     static ADCS_RegulationMode_E reg_mode;
+    static float euler_angles[3];
 
     // give time for sattelite to stabilize
     ADCS_delayMs(3000);
@@ -88,7 +93,13 @@ void ADCS_thread(void *argument)
             q_ref[2] = 0.0f;
             q_ref[3] = 0.0f;
             ADCS_controlAttitude(q_ref, q_meas, imu_data.gyr);
-            ADCS_sendQuaternion(q_meas);
+            
+            //ADCS_sendQuaternion(q_meas);
+
+            ADCS_calculateEulerAngles(euler_angles, q_meas);
+            ADCS_sendEulerAngles(euler_angles);
+            
+            //ADCS_sendMagneticField(imu_data.mag);
 
         } else if (reg_mode == ADCS_REGULATIOM_MODE_ANGULAR_VELOCITY) {
             const float ang_vel_ref = 0.0f;
@@ -204,6 +215,51 @@ __attribute__((unused)) static void ADCS_sendQuaternion(const ADCS_Quaternion_T 
                        quat[1],
                        quat[2],
                        quat[3]);
+
+    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
+
+    message.msg_len = cx;
+
+    COMM_sendMessage(&message, &status);
+}
+
+__attribute__((unused)) static void ADCS_calculateEulerAngles(float e[3], const ADCS_Quaternion_T q)
+{
+    e[0] = atan2f(+2.0f * (q[1]*q[2] + q[0]*q[3]), (q[0]*q[0] + q[1]*q[1] - q[2]*q[2] - q[3]*q[3]));
+    e[1] =  asinf(-2.0f * (q[1]*q[3] - q[0]*q[2]));
+    e[2] = atan2f(+2.0f * (q[2]*q[3] + q[0]*q[1]), (q[0]*q[0] - q[1]*q[1] - q[2]*q[2] + q[3]*q[3]));
+}
+
+__attribute__((unused)) static void ADCS_sendEulerAngles(const float e[3])
+{
+    COMM_Status status = COMM_STATUS_ERROR;
+    COMM_Message message;
+
+    int cx = snprintf_((char *)message.buffer,
+                       COMM_MESSAGE_MAX_BUFF_LEN,
+                       "e = [%.4f %.4f %.4f] deg\n",
+                       e[0] / 3.14159f * 180.0f,
+                       e[1] / 3.14159f * 180.0f,
+                       e[2] / 3.14159f * 180.0f);
+
+    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
+
+    message.msg_len = cx;
+
+    COMM_sendMessage(&message, &status);
+}
+
+__attribute__((unused)) static void ADCS_sendMagneticField(const float m[3])
+{
+    COMM_Status status = COMM_STATUS_ERROR;
+    COMM_Message message;
+
+    int cx = snprintf_((char *)message.buffer,
+                       COMM_MESSAGE_MAX_BUFF_LEN,
+                       "%.4f, %.4f, %.4f\n",
+                       m[0],
+                       m[1],
+                       m[2]);
 
     ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
 
