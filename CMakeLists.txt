@@ -79,6 +79,7 @@ set(STM32CUBEMX_GENERATED_FILES
     src/middlewares/adcs/adcs.c
     src/middlewares/adcs/adcs_imu.c
     src/middlewares/adcs/adcs_or.c
+    src/middlewares/adcs/adcs_cf.c
     src/middlewares/adcs/adcs_rw.c
     src/middlewares/adcs/adcs_pid.c
     src/middlewares/communication/comm.c
@@ -125,6 +126,7 @@ target_include_directories(${EXECUTABLE} PRIVATE
     src/libs/zs040/include
     src/libs/printf/src
     src/libs/optimal_request/src
+    src/libs/comp_filt/src
     src/libs/mpu9250/include
 )
 
