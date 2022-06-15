@@ -44,9 +44,9 @@ static const float ADCS_pid_angvel_max_out = 100.0f;
 
 // angle regulator params
 static const ADCS_PID_RegulatorCoeffs ADCS_pid_coeffs_angle = {
-    .Kp = 36.1f,
-    .Ki = 3.6f,
-    .Kd = 91.0f,
+    .Kp = 50.0f,
+    .Ki = 3.0f,
+    .Kd = 100.0f,
     .Ts = ADCS_THREAD_PERIOD_IN_SECONDS,
     .V  = 15.0f};
 static const float ADCS_pid_angle_max_out = 100.0f;
@@ -59,13 +59,7 @@ static void ADCS_init(void);
 static void ADCS_determineAttitude(ADCS_Quaternion_T quat, ADCS_ImuData_T *imu_data);
 static void ADCS_controlAngVel(const float ang_vel_ref, const float ang_vel);
 static void ADCS_controlAngle(const float angle_ref, const float angle);
-static void ADCS_sendQuaternion(const ADCS_Quaternion_T quat);
-static void ADCS_sendAngVel(const float w[3]);
-static void ADCS_sendAngVelPidOutput(const float pid_out);
-static void ADCS_sendAnglePidOutput(const float pid_out);
 static void ADCS_calculateEulerAngles(float e[3], const ADCS_Quaternion_T q);
-static void ADCS_sendEulerAngles(const float e_ref[3], const float e[3]);
-static void ADCS_sendMagneticField(const float m[3]);
 // TODO: move regulator stuff in its own files
 static void ADCS_getRwDutyCycleAndDirectionBasedOnPidAngVelRegOut(
     ADCS_RW_DutyCycle *rw_duty_cycle,
@@ -76,6 +70,12 @@ static void ADCS_getRwDutyCycleAndDirectionBasedOnPidAngleRegOut(
     ADCS_RW_Direction *rw_direction,
     float pid_reg_out);
 static ADCS_RW_DutyCycle ADCS_getReactionWheelRefPwmDutyCycle(void);
+static void ADCS_sendPacketInRegModeAngVel(float w_ref, float w, float controller_effort);
+static void ADCS_sendPacketInRegModeAngle(float angle_ref, float angle, float controller_effort);
+static void ADCS_sendPacketInRegModeNoReg(const float euler[3],
+    const float w[3],
+    const ADCS_RW_DutyCycle rw);
+
 /* Private user code ---------------------------------------------------------*/
 void ADCS_thread(void *argument)
 {
@@ -102,14 +102,16 @@ void ADCS_thread(void *argument)
             // first one (0th term) is the angle around z axis
             ADCS_controlAngle(ADCS_euler_angles_ref[0], euler_angles[0]);
 
-            //ADCS_sendQuaternion(q_meas);
-            ADCS_sendEulerAngles(ADCS_euler_angles_ref, euler_angles);
-
-            //ADCS_sendMagneticField(imu_data.mag);
+            float effort;
+            ADCS_PID_getControllerEffort(&ADCS_handle.pidHandleAngle, &effort);
+            ADCS_sendPacketInRegModeAngle(ADCS_euler_angles_ref[0], euler_angles[0], effort);
 
         } else if (reg_mode == ADCS_REGULATION_MODE_ANGULAR_VELOCITY) {
             ADCS_controlAngVel(ADCS_ang_vel_ref[2], imu_data.gyr[2]);
-            ADCS_sendAngVel(imu_data.gyr);
+
+            float effort;
+            ADCS_PID_getControllerEffort(&ADCS_handle.pidHandleAngVel, &effort);
+            ADCS_sendPacketInRegModeAngVel(ADCS_ang_vel_ref[2], imu_data.gyr[2], effort);
 
         } else if (reg_mode == ADCS_REGULATION_MODE_NO_REGULATION) {
             ADCS_RW_Status rw_status;
@@ -125,10 +127,8 @@ void ADCS_thread(void *argument)
 
             ADCS_determineAttitude(q_meas, &imu_data);
             ADCS_calculateEulerAngles(euler_angles, q_meas);
-            ADCS_sendEulerAngles(ADCS_euler_angles_ref, euler_angles);
-            //ADCS_sendQuaternion(q_meas);
 
-            //ADCS_sendAngVel(imu_data.gyr);
+            ADCS_sendPacketInRegModeNoReg(euler_angles, imu_data.gyr, duty_cycle_now);
         }
 
         tick += ADCS_THREAD_PERIOD_IN_MILISECONDS;    // overflow is safe
@@ -175,8 +175,6 @@ static void ADCS_controlAngVel(const float ang_vel_ref, const float ang_vel)
                                                           reg_out);
     ADCS_RW_setDirection(&ADCS_handle.reactionWheelHandle, rw_direction, &tw_status);
     ADCS_RW_setPwmDutyCycle(&ADCS_handle.reactionWheelHandle, rw_duty_cycle, &tw_status);
-
-    //ADCS_sendAngVelPidOutput(reg_out);
 }
 
 static void ADCS_controlAngle(const float angle_ref, const float angle)
@@ -196,8 +194,6 @@ static void ADCS_controlAngle(const float angle_ref, const float angle)
                                                           reg_out);
     ADCS_RW_setDirection(&ADCS_handle.reactionWheelHandle, rw_direction, &tw_status);
     ADCS_RW_setPwmDutyCycle(&ADCS_handle.reactionWheelHandle, rw_duty_cycle, &tw_status);
-
-    //ADCS_sendAnglePidOutput(reg_out);
 }
 
 void ADCS_delayMs(unsigned ms)
@@ -205,132 +201,11 @@ void ADCS_delayMs(unsigned ms)
     vTaskDelay(pdMS_TO_TICKS(ms));
 }
 
-__attribute__((unused)) static void ADCS_sendQuaternion(const ADCS_Quaternion_T quat)
-{
-    COMM_Status status = COMM_STATUS_ERROR;
-    COMM_Message message;
-
-    int cx = snprintf_((char *)message.buffer,
-                       COMM_MESSAGE_MAX_BUFF_LEN,
-                       "%d %d %d %d\n",
-                       (int)roundf(quat[0]*1000.0f),
-                       (int)roundf(quat[1]*1000.0f),
-                       (int)roundf(quat[2]*1000.0f),
-                       (int)roundf(quat[3]*1000.0f));
-
-    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
-
-    message.msg_len = cx;
-
-    COMM_sendMessage(&message, &status);
-}
-
 __attribute__((unused)) static void ADCS_calculateEulerAngles(float e[3], const ADCS_Quaternion_T q)
 {
     e[0] = atan2f(+2.0f * (q[1]*q[2] + q[0]*q[3]), q[0]*q[0] + q[1]*q[1] - q[2]*q[2] - q[3]*q[3]);
     e[1] =  asinf(-2.0f * (q[1]*q[3] - q[0]*q[2]));
     e[2] = atan2f(+2.0f * (q[2]*q[3] + q[0]*q[1]), q[0]*q[0] - q[1]*q[1] - q[2]*q[2] + q[3]*q[3]);
-}
-
-__attribute__((unused)) static void ADCS_sendEulerAngles(const float e_ref[3], const float e[3])
-{
-    COMM_Status status = COMM_STATUS_ERROR;
-    COMM_Message message;
-
-    // send referente first
-    int cx = snprintf_((char *)message.buffer,
-                       COMM_MESSAGE_MAX_BUFF_LEN,
-                       "%.0f %.0f %.0f ",
-                       e_ref[0] / 3.14159f * 180.0f,
-                       e_ref[1] / 3.14159f * 180.0f,
-                       e_ref[2] / 3.14159f * 180.0f);
-
-    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
-    message.msg_len = cx;
-    COMM_sendMessage(&message, &status);
-
-    // send real angles second
-    cx = snprintf_((char *)message.buffer,
-                       COMM_MESSAGE_MAX_BUFF_LEN,
-                       "%.0f %.0f %.0f\n",
-                       e[0]     / 3.14159f * 180.0f,
-                       e[1]     / 3.14159f * 180.0f,
-                       e[2]     / 3.14159f * 180.0f);
-    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
-    message.msg_len = cx;
-    COMM_sendMessage(&message, &status);
-}
-
-__attribute__((unused)) static void ADCS_sendMagneticField(const float m[3])
-{
-    COMM_Status status = COMM_STATUS_ERROR;
-    COMM_Message message;
-
-    int cx = snprintf_((char *)message.buffer,
-                       COMM_MESSAGE_MAX_BUFF_LEN,
-                       "%.4f, %.4f, %.4f\n",
-                       m[0],
-                       m[1],
-                       m[2]);
-
-    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
-
-    message.msg_len = cx;
-
-    COMM_sendMessage(&message, &status);
-}
-
-__attribute__((unused)) static void ADCS_sendAngVel(const float w[3])
-{
-    COMM_Status status = COMM_STATUS_ERROR;
-    COMM_Message message;
-
-    int cx = snprintf_((char *)message.buffer,
-                       COMM_MESSAGE_MAX_BUFF_LEN,
-                       "%d %d %d\n",
-                       (int)roundf(w[0] * 1000.0f),
-                       (int)roundf(w[1] * 1000.0f),
-                       (int)roundf(w[2] * 1000.0f));
-
-    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
-
-    message.msg_len = cx;
-
-    COMM_sendMessage(&message, &status);
-}
-
-__attribute__((unused)) static void ADCS_sendAngVelPidOutput(const float pid_out)
-{
-    COMM_Status status = COMM_STATUS_ERROR;
-    COMM_Message message;
-
-    int cx = snprintf_((char *)message.buffer,
-                       COMM_MESSAGE_MAX_BUFF_LEN,
-                       "pid_angvel_out = [%.4f]\n",
-                       pid_out);
-
-    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
-
-    message.msg_len = cx;
-
-    COMM_sendMessage(&message, &status);
-}
-
-__attribute__((unused)) static void ADCS_sendAnglePidOutput(const float pid_out)
-{
-    COMM_Status status = COMM_STATUS_ERROR;
-    COMM_Message message;
-
-    int cx = snprintf_((char *)message.buffer,
-                       COMM_MESSAGE_MAX_BUFF_LEN,
-                       "pid_angle_out = [%.4f]\n",
-                       pid_out);
-
-    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
-
-    message.msg_len = cx;
-
-    COMM_sendMessage(&message, &status);
 }
 
 static void ADCS_getRwDutyCycleAndDirectionBasedOnPidAngVelRegOut(
@@ -467,4 +342,87 @@ void ADCS_setReactionWheelRefPwmDutyCycle(ADCS_RW_DutyCycle duty_cycle)
     __disable_irq();
     ADCS_rw_duty_cycle_ref = duty_cycle;
     __enable_irq();
+}
+
+static void ADCS_sendPacketInRegModeAngVel(float w_ref, float w, float controller_effort)
+{
+    COMM_Status status = COMM_STATUS_ERROR;
+    COMM_Message message;
+
+    int cx = snprintf_((char *)message.buffer,
+                       COMM_MESSAGE_MAX_BUFF_LEN,
+                       "%d %d %d\n",
+                       (int)roundf(1000.0f * w_ref),
+                       (int)roundf(1000.0f * w),
+                       (int)roundf(controller_effort));
+
+    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
+
+    message.msg_len = cx;
+
+    COMM_sendMessage(&message, &status);
+}
+
+static void ADCS_sendPacketInRegModeAngle(float angle_ref, float angle, float controller_effort)
+{
+    COMM_Status status = COMM_STATUS_ERROR;
+    COMM_Message message;
+
+    int cx = snprintf_((char *)message.buffer,
+                       COMM_MESSAGE_MAX_BUFF_LEN,
+                       "%d %d %d\n",
+                       (int)roundf(180.0f / 3.14159f * angle_ref),
+                       (int)roundf(180.0f / 3.14159f * angle),
+                       (int)roundf(controller_effort));
+
+    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
+
+    message.msg_len = cx;
+
+    COMM_sendMessage(&message, &status);
+}
+
+static void ADCS_sendPacketInRegModeNoReg(const float euler[3],
+    const float w[3],
+    const ADCS_RW_DutyCycle rw)
+{
+    COMM_Status status = COMM_STATUS_ERROR;
+    COMM_Message message;
+
+    int cx = snprintf_((char *)message.buffer,
+                       COMM_MESSAGE_MAX_BUFF_LEN,
+                       "%d %d %d ",
+                       (int)roundf(180.0f / 3.14159f * euler[0]),
+                       (int)roundf(180.0f / 3.14159f * euler[1]),
+                       (int)roundf(180.0f / 3.14159f * euler[2]));
+
+    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
+
+    message.msg_len = cx;
+
+    COMM_sendMessage(&message, &status);
+
+    cx = snprintf_((char *)message.buffer,
+                       COMM_MESSAGE_MAX_BUFF_LEN,
+                       "%d %d %d ",
+                       (int)roundf(1000.0f * w[0]),
+                       (int)roundf(1000.0f * w[1]),
+                       (int)roundf(1000.0f * w[2]));
+
+    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
+
+    message.msg_len = cx;
+
+    COMM_sendMessage(&message, &status);
+
+    cx = snprintf_((char *)message.buffer,
+                       COMM_MESSAGE_MAX_BUFF_LEN,
+                       "%d\n",
+                       (int)rw);
+
+    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
+
+    message.msg_len = cx;
+
+    COMM_sendMessage(&message, &status);
 }

@@ -13,6 +13,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "adcs_pid.h"
 
+#include "stm32l4xx_hal.h"
 #include <stddef.h>
 
 /* Private typedef -----------------------------------------------------------*/
@@ -149,7 +150,9 @@ void ADCS_PID_resetIntegral(ADCS_PID_Handle *hpid, ADCS_PID_Status *status)
     ADCS_PID_Status local_status = ADCS_PID_STATUS_ERROR;
 
     if (hpid != NULL) {
+        __disable_irq();
         hpid->ui1 = 0.0f;
+        __enable_irq();
 
         local_status = ADCS_PID_STATUS_OK;
     }
@@ -165,12 +168,10 @@ void ADCS_PID_updateCoeffs(ADCS_PID_Handle *hpid, const ADCS_PID_RegulatorCoeffs
 
     if (hpid != NULL) {
         if (coeffs != NULL) {
-            hpid->ui1 = 0.0f;
-            hpid->ud1 = 0.0f;
-            hpid->e1  = 0.0f;
-            hpid->coeffs = *coeffs;
-
-            local_status = ADCS_PID_STATUS_OK;
+            // reinit
+            __disable_irq();
+            ADCS_PID_init(hpid, coeffs, &local_status);
+            __enable_irq();
         }
     }
 
@@ -181,7 +182,22 @@ void ADCS_PID_updateCoeffs(ADCS_PID_Handle *hpid, const ADCS_PID_RegulatorCoeffs
 
 void ADCS_PID_getCoeffs(const ADCS_PID_Handle *hpid, ADCS_PID_RegulatorCoeffs *coeffs)
 {
-    if (coeffs != NULL) {
-        *coeffs = hpid->coeffs;
+    if (hpid != NULL) {
+        if (coeffs != NULL) {
+            __disable_irq();
+            *coeffs = hpid->coeffs;
+            __enable_irq();
+        }
+    }
+}
+
+void ADCS_PID_getControllerEffort(const ADCS_PID_Handle *hpid, float *effort)
+{
+    if (hpid != NULL) {
+        if (effort != NULL) {
+            __disable_irq();
+            *effort = hpid->u0;
+            __enable_irq();
+        }
     }
 }

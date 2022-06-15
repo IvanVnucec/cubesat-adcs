@@ -380,11 +380,12 @@ static void COMM_setPidCoeffP(const char *msg)
 
     // get current pid regulator handle
     ADCS_PID_Handle* pid = ADCS_getCurrentPidRegulatorHandle();
-    ADCS_PID_getCoeffs(pid, &pid_coeffs);
-    pid_coeffs.Kp = COMM_stringToFloat(msg);
-    ADCS_PID_updateCoeffs(pid, &pid_coeffs, &status);
-
-    ERROR_assert(status == ADCS_PID_STATUS_OK);
+    if (pid == NULL) {
+        ADCS_PID_getCoeffs(pid, &pid_coeffs);
+        pid_coeffs.Kp = COMM_stringToFloat(msg);
+        ADCS_PID_updateCoeffs(pid, &pid_coeffs, &status);
+        ERROR_assert(status == ADCS_PID_STATUS_OK);
+    }
 }
 
 static void COMM_setPidCoeffI(const char *msg)
@@ -394,11 +395,12 @@ static void COMM_setPidCoeffI(const char *msg)
 
     // get current pid regulator handle
     ADCS_PID_Handle* pid = ADCS_getCurrentPidRegulatorHandle();
-    ADCS_PID_getCoeffs(pid, &pid_coeffs);
-    pid_coeffs.Ki = COMM_stringToFloat(msg);
-    ADCS_PID_updateCoeffs(pid, &pid_coeffs, &status);
-
-    ERROR_assert(status == ADCS_PID_STATUS_OK);
+    if (pid == NULL) {
+        ADCS_PID_getCoeffs(pid, &pid_coeffs);
+        pid_coeffs.Ki = COMM_stringToFloat(msg);
+        ADCS_PID_updateCoeffs(pid, &pid_coeffs, &status);
+        ERROR_assert(status == ADCS_PID_STATUS_OK);
+    }
 }
 
 static void COMM_setPidCoeffD(const char *msg)
@@ -408,11 +410,12 @@ static void COMM_setPidCoeffD(const char *msg)
 
     // get current pid regulator handle
     ADCS_PID_Handle* pid = ADCS_getCurrentPidRegulatorHandle();
-    ADCS_PID_getCoeffs(pid, &pid_coeffs);
-    pid_coeffs.Kd = COMM_stringToFloat(msg);
-    ADCS_PID_updateCoeffs(pid, &pid_coeffs, &status);
-
-    ERROR_assert(status == ADCS_PID_STATUS_OK);
+    if (pid == NULL) {
+        ADCS_PID_getCoeffs(pid, &pid_coeffs);
+        pid_coeffs.Kd = COMM_stringToFloat(msg);
+        ADCS_PID_updateCoeffs(pid, &pid_coeffs, &status);
+        ERROR_assert(status == ADCS_PID_STATUS_OK);
+    }
 }
 
 static void COMM_setPidCoeffV(const char *msg)
@@ -422,11 +425,12 @@ static void COMM_setPidCoeffV(const char *msg)
 
     // get current pid regulator handle
     ADCS_PID_Handle* pid = ADCS_getCurrentPidRegulatorHandle();
-    ADCS_PID_getCoeffs(pid, &pid_coeffs);
-    pid_coeffs.V = COMM_stringToFloat(msg);
-    ADCS_PID_updateCoeffs(pid, &pid_coeffs, &status);
-
-    ERROR_assert(status == ADCS_PID_STATUS_OK);
+    if (pid == NULL) {
+        ADCS_PID_getCoeffs(pid, &pid_coeffs);
+        pid_coeffs.V = COMM_stringToFloat(msg);
+        ADCS_PID_updateCoeffs(pid, &pid_coeffs, &status);
+        ERROR_assert(status == ADCS_PID_STATUS_OK);
+    }
 }
 
 static void COMM_setRefAngleZInDeg(const char *msg)
