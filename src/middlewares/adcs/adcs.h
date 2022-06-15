@@ -23,8 +23,8 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 #include "adcs_pid.h"
 #include "adcs_rw.h"
+#include "adcs_cf.h"
 #include "mpu9250/mpu9250.h"
-#include "opt_req/get_quat_from_K.h"
 
 /* Private defines -----------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
@@ -38,7 +38,7 @@ typedef enum ADCS_RegulationMode_Enum {
 typedef float ADCS_Quaternion_T[4];
 
 typedef struct {
-    struct0_T optReqHandle;
+    ADCS_CD_Handle_S compFiltHandle;
     MPU9250_Handle_s mpu9250Handle;
     ADCS_RW_Handle reactionWheelHandle;
     ADCS_PID_Handle pidHandleAngVel;

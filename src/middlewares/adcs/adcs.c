@@ -15,7 +15,7 @@
 
 #include "FreeRTOS.h"
 #include "adcs_imu.h"
-#include "adcs_or.h"
+#include "adcs_cf.h"
 #include "adcs_pid.h"
 #include "cmsis_os2.h"
 #include "middlewares/communication/comm.h"
@@ -56,8 +56,7 @@ static ADCS_RW_DutyCycle ADCS_rw_duty_cycle_ref = ADCS_RW_DUTY_CYCLE_MIN;
 
 /* Private function prototypes -----------------------------------------------*/
 static void ADCS_init(void);
-static void ADCS_determineAttitude(ADCS_Quaternion_T quat,
-                                   const ADCS_ImuData_T *imu_data);
+static void ADCS_determineAttitude(ADCS_Quaternion_T quat, ADCS_ImuData_T *imu_data);
 static void ADCS_controlAngVel(const float ang_vel_ref, const float ang_vel);
 static void ADCS_controlAngle(const float angle_ref, const float angle);
 static void ADCS_sendQuaternion(const ADCS_Quaternion_T quat);
@@ -143,7 +142,7 @@ static void ADCS_init(void)
     ADCS_PID_Status pid_status = ADCS_PID_STATUS_ERROR;
 
     ADCS_IMU_init(&ADCS_handle.mpu9250Handle);
-    ADCS_OR_init(&ADCS_handle.optReqHandle);
+    ADCS_CF_init(&ADCS_handle.compFiltHandle);
     ADCS_RW_init(&ADCS_handle.reactionWheelHandle, &rw_status);
     ERROR_assert(rw_status == ADCS_RW_STATUS_OK);
 
@@ -154,10 +153,9 @@ static void ADCS_init(void)
     ERROR_assert(pid_status == ADCS_PID_STATUS_OK);
 }
 
-static void ADCS_determineAttitude(ADCS_Quaternion_T quat, const ADCS_ImuData_T *imu_data)
+static void ADCS_determineAttitude(ADCS_Quaternion_T quat, ADCS_ImuData_T *imu_data)
 {
-    ADCS_OR_processImuData(&ADCS_handle.optReqHandle, imu_data);
-    ADCS_OR_getQuaternion(&ADCS_handle.optReqHandle, quat);
+    ADCS_CF_step(&ADCS_handle.compFiltHandle, imu_data, quat);
 }
 
 static void ADCS_controlAngVel(const float ang_vel_ref, const float ang_vel)

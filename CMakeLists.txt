@@ -74,24 +74,20 @@ set(STM32CUBEMX_GENERATED_FILES
     src/rtos/FreeRTOS/source/portable/MemMang/heap_4.c
     src/rtos/FreeRTOS/source/portable/GCC/ARM_CM4F/port.c
 
+    src/libs/comp_filt/src/comp_filt_init.c
+    src/libs/comp_filt/src/comp_filt_step.c
+    src/libs/comp_filt/src/norm.c
+
     src/middlewares/middlewares.c
     src/middlewares/alive/alive.c
     src/middlewares/adcs/adcs.c
     src/middlewares/adcs/adcs_imu.c
-    src/middlewares/adcs/adcs_or.c
     src/middlewares/adcs/adcs_cf.c
     src/middlewares/adcs/adcs_rw.c
     src/middlewares/adcs/adcs_pid.c
     src/middlewares/communication/comm.c
 
     src/libs/printf/src/printf/printf.c
-    src/libs/optimal_request/src/opt_req/get_quat_from_K_data.c
-    src/libs/optimal_request/src/opt_req/get_quat_from_K_initialize.c
-    src/libs/optimal_request/src/opt_req/get_quat_from_K_terminate.c
-    src/libs/optimal_request/src/opt_req/get_quat_from_K.c
-    src/libs/optimal_request/src/opt_req/optimal_request_init.c
-    src/libs/optimal_request/src/opt_req/optimal_request.c
-    src/libs/optimal_request/src/opt_req/vecnorm.c
     src/libs/mpu9250/src/mpu9250/mpu9250.c
     src/libs/zs040/src/zs040.c
 
@@ -123,10 +119,9 @@ target_include_directories(${EXECUTABLE} PRIVATE
     src/rtos/FreeRTOS/source/CMSIS_RTOS_V2
     src/rtos/FreeRTOS/source/portable/GCC/ARM_CM4F
 
+    src/libs/comp_filt/src
     src/libs/zs040/include
     src/libs/printf/src
-    src/libs/optimal_request/src
-    src/libs/comp_filt/src
     src/libs/mpu9250/include
 )
 
