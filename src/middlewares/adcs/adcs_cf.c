@@ -29,11 +29,10 @@ static const float ADCS_CF_K_cf     = 0.9f;
 static const float ADCS_CF_dJ_max   = 0.005f;
 static const float ADCS_CF_N_max    = 10.0f;
 static const float ADCS_CF_alpha    = 0.1f;
-static float ADCS_CF_qib_est[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private user code ---------------------------------------------------------*/
-void ADCS_CF_init(struct0_T *comp_filter_handle)
+void ADCS_CF_init(ADCS_CD_Handle_S *comp_filter_handle)
 {
     comp_filt_init(ADCS_CF_acc_i, 
         ADCS_CF_mag_i,
@@ -45,15 +44,7 @@ void ADCS_CF_init(struct0_T *comp_filter_handle)
         comp_filter_handle);
 }
 
-void ADCS_CF_processImuData(struct0_T *comp_filter_handle, ADCS_ImuData_T *imu_data)
+void ADCS_CF_step(const ADCS_CD_Handle_S *comp_filter_handle, ADCS_ImuData_T *imu_data, float qib_est[4])
 {
-    comp_filt_step(comp_filter_handle, imu_data->acc, imu_data->mag, imu_data->gyr, ADCS_CF_qib_est);
-}
-
-void ADCS_CF_getQuaternion(ADCS_Quaternion_T quat)
-{
-    quat[0] = ADCS_CF_qib_est[0];
-    quat[1] = ADCS_CF_qib_est[1];
-    quat[2] = ADCS_CF_qib_est[2];
-    quat[3] = ADCS_CF_qib_est[3];
+    comp_filt_step(comp_filter_handle, imu_data->acc, imu_data->mag, imu_data->gyr, qib_est);
 }
