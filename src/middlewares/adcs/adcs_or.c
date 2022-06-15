@@ -80,7 +80,20 @@ void ADCS_OR_processImuData(struct0_T *optReqHandle, const ADCS_ImuData_T *imu_d
 
 void ADCS_OR_getQuaternion(const struct0_T *optReqHandle, ADCS_Quaternion_T quat)
 {
-    get_quat_from_K(optReqHandle->K, quat);
+    ADCS_Quaternion_T quat_ned;
+
+    get_quat_from_K(optReqHandle->K, quat_ned);
+
+    quat[0] = quat_ned[0];
+    quat[1] = quat_ned[1];
+    quat[2] = quat_ned[2];
+    quat[3] = quat_ned[3];
+
+    // NED (north-east-down) to ENU
+    //quat[0] =  quat_ned[0];
+    //quat[1] =  quat_ned[2];
+    //quat[2] =  quat_ned[1];
+    //quat[3] = -quat_ned[3];
 }
 
 static void ADCS_OR_fillRMatrice(struct0_T *optReqHandle,
