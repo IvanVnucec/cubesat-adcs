@@ -2,7 +2,7 @@
  * File: main.c
  *
  * MATLAB Coder version            : 3.1
- * C/C++ source code generated on  : 15-Jun-2022 11:53:36
+ * C/C++ source code generated on  : 15-Jun-2022 15:26:49
  */
 
 /*************************************************************************/
@@ -116,17 +116,17 @@ static struct0_T argInit_struct0_T(void)
  */
 static void main_comp_filt_init(void)
 {
-  float fv5[3];
-  float fv6[3];
+  float fv0[3];
+  float fv1[3];
   struct0_T s;
 
   /* Initialize function 'comp_filt_init' input arguments. */
   /* Initialize function input argument 'acc_i'. */
   /* Initialize function input argument 'mag_i'. */
   /* Call the entry-point 'comp_filt_init'. */
-  argInit_3x1_real32_T(fv5);
-  argInit_3x1_real32_T(fv6);
-  comp_filt_init(fv5, fv6, argInit_real32_T(), argInit_real32_T(),
+  argInit_3x1_real32_T(fv0);
+  argInit_3x1_real32_T(fv1);
+  comp_filt_init(fv0, fv1, argInit_real32_T(), argInit_real32_T(),
                  argInit_real32_T(), argInit_real32_T(), argInit_real32_T(), &s);
 }
 
@@ -136,23 +136,24 @@ static void main_comp_filt_init(void)
  */
 static void main_comp_filt_step(void)
 {
-  float fv7[3];
-  float fv8[3];
-  float fv9[3];
-  struct0_T r0;
+  struct0_T s;
+  float fv2[3];
+  float fv3[3];
+  float fv4[3];
   float qib_est[4];
 
   /* Initialize function 'comp_filt_step' input arguments. */
   /* Initialize function input argument 's'. */
+  s = argInit_struct0_T();
+
   /* Initialize function input argument 'acc_b'. */
   /* Initialize function input argument 'mag_b'. */
   /* Initialize function input argument 'gyr_b'. */
   /* Call the entry-point 'comp_filt_step'. */
-  argInit_3x1_real32_T(fv7);
-  argInit_3x1_real32_T(fv8);
-  argInit_3x1_real32_T(fv9);
-  r0 = argInit_struct0_T();
-  comp_filt_step(&r0, fv7, fv8, fv9, qib_est);
+  argInit_3x1_real32_T(fv2);
+  argInit_3x1_real32_T(fv3);
+  argInit_3x1_real32_T(fv4);
+  comp_filt_step(&s, fv2, fv3, fv4, qib_est);
 }
 
 /*

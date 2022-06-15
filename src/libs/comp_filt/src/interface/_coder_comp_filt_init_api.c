@@ -2,7 +2,7 @@
  * File: _coder_comp_filt_init_api.c
  *
  * MATLAB Coder version            : 3.1
- * C/C++ source code generated on  : 15-Jun-2022 11:53:36
+ * C/C++ source code generated on  : 15-Jun-2022 15:26:49
  */
 
 /* Include Files */
@@ -420,10 +420,10 @@ void comp_filt_init_terminate(void)
 
 /*
  * Arguments    : const mxArray * const prhs[4]
- *                const mxArray *plhs[1]
+ *                const mxArray *plhs[2]
  * Return Type  : void
  */
-void comp_filt_step_api(const mxArray * const prhs[4], const mxArray *plhs[1])
+void comp_filt_step_api(const mxArray * const prhs[4], const mxArray *plhs[2])
 {
   struct0_T s;
   real32_T acc_b[3];
@@ -444,7 +444,8 @@ void comp_filt_step_api(const mxArray * const prhs[4], const mxArray *plhs[1])
   comp_filt_step(&s, acc_b, mag_b, gyr_b, qib_est);
 
   /* Marshall function outputs */
-  plhs[0] = b_emlrt_marshallOut(qib_est);
+  plhs[0] = emlrt_marshallOut(s);
+  plhs[1] = b_emlrt_marshallOut(qib_est);
 }
 
 /*

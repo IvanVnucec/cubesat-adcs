@@ -44,7 +44,7 @@ void ADCS_CF_init(ADCS_CD_Handle_S *comp_filter_handle)
         comp_filter_handle);
 }
 
-void ADCS_CF_step(const ADCS_CD_Handle_S *comp_filter_handle, ADCS_ImuData_T *imu_data, float qib_est[4])
+void ADCS_CF_step(ADCS_CD_Handle_S *comp_filter_handle, ADCS_ImuData_T *imu_data, float qib_est[4])
 {
     comp_filt_step(comp_filter_handle, imu_data->acc, imu_data->mag, imu_data->gyr, qib_est);
 }

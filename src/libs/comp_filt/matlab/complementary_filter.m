@@ -71,17 +71,11 @@ for n = 1:N_row
     a_b = data(n,10:12)'; % Akceleracija u sustavu tijela
     m_b = data(n,13:15)'; % Magnetsko polje u sustavu tijela
     w_b = data(n,16:18)'; % Kutna brzina u sustavu tijela
-
-    qib_est = comp_filt_step(s, a_b, m_b, w_b);
     
-    % Normaliziram procijenjeni kvaternion za svaki slucaj
-    qib_est = qib_est/norm(qib_est);
+    [s, qib_est] = comp_filt_step(s, a_b, m_b, w_b);
     
     % Spremanja procijenjenog kvaterniona u vektor
     qib_est_vect(:,n) = qib_est;
-    
-    % Spremanje broja iteracija u vektor
-    NOI_vect(n) = 0;
 end
 
 
@@ -215,16 +209,7 @@ set(gca,'TickLabelInterpreter','latex','FontSize',12);
 Fig2 = figure;
 Fig2.Renderer='Painters';
 
-subplot(3,1,1);
-plot(t, NOI_vect, 'Linewidth', 2);
-box on;
-grid on;
-ylim([0, N_max]);
-xlabel('$t$ [s]', 'Interpreter', 'latex','FontSize',20);
-ylabel('Broj iteracija', 'Interpreter', 'latex','FontSize',20);
-set(gca,'TickLabelInterpreter','latex','FontSize',12);
-
-subplot(3,1,2);
+subplot(2,1,1);
 semilogy(t, qib_RMS_error, 'Linewidth', 2);
 box on;
 grid on;
@@ -233,7 +218,7 @@ xlabel('$t$ [s]', 'Interpreter', 'latex','FontSize',20);
 ylabel('Kvaternion RMSE', 'Interpreter', 'latex','FontSize',20);
 set(gca,'TickLabelInterpreter','latex','FontSize',12);
 
-subplot(3,1,3);
+subplot(2,1,2);
 semilogy(t, euler_RMS_error, 'Linewidth', 2);
 box on;
 grid on;

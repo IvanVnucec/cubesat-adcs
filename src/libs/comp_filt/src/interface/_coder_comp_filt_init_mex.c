@@ -2,7 +2,7 @@
  * File: _coder_comp_filt_init_mex.c
  *
  * MATLAB Coder version            : 3.1
- * C/C++ source code generated on  : 15-Jun-2022 11:53:36
+ * C/C++ source code generated on  : 15-Jun-2022 15:26:49
  */
 
 /* Include Files */
@@ -15,7 +15,7 @@ static const char * emlrtEntryPoints[2] = { "comp_filt_init", "comp_filt_step" }
 /* Function Declarations */
 static void comp_filt_init_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T
   nrhs, const mxArray *prhs[7]);
-static void comp_filt_step_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T
+static void comp_filt_step_mexFunction(int32_T nlhs, mxArray *plhs[2], int32_T
   nrhs, const mxArray *prhs[4]);
 
 /* Function Definitions */
@@ -72,17 +72,17 @@ static void comp_filt_init_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T
 
 /*
  * Arguments    : int32_T nlhs
- *                const mxArray *plhs[1]
+ *                const mxArray *plhs[2]
  *                int32_T nrhs
  *                const mxArray *prhs[4]
  * Return Type  : void
  */
-static void comp_filt_step_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T
+static void comp_filt_step_mexFunction(int32_T nlhs, mxArray *plhs[2], int32_T
   nrhs, const mxArray *prhs[4])
 {
   int32_T n;
   const mxArray *inputs[4];
-  const mxArray *outputs[1];
+  const mxArray *outputs[2];
   int32_T b_nlhs;
   emlrtStack st = { NULL, NULL, NULL };
 
@@ -94,7 +94,7 @@ static void comp_filt_step_mexFunction(int32_T nlhs, mxArray *plhs[1], int32_T
                         14, "comp_filt_step");
   }
 
-  if (nlhs > 1) {
+  if (nlhs > 2) {
     emlrtErrMsgIdAndTxt(&st, "EMLRT:runTime:TooManyOutputArguments", 3, 4, 14,
                         "comp_filt_step");
   }

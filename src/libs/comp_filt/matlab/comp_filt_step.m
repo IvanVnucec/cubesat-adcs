@@ -1,4 +1,4 @@
-function [ qib_est ] = comp_filt_step( s, acc_b, mag_b, gyr_b )
+function [ s, qib_est ] = comp_filt_step( s, acc_b, mag_b, gyr_b )
 %COMP_FILT_STEP Summary of this function goes here
 %   Detailed explanation goes here
 

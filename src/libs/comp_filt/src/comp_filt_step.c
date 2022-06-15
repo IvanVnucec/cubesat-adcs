@@ -2,7 +2,7 @@
  * File: comp_filt_step.c
  *
  * MATLAB Coder version            : 3.1
- * C/C++ source code generated on  : 15-Jun-2022 11:53:36
+ * C/C++ source code generated on  : 15-Jun-2022 15:26:49
  */
 
 /* Include Files */
@@ -16,22 +16,22 @@
 /*
  * COMP_FILT_STEP Summary of this function goes here
  *    Detailed explanation goes here
- * Arguments    : const struct0_T *s
+ * Arguments    : struct0_T *s
  *                float acc_b[3]
  *                float mag_b[3]
  *                const float gyr_b[3]
  *                float qib_est[4]
  * Return Type  : void
  */
-void comp_filt_step(const struct0_T *s, float acc_b[3], float mag_b[3], const
-                    float gyr_b[3], float qib_est[4])
+void comp_filt_step(struct0_T *s, float acc_b[3], float mag_b[3], const float
+                    gyr_b[3], float qib_est[4])
 {
   float value;
   float b_value;
   int i0;
-  float fv0[16];
-  float fv1[16];
-  float fv2[4];
+  float fv5[16];
+  float fv6[16];
+  float fv7[4];
   int i1;
   float qib_gd[4];
   int i;
@@ -52,8 +52,8 @@ void comp_filt_step(const struct0_T *s, float acc_b[3], float mag_b[3], const
   float c_qib_gd[9];
   float d_qib_gd[9];
   float e_qib_gd[9];
-  float fv3[3];
-  float fv4[3];
+  float fv8[3];
+  float fv9[3];
   float M2[9];
   float M3[9];
   float M4[9];
@@ -89,35 +89,35 @@ void comp_filt_step(const struct0_T *s, float acc_b[3], float mag_b[3], const
   /* 'q_gyro:17' d_qib_dt = 0.5*S_w*qib_prev; */
   /*  Integriram (akumuliram) promjenu kvaterniona i dodajem prethodnom kvaternionu         */
   /* 'q_gyro:20' qib = dt*d_qib_dt + qib_prev; */
-  fv0[0] = 0.0F;
-  fv0[4] = -gyr_b[0];
-  fv0[8] = -gyr_b[1];
-  fv0[12] = -gyr_b[2];
-  fv0[1] = gyr_b[0];
-  fv0[5] = 0.0F;
-  fv0[9] = gyr_b[2];
-  fv0[13] = -gyr_b[1];
-  fv0[2] = gyr_b[1];
-  fv0[6] = -gyr_b[2];
-  fv0[10] = 0.0F;
-  fv0[14] = gyr_b[0];
-  fv0[3] = gyr_b[2];
-  fv0[7] = gyr_b[1];
-  fv0[11] = -gyr_b[0];
-  fv0[15] = 0.0F;
+  fv5[0] = 0.0F;
+  fv5[4] = -gyr_b[0];
+  fv5[8] = -gyr_b[1];
+  fv5[12] = -gyr_b[2];
+  fv5[1] = gyr_b[0];
+  fv5[5] = 0.0F;
+  fv5[9] = gyr_b[2];
+  fv5[13] = -gyr_b[1];
+  fv5[2] = gyr_b[1];
+  fv5[6] = -gyr_b[2];
+  fv5[10] = 0.0F;
+  fv5[14] = gyr_b[0];
+  fv5[3] = gyr_b[2];
+  fv5[7] = gyr_b[1];
+  fv5[11] = -gyr_b[0];
+  fv5[15] = 0.0F;
   for (i0 = 0; i0 < 4; i0++) {
     for (i1 = 0; i1 < 4; i1++) {
-      fv1[i1 + (i0 << 2)] = 0.5F * fv0[i1 + (i0 << 2)];
+      fv6[i1 + (i0 << 2)] = 0.5F * fv5[i1 + (i0 << 2)];
     }
   }
 
   for (i0 = 0; i0 < 4; i0++) {
-    fv2[i0] = 0.0F;
+    fv7[i0] = 0.0F;
     for (i1 = 0; i1 < 4; i1++) {
-      fv2[i0] += fv1[i0 + (i1 << 2)] * s->qib_prev[i1];
+      fv7[i0] += fv6[i0 + (i1 << 2)] * s->qib_prev[i1];
     }
 
-    qib_est[i0] = s->dt * fv2[i0] + s->qib_prev[i0];
+    qib_est[i0] = s->dt * fv7[i0] + s->qib_prev[i0];
   }
 
   /*  Normaliziram kvaternion */
@@ -318,22 +318,22 @@ void comp_filt_step(const struct0_T *s, float acc_b[3], float mag_b[3], const
       c_value = 0.0F;
       d_value = 0.0F;
       for (i0 = 0; i0 < 3; i0++) {
-        fv3[i0] = 0.0F;
+        fv8[i0] = 0.0F;
         for (i1 = 0; i1 < 3; i1++) {
           Rib[i1 + 3 * i0] = 2.0F * b_qib_gd[i1 + 3 * i0];
           M2[i1 + 3 * i0] = 2.0F * c_qib_gd[i1 + 3 * i0];
           M3[i1 + 3 * i0] = 2.0F * d_qib_gd[i1 + 3 * i0];
           M4[i1 + 3 * i0] = 2.0F * e_qib_gd[i1 + 3 * i0];
-          fv3[i0] += 2.0F * e_a[i1] * Rib[i1 + 3 * i0];
+          fv8[i0] += 2.0F * e_a[i1] * Rib[i1 + 3 * i0];
         }
 
-        c_value += fv3[i0] * a_i[i0];
-        fv4[i0] = 0.0F;
+        c_value += fv8[i0] * a_i[i0];
+        fv9[i0] = 0.0F;
         for (i1 = 0; i1 < 3; i1++) {
-          fv4[i0] += 2.0F * e_m[i1] * Rib[i1 + 3 * i0];
+          fv9[i0] += 2.0F * e_m[i1] * Rib[i1 + 3 * i0];
         }
 
-        d_value += fv4[i0] * m_i[i0];
+        d_value += fv9[i0] * m_i[i0];
       }
 
       grad_J[0] = c_value + d_value;
@@ -342,18 +342,18 @@ void comp_filt_step(const struct0_T *s, float acc_b[3], float mag_b[3], const
       c_value = 0.0F;
       d_value = 0.0F;
       for (i0 = 0; i0 < 3; i0++) {
-        fv3[i0] = 0.0F;
+        fv8[i0] = 0.0F;
         for (i1 = 0; i1 < 3; i1++) {
-          fv3[i0] += 2.0F * e_a[i1] * M2[i1 + 3 * i0];
+          fv8[i0] += 2.0F * e_a[i1] * M2[i1 + 3 * i0];
         }
 
-        c_value += fv3[i0] * a_i[i0];
-        fv4[i0] = 0.0F;
+        c_value += fv8[i0] * a_i[i0];
+        fv9[i0] = 0.0F;
         for (i1 = 0; i1 < 3; i1++) {
-          fv4[i0] += 2.0F * e_m[i1] * M2[i1 + 3 * i0];
+          fv9[i0] += 2.0F * e_m[i1] * M2[i1 + 3 * i0];
         }
 
-        d_value += fv4[i0] * m_i[i0];
+        d_value += fv9[i0] * m_i[i0];
       }
 
       grad_J[1] = c_value + d_value;
@@ -362,18 +362,18 @@ void comp_filt_step(const struct0_T *s, float acc_b[3], float mag_b[3], const
       c_value = 0.0F;
       d_value = 0.0F;
       for (i0 = 0; i0 < 3; i0++) {
-        fv3[i0] = 0.0F;
+        fv8[i0] = 0.0F;
         for (i1 = 0; i1 < 3; i1++) {
-          fv3[i0] += 2.0F * e_a[i1] * M3[i1 + 3 * i0];
+          fv8[i0] += 2.0F * e_a[i1] * M3[i1 + 3 * i0];
         }
 
-        c_value += fv3[i0] * a_i[i0];
-        fv4[i0] = 0.0F;
+        c_value += fv8[i0] * a_i[i0];
+        fv9[i0] = 0.0F;
         for (i1 = 0; i1 < 3; i1++) {
-          fv4[i0] += 2.0F * e_m[i1] * M3[i1 + 3 * i0];
+          fv9[i0] += 2.0F * e_m[i1] * M3[i1 + 3 * i0];
         }
 
-        d_value += fv4[i0] * m_i[i0];
+        d_value += fv9[i0] * m_i[i0];
       }
 
       grad_J[2] = c_value + d_value;
@@ -382,18 +382,18 @@ void comp_filt_step(const struct0_T *s, float acc_b[3], float mag_b[3], const
       c_value = 0.0F;
       d_value = 0.0F;
       for (i0 = 0; i0 < 3; i0++) {
-        fv3[i0] = 0.0F;
+        fv8[i0] = 0.0F;
         for (i1 = 0; i1 < 3; i1++) {
-          fv3[i0] += 2.0F * e_a[i1] * M4[i1 + 3 * i0];
+          fv8[i0] += 2.0F * e_a[i1] * M4[i1 + 3 * i0];
         }
 
-        c_value += fv3[i0] * a_i[i0];
-        fv4[i0] = 0.0F;
+        c_value += fv8[i0] * a_i[i0];
+        fv9[i0] = 0.0F;
         for (i1 = 0; i1 < 3; i1++) {
-          fv4[i0] += 2.0F * e_m[i1] * M4[i1 + 3 * i0];
+          fv9[i0] += 2.0F * e_m[i1] * M4[i1 + 3 * i0];
         }
 
-        d_value += fv4[i0] * m_i[i0];
+        d_value += fv9[i0] * m_i[i0];
       }
 
       grad_J[3] = c_value + d_value;
@@ -423,18 +423,21 @@ void comp_filt_step(const struct0_T *s, float acc_b[3], float mag_b[3], const
   /* 'comp_filt_step:14' ~ */
   /*  Komplementarni filtar */
   /* 'comp_filt_step:17' qib_est = s.K_cf * qib_gyro + (1 - s.K_cf) * qib_gd; */
+  c_value = 1.0F - s->K_cf;
   for (i0 = 0; i0 < 4; i0++) {
-    qib_est[i0] = s->K_cf * qib_est[i0] + (1.0F - s->K_cf) * qib_gd[i0];
+    qib_est[i0] = s->K_cf * qib_est[i0] + c_value * qib_gd[i0];
   }
 
   /* 'comp_filt_step:18' qib_est = qib_est / norm(qib_est); */
   value = b_norm(qib_est);
-  for (i0 = 0; i0 < 4; i0++) {
-    qib_est[i0] /= value;
-  }
 
   /*  Storing current quaternion for the next iterative process */
   /* 'comp_filt_step:21' s.qib_prev = qib_est; */
+  for (i = 0; i < 4; i++) {
+    b_qib_est = qib_est[i] / value;
+    s->qib_prev[i] = b_qib_est;
+    qib_est[i] = b_qib_est;
+  }
 }
 
 /*

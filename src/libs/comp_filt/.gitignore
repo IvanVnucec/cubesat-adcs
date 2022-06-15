@@ -1,0 +1,6 @@
+matlab/codegen
+src/*.bat
+src/*.mk
+src/*.rsp
+src/*.tmw
+src/*.mat
