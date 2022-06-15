@@ -124,5 +124,5 @@ fprintf('Kp = 42.5 \nKi = 14.8 \nKd = 0\n\n');
 H2 = tf([K], DC*[tau, 1, 0]);
 
 fprintf('PID regulator za regulaciju kuta:\n');
-fprintf('Kp = 36.1 \nKi = 3.6 \nKd = 91\n');
+fprintf('Kp = 50.0 \nKi = 3.0 \nKd = 100.0\n');
 
