@@ -105,9 +105,7 @@ void ADCS_thread(void *argument)
 
             //ADCS_sendMagneticField(imu_data.mag);
 
-        } else if (reg_mode == ADCS_REGULATIOM_MODE_ANGULAR_VELOCITY) {
-            const float ang_vel_ref = 0.0f;
-            ADCS_controlAngVel(ang_vel_ref, imu_data.gyr[2]);
+        } else if (reg_mode == ADCS_REGULATION_MODE_ANGULAR_VELOCITY) {
             ADCS_sendAngVel(imu_data.gyr);
 
         } else {
@@ -383,7 +381,7 @@ void ADCS_setRegulationMode(ADCS_RegulationMode_E reg_mode)
             ADCS_PID_resetIntegral(&ADCS_handle.pidHandleAngle, &pid_status);
             ERROR_assert(pid_status == ADCS_PID_STATUS_OK);
         
-        } else if (reg_mode == ADCS_REGULATIOM_MODE_ANGULAR_VELOCITY) {
+        } else if (reg_mode == ADCS_REGULATION_MODE_ANGULAR_VELOCITY) {
             ADCS_PID_Status pid_status;
             ADCS_PID_resetIntegral(&ADCS_handle.pidHandleAngVel, &pid_status);
             ERROR_assert(pid_status == ADCS_PID_STATUS_OK);
@@ -393,3 +391,5 @@ void ADCS_setRegulationMode(ADCS_RegulationMode_E reg_mode)
         ERROR_assert(0);
     }
 }
+
+    else if (reg_mode == ADCS_REGULATION_MODE_ANGULAR_VELOCITY)

@@ -30,7 +30,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 typedef enum ADCS_RegulationMode_Enum {
     ADCS_REGULATION_MODE_ATTITUDE,
-    ADCS_REGULATIOM_MODE_ANGULAR_VELOCITY,
+    ADCS_REGULATION_MODE_ANGULAR_VELOCITY,
     ADCS_REGULATION_MODE_NUM
 } ADCS_RegulationMode_E;
 

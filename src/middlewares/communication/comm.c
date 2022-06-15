@@ -310,7 +310,7 @@ static void COMM_setSending(const char *msg)
 
 static void COMM_setRegulationModeAngVel(const char *msg)
 {
-    ADCS_setRegulationMode(ADCS_REGULATIOM_MODE_ANGULAR_VELOCITY);
+    ADCS_setRegulationMode(ADCS_REGULATION_MODE_ANGULAR_VELOCITY);
 }
 
 static void COMM_setRegulationModeAttitude(const char *msg)
