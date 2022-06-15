@@ -31,6 +31,7 @@ extern "C" {
 typedef enum ADCS_RegulationMode_Enum {
     ADCS_REGULATION_MODE_ATTITUDE,
     ADCS_REGULATION_MODE_ANGULAR_VELOCITY,
+    ADCS_REGULATION_MODE_NO_REGULATION,
     ADCS_REGULATION_MODE_NUM
 } ADCS_RegulationMode_E;
 
@@ -54,6 +55,10 @@ void ADCS_thread(void *argument);
 void ADCS_delayMs(unsigned ms);
 ADCS_RegulationMode_E ADCS_getRegulationMode(void);
 void ADCS_setRegulationMode(ADCS_RegulationMode_E reg_mode);
+ADCS_PID_Handle *ADCS_getCurrentPidRegulatorHandle(void);
+void ADCS_setRefAngleZInDeg(const float z_deg);
+void ADCS_setRefAngVelZInRad(const float z_ang_vel);
+void ADCS_setReactionWheelRefPwmDutyCycle(ADCS_RW_DutyCycle duty_cycle);
 
 #ifdef __cplusplus
 }

@@ -21,13 +21,13 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 /* Private typedef -----------------------------------------------------------*/
-
 /* Private define ------------------------------------------------------------*/
 #define COMM_UART_TX_QUEUE_LEN (10)
 #define COMM_UART_RX_QUEUE_LEN (10)
-#define COMM_CALLBACK_FUNCTIONS_LEN (5)
+#define COMM_CALLBACK_FUNCTIONS_LEN (14)
 
 /* Private macro -------------------------------------------------------------*/
 
@@ -43,9 +43,18 @@ static void COMM_UART_startReceiving(uint8_t *save_to, COMM_Status *status);
 static void COMM_UART_stopReceiving(COMM_Status *status);
 static void COMM_echo(const char *msg);
 static void COMM_help(const char *msg);
+static void COMM_resetMicrocontroller(const char *msg);
 static void COMM_setSending(const char *msg);
 static void COMM_setRegulationModeAngVel(const char *msg);
 static void COMM_setRegulationModeAttitude(const char *msg);
+static void COMM_setRefAngleZInDeg(const char *msg);
+static void COMM_setRefAngVelZInRad(const char *msg);
+static void COMM_setPidCoeffP(const char *msg);
+static void COMM_setPidCoeffI(const char *msg);
+static void COMM_setPidCoeffD(const char *msg);
+static void COMM_setPidCoeffV(const char *msg);
+static void COMM_setRegulationModeNoRegulation(const char *msg);
+static void COMM_setRwDutyCycleZ(const char *msg);
 
 /* Private variables ---------------------------------------------------------*/
 static osMessageQueueId_t COMM_uart_tx_queue = NULL;
@@ -56,9 +65,18 @@ static int COMM_UART_tx_free = 0;                           // for uart tx
 static COMM_CallbackFunction COMM_callback_functions[COMM_CALLBACK_FUNCTIONS_LEN] = {
     {"echo", COMM_echo},
     {"help", COMM_help},
+    {"reset", COMM_resetMicrocontroller},
     {"set_sending", COMM_setSending},
     {"set_reg_angvel", COMM_setRegulationModeAngVel},
     {"set_reg_attitude", COMM_setRegulationModeAttitude},
+    {"set_reg_no_reg", COMM_setRegulationModeNoRegulation},
+    {"set_pid_p", COMM_setPidCoeffP},
+    {"set_pid_i", COMM_setPidCoeffI},
+    {"set_pid_d", COMM_setPidCoeffD},
+    {"set_pid_v", COMM_setPidCoeffV},
+    {"set_ref_angle_z", COMM_setRefAngleZInDeg},
+    {"set_ref_angvel_z", COMM_setRefAngVelZInRad},
+    {"set_rw_duty_cycle_z", COMM_setRwDutyCycleZ},
 };
 static int COMM_sending_enabled = 1;
 
@@ -300,6 +318,11 @@ static void COMM_help(const char *msg)
     }
 }
 
+static void COMM_resetMicrocontroller(const char *msg)
+{
+    NVIC_SystemReset();
+}
+
 static void COMM_setSending(const char *msg)
 {
     if (msg[0] == '1')
@@ -316,6 +339,121 @@ static void COMM_setRegulationModeAngVel(const char *msg)
 static void COMM_setRegulationModeAttitude(const char *msg)
 {
     ADCS_setRegulationMode(ADCS_REGULATION_MODE_ATTITUDE);
+}
+
+static void COMM_setRegulationModeNoRegulation(const char *msg)
+{
+    ADCS_setRegulationMode(ADCS_REGULATION_MODE_NO_REGULATION);
+}
+
+float COMM_stringToFloat(const char *s)
+{
+    float rez  = 0.0f;
+    float fact = 1.0f;
+ 
+    if (*s == '-') {
+        s++;
+        fact = -1.0f;
+    }
+
+    for (int point_seen = 0; *s; s++) {
+        if (*s == '.') {
+            point_seen = 1;
+            continue;
+        }
+
+        int d = *s - '0';
+        if (d >= 0 && d <= 9) {
+            if (point_seen)
+                fact /= 10.0f;
+            rez = rez * 10.0f + (float)d;
+        }
+    }
+
+    return rez * fact;
+}
+
+static void COMM_setPidCoeffP(const char *msg)
+{
+    ADCS_PID_Status status;
+    ADCS_PID_RegulatorCoeffs pid_coeffs;
+
+    // get current pid regulator handle
+    ADCS_PID_Handle* pid = ADCS_getCurrentPidRegulatorHandle();
+    ADCS_PID_getCoeffs(pid, &pid_coeffs);
+    pid_coeffs.Kp = COMM_stringToFloat(msg);
+    ADCS_PID_updateCoeffs(pid, &pid_coeffs, &status);
+
+    ERROR_assert(status == ADCS_PID_STATUS_OK);
+}
+
+static void COMM_setPidCoeffI(const char *msg)
+{
+    ADCS_PID_Status status;
+    ADCS_PID_RegulatorCoeffs pid_coeffs;
+
+    // get current pid regulator handle
+    ADCS_PID_Handle* pid = ADCS_getCurrentPidRegulatorHandle();
+    ADCS_PID_getCoeffs(pid, &pid_coeffs);
+    pid_coeffs.Ki = COMM_stringToFloat(msg);
+    ADCS_PID_updateCoeffs(pid, &pid_coeffs, &status);
+
+    ERROR_assert(status == ADCS_PID_STATUS_OK);
+}
+
+static void COMM_setPidCoeffD(const char *msg)
+{
+    ADCS_PID_Status status;
+    ADCS_PID_RegulatorCoeffs pid_coeffs;
+
+    // get current pid regulator handle
+    ADCS_PID_Handle* pid = ADCS_getCurrentPidRegulatorHandle();
+    ADCS_PID_getCoeffs(pid, &pid_coeffs);
+    pid_coeffs.Kd = COMM_stringToFloat(msg);
+    ADCS_PID_updateCoeffs(pid, &pid_coeffs, &status);
+
+    ERROR_assert(status == ADCS_PID_STATUS_OK);
+}
+
+static void COMM_setPidCoeffV(const char *msg)
+{
+    ADCS_PID_Status status;
+    ADCS_PID_RegulatorCoeffs pid_coeffs;
+
+    // get current pid regulator handle
+    ADCS_PID_Handle* pid = ADCS_getCurrentPidRegulatorHandle();
+    ADCS_PID_getCoeffs(pid, &pid_coeffs);
+    pid_coeffs.V = COMM_stringToFloat(msg);
+    ADCS_PID_updateCoeffs(pid, &pid_coeffs, &status);
+
+    ERROR_assert(status == ADCS_PID_STATUS_OK);
+}
+
+static void COMM_setRefAngleZInDeg(const char *msg)
+{
+    float z_angle;
+
+    z_angle = COMM_stringToFloat(msg);
+
+    ADCS_setRefAngleZInDeg(z_angle);
+}
+
+static void COMM_setRefAngVelZInRad(const char *msg)
+{
+    float z_ang_vel;
+
+    z_ang_vel = COMM_stringToFloat(msg);
+
+    ADCS_setRefAngVelZInRad(z_ang_vel);
+}
+
+static void COMM_setRwDutyCycleZ(const char *msg)
+{
+    ADCS_RW_DutyCycle duty_cycle;
+
+    duty_cycle = roundf(COMM_stringToFloat(msg));
+
+    ADCS_setReactionWheelRefPwmDutyCycle(duty_cycle);
 }
 
 // TODO: move UART code from comm to uart (bsp or mcu)

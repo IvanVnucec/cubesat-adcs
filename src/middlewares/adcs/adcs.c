@@ -31,7 +31,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 static ADCS_Handle_T ADCS_handle;
-static ADCS_RegulationMode_E ADCS_regulation_mode = ADCS_REGULATION_MODE_ATTITUDE;
+static ADCS_RegulationMode_E ADCS_regulation_mode = ADCS_REGULATION_MODE_NO_REGULATION;
 
 // angular velocity regulator params
 static const ADCS_PID_RegulatorCoeffs ADCS_pid_coeffs_angvel = {
@@ -50,6 +50,9 @@ static const ADCS_PID_RegulatorCoeffs ADCS_pid_coeffs_angle = {
     .Ts = ADCS_THREAD_PERIOD_IN_SECONDS,
     .V  = 15.0f};
 static const float ADCS_pid_angle_max_out = 100.0f;
+static float ADCS_euler_angles_ref[3] = {0.0f, 0.0f, 0.0f};
+static float ADCS_ang_vel_ref[3] = {0.0f, 0.0f, 0.0f};
+static ADCS_RW_DutyCycle ADCS_rw_duty_cycle_ref = ADCS_RW_DUTY_CYCLE_MIN;
 
 /* Private function prototypes -----------------------------------------------*/
 static void ADCS_init(void);
@@ -62,7 +65,7 @@ static void ADCS_sendAngVel(const float w[3]);
 static void ADCS_sendAngVelPidOutput(const float pid_out);
 static void ADCS_sendAnglePidOutput(const float pid_out);
 static void ADCS_calculateEulerAngles(float e[3], const ADCS_Quaternion_T q);
-static void ADCS_sendEulerAngles(const float e[3]);
+static void ADCS_sendEulerAngles(const float e_ref[3], const float e[3]);
 static void ADCS_sendMagneticField(const float m[3]);
 // TODO: move regulator stuff in its own files
 static void ADCS_getRwDutyCycleAndDirectionBasedOnPidAngVelRegOut(
@@ -73,6 +76,7 @@ static void ADCS_getRwDutyCycleAndDirectionBasedOnPidAngleRegOut(
     ADCS_RW_DutyCycle *rw_duty_cycle,
     ADCS_RW_Direction *rw_direction,
     float pid_reg_out);
+static ADCS_RW_DutyCycle ADCS_getReactionWheelRefPwmDutyCycle(void);
 /* Private user code ---------------------------------------------------------*/
 void ADCS_thread(void *argument)
 {
@@ -81,7 +85,6 @@ void ADCS_thread(void *argument)
     static uint32_t tick;
     static ADCS_RegulationMode_E reg_mode;
     static float euler_angles[3];
-    static const float euler_angles_ref[3] = {0.0f, 0.0f, 0.0f};
 
     // give time for sattelite to stabilize
     ADCS_delayMs(3000);
@@ -98,19 +101,35 @@ void ADCS_thread(void *argument)
 
             ADCS_calculateEulerAngles(euler_angles, q_meas);
             // first one (0th term) is the angle around z axis
-            ADCS_controlAngle(euler_angles_ref[0], euler_angles[0]);
-            
+            ADCS_controlAngle(ADCS_euler_angles_ref[0], euler_angles[0]);
+
             //ADCS_sendQuaternion(q_meas);
-            ADCS_sendEulerAngles(euler_angles);
+            ADCS_sendEulerAngles(ADCS_euler_angles_ref, euler_angles);
 
             //ADCS_sendMagneticField(imu_data.mag);
 
         } else if (reg_mode == ADCS_REGULATION_MODE_ANGULAR_VELOCITY) {
+            ADCS_controlAngVel(ADCS_ang_vel_ref[2], imu_data.gyr[2]);
             ADCS_sendAngVel(imu_data.gyr);
 
-        } else {
-            // throw error
-            ERROR_assert(0);
+        } else if (reg_mode == ADCS_REGULATION_MODE_NO_REGULATION) {
+            ADCS_RW_Status rw_status;
+            ADCS_RW_DutyCycle duty_cycle_ref;
+            ADCS_RW_DutyCycle duty_cycle_now;
+
+            ADCS_RW_getPwmDutyCycle(&ADCS_handle.reactionWheelHandle, &duty_cycle_now, &rw_status);
+            duty_cycle_ref = ADCS_getReactionWheelRefPwmDutyCycle();
+
+            if (duty_cycle_now != duty_cycle_ref) {
+                ADCS_RW_setPwmDutyCycle(&ADCS_handle.reactionWheelHandle, duty_cycle_ref, &rw_status);
+            }
+
+            ADCS_determineAttitude(q_meas, &imu_data);
+            ADCS_calculateEulerAngles(euler_angles, q_meas);
+            ADCS_sendEulerAngles(ADCS_euler_angles_ref, euler_angles);
+            //ADCS_sendQuaternion(q_meas);
+
+            //ADCS_sendAngVel(imu_data.gyr);
         }
 
         tick += ADCS_THREAD_PERIOD_IN_MILISECONDS;    // overflow is safe
@@ -195,11 +214,11 @@ __attribute__((unused)) static void ADCS_sendQuaternion(const ADCS_Quaternion_T 
 
     int cx = snprintf_((char *)message.buffer,
                        COMM_MESSAGE_MAX_BUFF_LEN,
-                       "q = [%.4f %.4f %.4f %.4f]\n",
-                       quat[0],
-                       quat[1],
-                       quat[2],
-                       quat[3]);
+                       "%d %d %d %d\n",
+                       (int)roundf(quat[0]*1000.0f),
+                       (int)roundf(quat[1]*1000.0f),
+                       (int)roundf(quat[2]*1000.0f),
+                       (int)roundf(quat[3]*1000.0f));
 
     ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
 
@@ -215,22 +234,32 @@ __attribute__((unused)) static void ADCS_calculateEulerAngles(float e[3], const 
     e[2] = atan2f(+2.0f * (q[2]*q[3] + q[0]*q[1]), (q[0]*q[0] - q[1]*q[1] - q[2]*q[2] + q[3]*q[3]));
 }
 
-__attribute__((unused)) static void ADCS_sendEulerAngles(const float e[3])
+__attribute__((unused)) static void ADCS_sendEulerAngles(const float e_ref[3], const float e[3])
 {
     COMM_Status status = COMM_STATUS_ERROR;
     COMM_Message message;
 
+    // send referente first
     int cx = snprintf_((char *)message.buffer,
                        COMM_MESSAGE_MAX_BUFF_LEN,
-                       "e = [%.4f %.4f %.4f] deg\n",
-                       e[0] / 3.14159f * 180.0f,
-                       e[1] / 3.14159f * 180.0f,
-                       e[2] / 3.14159f * 180.0f);
+                       "%.0f %.0f %.0f ",
+                       e_ref[0] / 3.14159f * 180.0f,
+                       e_ref[1] / 3.14159f * 180.0f,
+                       e_ref[2] / 3.14159f * 180.0f);
 
     ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
-
     message.msg_len = cx;
+    COMM_sendMessage(&message, &status);
 
+    // send real angles second
+    cx = snprintf_((char *)message.buffer,
+                       COMM_MESSAGE_MAX_BUFF_LEN,
+                       "%.0f %.0f %.0f\n",
+                       e[0]     / 3.14159f * 180.0f,
+                       e[1]     / 3.14159f * 180.0f,
+                       e[2]     / 3.14159f * 180.0f);
+    ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
+    message.msg_len = cx;
     COMM_sendMessage(&message, &status);
 }
 
@@ -260,10 +289,10 @@ __attribute__((unused)) static void ADCS_sendAngVel(const float w[3])
 
     int cx = snprintf_((char *)message.buffer,
                        COMM_MESSAGE_MAX_BUFF_LEN,
-                       "w = [%.4f %.4f %.4f]\n",
-                       w[0],
-                       w[1],
-                       w[2]);
+                       "%d %d %d\n",
+                       (int)roundf(w[0] * 1000.0f),
+                       (int)roundf(w[1] * 1000.0f),
+                       (int)roundf(w[2] * 1000.0f));
 
     ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
 
@@ -339,9 +368,9 @@ static void ADCS_getRwDutyCycleAndDirectionBasedOnPidAngleRegOut(
 {
     // set direction and make torque positive if negative
     if (pid_reg_out > 0.0f) {
-        *rw_direction = ADCS_RW_DIRECTION_CCW;
-    } else {
         *rw_direction = ADCS_RW_DIRECTION_CW;
+    } else {
+        *rw_direction = ADCS_RW_DIRECTION_CCW;
         pid_reg_out *= -1.0f;
     }
 
@@ -385,6 +414,10 @@ void ADCS_setRegulationMode(ADCS_RegulationMode_E reg_mode)
             ADCS_PID_Status pid_status;
             ADCS_PID_resetIntegral(&ADCS_handle.pidHandleAngVel, &pid_status);
             ERROR_assert(pid_status == ADCS_PID_STATUS_OK);
+        } else if (reg_mode == ADCS_REGULATION_MODE_NO_REGULATION) {
+            ADCS_RW_Status rw_status;
+            ADCS_RW_setPwmDutyCycle(&ADCS_handle.reactionWheelHandle, ADCS_RW_DUTY_CYCLE_MIN, &rw_status);
+            ERROR_assert(rw_status == ADCS_RW_STATUS_OK);
         }
     } else {
         // error
@@ -392,4 +425,48 @@ void ADCS_setRegulationMode(ADCS_RegulationMode_E reg_mode)
     }
 }
 
+ADCS_PID_Handle *ADCS_getCurrentPidRegulatorHandle(void)
+{
+    ADCS_RegulationMode_E reg_mode;
+
+    reg_mode = ADCS_getRegulationMode();
+
+    if (reg_mode == ADCS_REGULATION_MODE_ATTITUDE)
+        return &ADCS_handle.pidHandleAngle;
     else if (reg_mode == ADCS_REGULATION_MODE_ANGULAR_VELOCITY)
+        return &ADCS_handle.pidHandleAngVel;
+
+    return NULL; // error
+}
+
+void ADCS_setRefAngleZInDeg(const float z_deg)
+{
+    float z_rad;
+
+    z_rad = z_deg * 3.14159f / 180.0f;
+
+    __disable_irq();
+    ADCS_euler_angles_ref[0] = z_rad;
+    __enable_irq();
+}
+
+void ADCS_setRefAngVelZInRad(const float z_ang_vel)
+{
+    __disable_irq();
+    ADCS_ang_vel_ref[2] = z_ang_vel;
+    __enable_irq();
+}
+
+static ADCS_RW_DutyCycle ADCS_getReactionWheelRefPwmDutyCycle(void)
+{
+    // no need to disable irq because this function is called from
+    // ...adcs thread only
+    return ADCS_rw_duty_cycle_ref;
+}
+
+void ADCS_setReactionWheelRefPwmDutyCycle(ADCS_RW_DutyCycle duty_cycle)
+{
+    __disable_irq();
+    ADCS_rw_duty_cycle_ref = duty_cycle;
+    __enable_irq();
+}
