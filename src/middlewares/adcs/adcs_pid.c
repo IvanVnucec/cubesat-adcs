@@ -93,7 +93,6 @@ void ADCS_PID_regulate(ADCS_PID_Handle *hpid,
     if (hpid != NULL) {
         /* transform PID coeff from Parralel to Standard form. See documentation */
         const float Kr = hpid->coeffs.Kp;
-        const float Ti = Kr / hpid->coeffs.Ki;
         const float Td = hpid->coeffs.Kd / Kr;
         const float T  = hpid->coeffs.Ts;
         const float v  = hpid->coeffs.V;
@@ -104,8 +103,15 @@ void ADCS_PID_regulate(ADCS_PID_Handle *hpid,
         /* up(k)  = Kr *   e(k) */
         hpid->up0 = Kr * hpid->e0;
 
-        /* ui(k)  = ui(k-1)   + Kr * T / Ti * (  e(k)   + e(k-1)  ) / 2.0f */
-        hpid->ui0 = hpid->ui1 + Kr * T / Ti * (hpid->e0 + hpid->e1) / 2.0f;
+        // skip calculating I term if Ki is really small
+        // problem is with dividing by small values
+        if (hpid->coeffs.Ki >= 0.01f) {
+            /* ui(k)  = ui(k-1)   + Kr * T / Ti * (  e(k)   + e(k-1)  ) / 2.0f */
+            const float Ti = Kr / hpid->coeffs.Ki;
+            hpid->ui0 = hpid->ui1 + Kr * T / Ti * (hpid->e0 + hpid->e1) / 2.0f;
+            /* ui(k-1) = ui(k) */
+            hpid->ui1 = hpid->ui0;
+        }
 
         /* ud(k)  = Td / (Td + v * T) * ud(k-1)   + Kr * v * Td / (Td + v * T) * (  e(k)   - e(k-1)  ) */
         hpid->ud0 = Td / (Td + v * T) * hpid->ud1
@@ -116,7 +122,6 @@ void ADCS_PID_regulate(ADCS_PID_Handle *hpid,
 
         /* u(k-1) = u(k) */
         /* e(k-1) = e(k) */
-        hpid->ui1 = hpid->ui0;
         hpid->ud1 = hpid->ud0;
         hpid->e1  = hpid->e0;
 
@@ -151,5 +156,32 @@ void ADCS_PID_resetIntegral(ADCS_PID_Handle *hpid, ADCS_PID_Status *status)
 
     if (status != NULL) {
         *status = local_status;
+    }
+}
+
+void ADCS_PID_updateCoeffs(ADCS_PID_Handle *hpid, const ADCS_PID_RegulatorCoeffs *coeffs, ADCS_PID_Status *status)
+{
+    ADCS_PID_Status local_status = ADCS_PID_STATUS_ERROR;
+
+    if (hpid != NULL) {
+        if (coeffs != NULL) {
+            hpid->ui1 = 0.0f;
+            hpid->ud1 = 0.0f;
+            hpid->e1  = 0.0f;
+            hpid->coeffs = *coeffs;
+
+            local_status = ADCS_PID_STATUS_OK;
+        }
+    }
+
+    if (status != NULL) {
+        *status = local_status;
+    }
+}
+
+void ADCS_PID_getCoeffs(const ADCS_PID_Handle *hpid, ADCS_PID_RegulatorCoeffs *coeffs)
+{
+    if (coeffs != NULL) {
+        *coeffs = hpid->coeffs;
     }
 }
