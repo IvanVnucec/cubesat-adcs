@@ -13,10 +13,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "adcs_imu.h"
 
-#include "adcs.h"
+#include "FreeRTOS.h"
+#include "task.h"
 #include "mcu/i2c/mcu_i2c.h"
-#include "mpu9250/mpu9250.h"
-#include "stm32l4xx_hal.h"
 #include "utils/error/error.h"
 
 /* Private typedef -----------------------------------------------------------*/
@@ -24,6 +23,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 static MPU9250_Handle_s *ADCS_IMU_mpu9250Handle = NULL;
+
 // clang-format off
 const static float A[3][3] = {
     {1.0f, 0.0f, 0.0f}, 
@@ -34,18 +34,19 @@ const static float b[3] = {12.6506f, -17.8589f, -56.9918f};
 // clang-format on
 
 /* Private function prototypes -----------------------------------------------*/
+static void ADCS_IMU_delayMs(unsigned ms);
 static void ADCS_IMU_calibrateMagnetometerMeasurements(float mag[3]);
 static int ADCS_IMU_writeToMpu9250(uint8_t subAddress, uint8_t data);
 static int ADCS_IMU_readFromMpu9250(uint8_t subAddress, uint8_t count, uint8_t *dest);
 
 /* Private user code ---------------------------------------------------------*/
-void ADCS_IMU_init(ADCS_Handle_T *ADCS_handle)
+void ADCS_IMU_init(MPU9250_Handle_s *mpu9250Handle)
 {
-    ADCS_IMU_mpu9250Handle = &ADCS_handle->mpu9250Handle;
+    ADCS_IMU_mpu9250Handle = mpu9250Handle;
 
     int retval = MPU9250_begin(&ADCS_IMU_writeToMpu9250,
                                &ADCS_IMU_readFromMpu9250,
-                               &ADCS_delayMs,
+                               &ADCS_IMU_delayMs,
                                ADCS_IMU_mpu9250Handle);
 
     ERROR_assert(retval == 1);
@@ -128,4 +129,9 @@ static int ADCS_IMU_readFromMpu9250(uint8_t subAddress, uint8_t count, uint8_t *
     }
 
     return 1;    // success
+}
+
+static void ADCS_IMU_delayMs(unsigned ms)
+{
+    vTaskDelay(pdMS_TO_TICKS(ms));
 }

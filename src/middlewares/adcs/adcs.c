@@ -142,7 +142,7 @@ static void ADCS_init(void)
     ADCS_RW_Status rw_status   = ADCS_RW_STATUS_ERROR;
     ADCS_PID_Status pid_status = ADCS_PID_STATUS_ERROR;
 
-    ADCS_IMU_init(&ADCS_handle);
+    ADCS_IMU_init(&ADCS_handle.mpu9250Handle);
     ADCS_OR_init(&ADCS_handle.optReqHandle);
     ADCS_RW_init(&ADCS_handle.reactionWheelHandle, &rw_status);
     ERROR_assert(rw_status == ADCS_RW_STATUS_OK);

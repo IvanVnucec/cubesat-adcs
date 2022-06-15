@@ -19,7 +19,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "adcs.h"
+#include "mpu9250/mpu9250.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* Private defines -----------------------------------------------------------*/
@@ -34,7 +34,7 @@ typedef struct {
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions prototypes ---------------------------------------------*/
-void ADCS_IMU_init(ADCS_Handle_T *ADCS_handle);
+void ADCS_IMU_init(MPU9250_Handle_s *mpu9250Handle);
 void ADCS_IMU_getData(ADCS_ImuData_T *imu_data);
 
 #ifdef __cplusplus
