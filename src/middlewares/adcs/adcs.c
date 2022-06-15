@@ -35,21 +35,21 @@ static ADCS_RegulationMode_E ADCS_regulation_mode = ADCS_REGULATION_MODE_ATTITUD
 
 // angular velocity regulator params
 static const ADCS_PID_RegulatorCoeffs ADCS_pid_coeffs_angvel = {
-    .Kp = 231.5f,
-    .Ki = 117.0f,
+    .Kp = 42.5f,
+    .Ki = 14.8f,
     .Kd = 0.0f,
     .Ts = ADCS_THREAD_PERIOD_IN_SECONDS,
     .V  = 15.0f};
-static const float ADCS_pid_angvel_max_out = 255.0f;
+static const float ADCS_pid_angvel_max_out = 100.0f;
 
 // angle regulator params
 static const ADCS_PID_RegulatorCoeffs ADCS_pid_coeffs_angle = {
-    .Kp = 25.0f,
-    .Ki = 10.0f,
-    .Kd = 10.0f,
+    .Kp = 36.1f,
+    .Ki = 3.6f,
+    .Kd = 91.0f,
     .Ts = ADCS_THREAD_PERIOD_IN_SECONDS,
-    .V  = 10.0f};
-static const float ADCS_pid_angle_max_out = 255.0f;
+    .V  = 15.0f};
+static const float ADCS_pid_angle_max_out = 100.0f;
 
 /* Private function prototypes -----------------------------------------------*/
 static void ADCS_init(void);
