@@ -227,9 +227,9 @@ __attribute__((unused)) static void ADCS_sendQuaternion(const ADCS_Quaternion_T 
 
 __attribute__((unused)) static void ADCS_calculateEulerAngles(float e[3], const ADCS_Quaternion_T q)
 {
-    e[0] = atan2f(+2.0f * (q[1]*q[2] + q[0]*q[3]), (q[0]*q[0] + q[1]*q[1] - q[2]*q[2] - q[3]*q[3]));
+    e[0] = atan2f(+2.0f * (q[1]*q[2] + q[0]*q[3]), q[0]*q[0] + q[1]*q[1] - q[2]*q[2] - q[3]*q[3]);
     e[1] =  asinf(-2.0f * (q[1]*q[3] - q[0]*q[2]));
-    e[2] = atan2f(+2.0f * (q[2]*q[3] + q[0]*q[1]), (q[0]*q[0] - q[1]*q[1] - q[2]*q[2] + q[3]*q[3]));
+    e[2] = atan2f(+2.0f * (q[2]*q[3] + q[0]*q[1]), q[0]*q[0] - q[1]*q[1] - q[2]*q[2] + q[3]*q[3]);
 }
 
 __attribute__((unused)) static void ADCS_sendEulerAngles(const float e_ref[3], const float e[3])
