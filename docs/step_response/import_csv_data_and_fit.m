@@ -1,3 +1,5 @@
+clear all;
+
 %% Import data from text file.
 % Script for importing data from the following text file:
 %
