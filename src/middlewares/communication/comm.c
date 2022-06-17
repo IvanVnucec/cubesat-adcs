@@ -19,9 +19,9 @@
 #include "stm32l4xx_hal.h"
 #include "utils/error/error.h"
 
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -350,7 +350,7 @@ float COMM_stringToFloat(const char *s)
 {
     float rez  = 0.0f;
     float fact = 1.0f;
- 
+
     if (*s == '-') {
         s++;
         fact = -1.0f;
@@ -379,7 +379,7 @@ static void COMM_setPidCoeffP(const char *msg)
     ADCS_PID_RegulatorCoeffs pid_coeffs;
 
     // get current pid regulator handle
-    ADCS_PID_Handle* pid = ADCS_getCurrentPidRegulatorHandle();
+    ADCS_PID_Handle *pid = ADCS_getCurrentPidRegulatorHandle();
     if (pid == NULL) {
         ADCS_PID_getCoeffs(pid, &pid_coeffs);
         pid_coeffs.Kp = COMM_stringToFloat(msg);
@@ -394,7 +394,7 @@ static void COMM_setPidCoeffI(const char *msg)
     ADCS_PID_RegulatorCoeffs pid_coeffs;
 
     // get current pid regulator handle
-    ADCS_PID_Handle* pid = ADCS_getCurrentPidRegulatorHandle();
+    ADCS_PID_Handle *pid = ADCS_getCurrentPidRegulatorHandle();
     if (pid == NULL) {
         ADCS_PID_getCoeffs(pid, &pid_coeffs);
         pid_coeffs.Ki = COMM_stringToFloat(msg);
@@ -409,7 +409,7 @@ static void COMM_setPidCoeffD(const char *msg)
     ADCS_PID_RegulatorCoeffs pid_coeffs;
 
     // get current pid regulator handle
-    ADCS_PID_Handle* pid = ADCS_getCurrentPidRegulatorHandle();
+    ADCS_PID_Handle *pid = ADCS_getCurrentPidRegulatorHandle();
     if (pid == NULL) {
         ADCS_PID_getCoeffs(pid, &pid_coeffs);
         pid_coeffs.Kd = COMM_stringToFloat(msg);
@@ -424,7 +424,7 @@ static void COMM_setPidCoeffV(const char *msg)
     ADCS_PID_RegulatorCoeffs pid_coeffs;
 
     // get current pid regulator handle
-    ADCS_PID_Handle* pid = ADCS_getCurrentPidRegulatorHandle();
+    ADCS_PID_Handle *pid = ADCS_getCurrentPidRegulatorHandle();
     if (pid == NULL) {
         ADCS_PID_getCoeffs(pid, &pid_coeffs);
         pid_coeffs.V = COMM_stringToFloat(msg);

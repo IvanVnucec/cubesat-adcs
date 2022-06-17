@@ -21,9 +21,9 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 
 /* Private includes ----------------------------------------------------------*/
+#include "adcs_cf.h"
 #include "adcs_pid.h"
 #include "adcs_rw.h"
-#include "adcs_cf.h"
 #include "mpu9250/mpu9250.h"
 
 /* Private defines -----------------------------------------------------------*/

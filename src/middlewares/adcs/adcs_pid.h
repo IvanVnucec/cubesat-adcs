@@ -68,7 +68,9 @@ void ADCS_PID_regulate(ADCS_PID_Handle *hpid,
                        float error,
                        ADCS_PID_Status *status);
 void ADCS_PID_resetIntegral(ADCS_PID_Handle *hpid, ADCS_PID_Status *status);
-void ADCS_PID_updateCoeffs(ADCS_PID_Handle *hpid, const ADCS_PID_RegulatorCoeffs *coeffs, ADCS_PID_Status *status);
+void ADCS_PID_updateCoeffs(ADCS_PID_Handle *hpid,
+                           const ADCS_PID_RegulatorCoeffs *coeffs,
+                           ADCS_PID_Status *status);
 void ADCS_PID_getCoeffs(const ADCS_PID_Handle *hpid, ADCS_PID_RegulatorCoeffs *coeffs);
 void ADCS_PID_getControllerEffort(const ADCS_PID_Handle *hpid, float *effort);
 
