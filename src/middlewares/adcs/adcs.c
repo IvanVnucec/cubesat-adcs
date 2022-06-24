@@ -14,8 +14,8 @@
 #include "adcs.h"
 
 #include "FreeRTOS.h"
-#include "adcs_imu.h"
 #include "adcs_cf.h"
+#include "adcs_imu.h"
 #include "adcs_pid.h"
 #include "cmsis_os2.h"
 #include "middlewares/communication/comm.h"
@@ -24,6 +24,7 @@
 #include "task.h"
 #include "utils/error/error.h"
 #include "utils/lerp/lerp.h"
+
 #include <math.h>
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,9 +50,9 @@ static const ADCS_PID_RegulatorCoeffs ADCS_pid_coeffs_angle = {
     .Kd = 100.0f,
     .Ts = ADCS_THREAD_PERIOD_IN_SECONDS,
     .V  = 15.0f};
-static const float ADCS_pid_angle_max_out = 100.0f;
-static float ADCS_euler_angles_ref[3] = {0.0f, 0.0f, 0.0f};
-static float ADCS_ang_vel_ref[3] = {0.0f, 0.0f, 0.0f};
+static const float ADCS_pid_angle_max_out       = 100.0f;
+static float ADCS_euler_angles_ref[3]           = {0.0f, 0.0f, 0.0f};
+static float ADCS_ang_vel_ref[3]                = {0.0f, 0.0f, 0.0f};
 static ADCS_RW_DutyCycle ADCS_rw_duty_cycle_ref = ADCS_RW_DUTY_CYCLE_MIN;
 
 /* Private function prototypes -----------------------------------------------*/
@@ -65,16 +66,17 @@ static void ADCS_getRwDutyCycleAndDirectionBasedOnPidAngVelRegOut(
     ADCS_RW_DutyCycle *rw_duty_cycle,
     ADCS_RW_Direction *rw_direction,
     float pid_reg_out);
-static void ADCS_getRwDutyCycleAndDirectionBasedOnPidAngleRegOut(
-    ADCS_RW_DutyCycle *rw_duty_cycle,
-    ADCS_RW_Direction *rw_direction,
-    float pid_reg_out);
+static void
+    ADCS_getRwDutyCycleAndDirectionBasedOnPidAngleRegOut(ADCS_RW_DutyCycle *rw_duty_cycle,
+                                                         ADCS_RW_Direction *rw_direction,
+                                                         float pid_reg_out);
 static ADCS_RW_DutyCycle ADCS_getReactionWheelRefPwmDutyCycle(void);
 static void ADCS_sendPacketInRegModeAngVel(float w_ref, float w, float controller_effort);
-static void ADCS_sendPacketInRegModeAngle(float angle_ref, float angle, float controller_effort);
+static void
+    ADCS_sendPacketInRegModeAngle(float angle_ref, float angle, float controller_effort);
 static void ADCS_sendPacketInRegModeNoReg(const float euler[3],
-    const float w[3],
-    const ADCS_RW_DutyCycle rw);
+                                          const float w[3],
+                                          const ADCS_RW_DutyCycle rw);
 
 /* Private user code ---------------------------------------------------------*/
 void ADCS_thread(void *argument)
@@ -104,7 +106,9 @@ void ADCS_thread(void *argument)
 
             float effort;
             ADCS_PID_getControllerEffort(&ADCS_handle.pidHandleAngle, &effort);
-            ADCS_sendPacketInRegModeAngle(ADCS_euler_angles_ref[0], euler_angles[0], effort);
+            ADCS_sendPacketInRegModeAngle(ADCS_euler_angles_ref[0],
+                                          euler_angles[0],
+                                          effort);
 
         } else if (reg_mode == ADCS_REGULATION_MODE_ANGULAR_VELOCITY) {
             ADCS_controlAngVel(ADCS_ang_vel_ref[2], imu_data.gyr[2]);
@@ -118,11 +122,15 @@ void ADCS_thread(void *argument)
             ADCS_RW_DutyCycle duty_cycle_ref;
             ADCS_RW_DutyCycle duty_cycle_now;
 
-            ADCS_RW_getPwmDutyCycle(&ADCS_handle.reactionWheelHandle, &duty_cycle_now, &rw_status);
+            ADCS_RW_getPwmDutyCycle(&ADCS_handle.reactionWheelHandle,
+                                    &duty_cycle_now,
+                                    &rw_status);
             duty_cycle_ref = ADCS_getReactionWheelRefPwmDutyCycle();
 
             if (duty_cycle_now != duty_cycle_ref) {
-                ADCS_RW_setPwmDutyCycle(&ADCS_handle.reactionWheelHandle, duty_cycle_ref, &rw_status);
+                ADCS_RW_setPwmDutyCycle(&ADCS_handle.reactionWheelHandle,
+                                        duty_cycle_ref,
+                                        &rw_status);
             }
 
             ADCS_determineAttitude(q_meas, &imu_data);
@@ -190,8 +198,8 @@ static void ADCS_controlAngle(const float angle_ref, const float angle)
     ERROR_assert(pid_status == ADCS_PID_STATUS_OK);
 
     ADCS_getRwDutyCycleAndDirectionBasedOnPidAngleRegOut(&rw_duty_cycle,
-                                                          &rw_direction,
-                                                          reg_out);
+                                                         &rw_direction,
+                                                         reg_out);
     ADCS_RW_setDirection(&ADCS_handle.reactionWheelHandle, rw_direction, &tw_status);
     ADCS_RW_setPwmDutyCycle(&ADCS_handle.reactionWheelHandle, rw_duty_cycle, &tw_status);
 }
@@ -201,11 +209,14 @@ void ADCS_delayMs(unsigned ms)
     vTaskDelay(pdMS_TO_TICKS(ms));
 }
 
-__attribute__((unused)) static void ADCS_calculateEulerAngles(float e[3], const ADCS_Quaternion_T q)
+__attribute__((unused)) static void ADCS_calculateEulerAngles(float e[3],
+                                                              const ADCS_Quaternion_T q)
 {
-    e[0] = atan2f(+2.0f * (q[1]*q[2] + q[0]*q[3]), q[0]*q[0] + q[1]*q[1] - q[2]*q[2] - q[3]*q[3]);
-    e[1] =  asinf(-2.0f * (q[1]*q[3] - q[0]*q[2]));
-    e[2] = atan2f(+2.0f * (q[2]*q[3] + q[0]*q[1]), q[0]*q[0] - q[1]*q[1] - q[2]*q[2] + q[3]*q[3]);
+    e[0] = atan2f(+2.0f * (q[1] * q[2] + q[0] * q[3]),
+                  q[0] * q[0] + q[1] * q[1] - q[2] * q[2] - q[3] * q[3]);
+    e[1] = asinf(-2.0f * (q[1] * q[3] - q[0] * q[2]));
+    e[2] = atan2f(+2.0f * (q[2] * q[3] + q[0] * q[1]),
+                  q[0] * q[0] - q[1] * q[1] - q[2] * q[2] + q[3] * q[3]);
 }
 
 static void ADCS_getRwDutyCycleAndDirectionBasedOnPidAngVelRegOut(
@@ -234,10 +245,10 @@ static void ADCS_getRwDutyCycleAndDirectionBasedOnPidAngVelRegOut(
     *rw_duty_cycle = lerp(x, x0, x1, y0, y1);
 }
 
-static void ADCS_getRwDutyCycleAndDirectionBasedOnPidAngleRegOut(
-    ADCS_RW_DutyCycle *rw_duty_cycle,
-    ADCS_RW_Direction *rw_direction,
-    float pid_reg_out)
+static void
+    ADCS_getRwDutyCycleAndDirectionBasedOnPidAngleRegOut(ADCS_RW_DutyCycle *rw_duty_cycle,
+                                                         ADCS_RW_Direction *rw_direction,
+                                                         float pid_reg_out)
 {
     // set direction and make torque positive if negative
     if (pid_reg_out > 0.0f) {
@@ -282,14 +293,16 @@ void ADCS_setRegulationMode(ADCS_RegulationMode_E reg_mode)
             ADCS_PID_Status pid_status;
             ADCS_PID_resetIntegral(&ADCS_handle.pidHandleAngle, &pid_status);
             ERROR_assert(pid_status == ADCS_PID_STATUS_OK);
-        
+
         } else if (reg_mode == ADCS_REGULATION_MODE_ANGULAR_VELOCITY) {
             ADCS_PID_Status pid_status;
             ADCS_PID_resetIntegral(&ADCS_handle.pidHandleAngVel, &pid_status);
             ERROR_assert(pid_status == ADCS_PID_STATUS_OK);
         } else if (reg_mode == ADCS_REGULATION_MODE_NO_REGULATION) {
             ADCS_RW_Status rw_status;
-            ADCS_RW_setPwmDutyCycle(&ADCS_handle.reactionWheelHandle, ADCS_RW_DUTY_CYCLE_MIN, &rw_status);
+            ADCS_RW_setPwmDutyCycle(&ADCS_handle.reactionWheelHandle,
+                                    ADCS_RW_DUTY_CYCLE_MIN,
+                                    &rw_status);
             ERROR_assert(rw_status == ADCS_RW_STATUS_OK);
         }
     } else {
@@ -309,7 +322,7 @@ ADCS_PID_Handle *ADCS_getCurrentPidRegulatorHandle(void)
     else if (reg_mode == ADCS_REGULATION_MODE_ANGULAR_VELOCITY)
         return &ADCS_handle.pidHandleAngVel;
 
-    return NULL; // error
+    return NULL;    // error
 }
 
 void ADCS_setRefAngleZInDeg(const float z_deg)
@@ -363,7 +376,8 @@ static void ADCS_sendPacketInRegModeAngVel(float w_ref, float w, float controlle
     COMM_sendMessage(&message, &status);
 }
 
-static void ADCS_sendPacketInRegModeAngle(float angle_ref, float angle, float controller_effort)
+static void
+    ADCS_sendPacketInRegModeAngle(float angle_ref, float angle, float controller_effort)
 {
     COMM_Status status = COMM_STATUS_ERROR;
     COMM_Message message;
@@ -383,8 +397,8 @@ static void ADCS_sendPacketInRegModeAngle(float angle_ref, float angle, float co
 }
 
 static void ADCS_sendPacketInRegModeNoReg(const float euler[3],
-    const float w[3],
-    const ADCS_RW_DutyCycle rw)
+                                          const float w[3],
+                                          const ADCS_RW_DutyCycle rw)
 {
     COMM_Status status = COMM_STATUS_ERROR;
     COMM_Message message;
@@ -403,11 +417,11 @@ static void ADCS_sendPacketInRegModeNoReg(const float euler[3],
     COMM_sendMessage(&message, &status);
 
     cx = snprintf_((char *)message.buffer,
-                       COMM_MESSAGE_MAX_BUFF_LEN,
-                       "%d %d %d ",
-                       (int)roundf(1000.0f * w[0]),
-                       (int)roundf(1000.0f * w[1]),
-                       (int)roundf(1000.0f * w[2]));
+                   COMM_MESSAGE_MAX_BUFF_LEN,
+                   "%d %d %d ",
+                   (int)roundf(1000.0f * w[0]),
+                   (int)roundf(1000.0f * w[1]),
+                   (int)roundf(1000.0f * w[2]));
 
     ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
 
@@ -415,10 +429,7 @@ static void ADCS_sendPacketInRegModeNoReg(const float euler[3],
 
     COMM_sendMessage(&message, &status);
 
-    cx = snprintf_((char *)message.buffer,
-                       COMM_MESSAGE_MAX_BUFF_LEN,
-                       "%d\n",
-                       (int)rw);
+    cx = snprintf_((char *)message.buffer, COMM_MESSAGE_MAX_BUFF_LEN, "%d\n", (int)rw);
 
     ERROR_assert(cx >= 0 && cx < COMM_MESSAGE_MAX_BUFF_LEN);
 

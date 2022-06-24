@@ -14,8 +14,8 @@
 #include "adcs_imu.h"
 
 #include "FreeRTOS.h"
-#include "task.h"
 #include "mcu/i2c/mcu_i2c.h"
+#include "task.h"
 #include "utils/error/error.h"
 
 /* Private typedef -----------------------------------------------------------*/
