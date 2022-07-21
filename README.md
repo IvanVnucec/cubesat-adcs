@@ -4,7 +4,7 @@
 Accurate satellite orientation is a prerequisite for a successful mission, therefore the Attitude Determination and Control System (ADCS) is one of the most important satellite systems. In this repo, the ADCS system software is presented, which enables the collection and processing of the orientation sensors data, attitude determination, actuator control and finally, control of the desired orientation.
 
 ## Video Demonstration
-Click on an image for YouTube video.<br>
+Click on an image for a YouTube video.<br>
 [![ADCS Demo](http://img.youtube.com/vi/CTYEpx-xjxo/0.jpg)](http://www.youtube.com/watch?v=CTYEpx-xjxo "Cubesat ADCS demo")
 
 ## Development
