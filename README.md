@@ -1,6 +1,12 @@
 [![build-and-test](https://github.com/IvanVnucec/cubesat-adcs/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/IvanVnucec/cubesat-adcs/actions/workflows/build_and_test.yml)
 
-# README
+# Cubesat-ADCS
+
+Attitude Determination and Control System (ADCS) for a satellite faculty project.
+
+<p align="middle">
+  <img src="docs/images/adcs_system.png" height="400"/>
+</p>
 
 ## Development
  <b>IMPORTANT:</b> Recommended OS for the development is the [Ubuntu 21.10](https://ubuntu.com/download/desktop). If you don't have a machine with the Ubuntu 21.10, the easiest workaround is to install Ubuntu on a Virtual Machine ([Link for a tutorial](https://www.youtube.com/watch?v=0CgNfilnJPY)).
