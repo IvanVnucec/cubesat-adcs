@@ -1,8 +1,7 @@
 [![build-and-test](https://github.com/IvanVnucec/cubesat-adcs/actions/workflows/build_and_test.yml/badge.svg)](https://github.com/IvanVnucec/cubesat-adcs/actions/workflows/build_and_test.yml)
 
 # Cubesat-ADCS
-
-Attitude Determination and Control System (ADCS) for a satellite faculty project.
+Accurate satellite orientation is a prerequisite for a successful mission, therefore the Attitude Determination and Control System (ADCS) is one of the most important satellite systems. In this repo, the ADCS system software is presented, which enables the collection and processing of the orientation sensors data, attitude determination, actuator control and finally, control of the desired orientation.
 
 <p align="middle">
   <img src="docs/images/adcs_system.png" height="400"/>
