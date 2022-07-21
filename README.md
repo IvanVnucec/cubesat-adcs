@@ -3,9 +3,7 @@
 # Cubesat-ADCS
 Accurate satellite orientation is a prerequisite for a successful mission, therefore the Attitude Determination and Control System (ADCS) is one of the most important satellite systems. In this repo, the ADCS system software is presented, which enables the collection and processing of the orientation sensors data, attitude determination, actuator control and finally, control of the desired orientation.
 
-<p align="middle">
-  <img src="docs/images/adcs_system.png" height="400"/>
-</p>
+[![ADCS Demo](http://img.youtube.com/vi/CTYEpx-xjxo/0.jpg)](http://www.youtube.com/watch?v=CTYEpx-xjxo "Cubesat ADCS demo")
 
 ## Development
  <b>IMPORTANT:</b> Recommended OS for the development is the [Ubuntu 21.10](https://ubuntu.com/download/desktop). If you don't have a machine with the Ubuntu 21.10, the easiest workaround is to install Ubuntu on a Virtual Machine ([Link for a tutorial](https://www.youtube.com/watch?v=0CgNfilnJPY)).
